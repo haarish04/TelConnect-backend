@@ -1,4 +1,9 @@
 package com.example.TelConnect.repository;
 
-public interface DemoRepository {
+import com.example.TelConnect.model.Demo;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface DemoRepository extends JpaRepository<Demo, String> {
 }
