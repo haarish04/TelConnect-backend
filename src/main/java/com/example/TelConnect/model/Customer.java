@@ -10,40 +10,34 @@ import java.util.List;
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customerId;
 
-    @Column(name = "customer_name", nullable = false)
+    @Column
     private String customerName;
 
-    @Column(name = "password", nullable = false)
+    @Column
     private String password;
 
-    @Column(name = "customer_email", nullable = false, unique = true)
+    @Column
     private String customerEmail;
 
-    @Column(name = "customer_phno")
+    @Column
     private String customerPhno;
 
-    @Column(name = "account_creation_date", nullable = false)
+    @Column
     private LocalDate accountCreationDate;
 
-    @Column(name = "role")
+    @Column
     private String role;
 
 
-    // Constructors
-    public Customer() {
-        this.accountCreationDate = LocalDate.now();
-    }
-
-    public Customer(String customerName, String password, String customerEmail, String customerPhno) {
-        this.customerName = customerName;
-        this.password = password;
-        this.customerEmail = customerEmail;
-        this.customerPhno = customerPhno;
-        this.accountCreationDate = LocalDate.now();
-    }
+//    public Customer(String customerName, String password, String customerEmail, String customerPhno) {
+//        this.customerName = customerName;
+//        this.password = password;
+//        this.customerEmail = customerEmail;
+//        this.customerPhno = customerPhno;
+//        this.accountCreationDate = LocalDate.now();
+//    }
 
     // Getters and Setters
     public Long getCustomerId() {

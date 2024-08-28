@@ -1,14 +1,16 @@
 package com.example.TelConnect.controller;
 
+import com.example.TelConnect.model.Demo;
+import com.example.TelConnect.service.DemoService;
 import jakarta.validation.Valid;
 import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.model.LoginRequest;
-import com.example.TelConnect.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import com.example.TelConnect.service.CustomerService;
 
 import java.util.List;
 
@@ -17,10 +19,12 @@ import java.util.List;
 public class WebController {
 
     private final CustomerService customerService;
+    private final DemoService demoService;
 
     @Autowired
-    public WebController(CustomerService customerService) {
+    public WebController(CustomerService customerService, DemoService demoService) {
         this.customerService = customerService;
+        this.demoService= demoService;
     }
 
     // Handler method to handle login request
@@ -30,14 +34,18 @@ public class WebController {
         String password = loginRequest.getPassword();
         try {
             // Authenticate the customer using your custom service
-            String authenticate = customerService.authenticateCustomer(email, password);
-            if (authenticate.equals("Login Success")) {
-                // If authentication is successful
+            int authenticate = customerService.authenticateCustomer(email, password);
+
+            // If authentication is successful
+            if (authenticate == 1) {
                 return ResponseEntity.ok("Login successful");
-            } else if (authenticate.equals("Login failed")) {
+
                 // If authentication fails
+            } else if (authenticate == 0) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
-            } else if (authenticate.equals("User not found")) {
+
+                //Error in login
+            } else if (authenticate ==-1) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User does not exist");
             }
         } catch (Exception e) {
@@ -49,13 +57,18 @@ public class WebController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred during login");
     }
 
+//    @GetMapping("verifyEmail")
+//    public ResponseEntity<String> verifyCustomerEmail(@RequestParam String customerEmail){
+//
+//    }
 
 
-    // Handler method to handle customer registration
+
+    // Handler method to handle customer registration after verification of email
     @PostMapping("/register")
     public ResponseEntity<String> registerCustomer(@Valid @RequestBody Customer customer,
                                                    BindingResult result) {
-        Customer existingCustomer = customerService.findByCustomerEmail(customer.getCustomerEmail());
+        Customer existingCustomer = customerService.getByCustomerEmail(customer.getCustomerEmail());
 
         if (existingCustomer != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
@@ -82,4 +95,16 @@ public class WebController {
     public ResponseEntity<String> logout() {
         return ResponseEntity.ok("Logged out successfully");
     }
+
+//    @GetMapping("/demo")
+//    public ResponseEntity<List<Demo>> demo(){
+//        List<Demo> demo = demoService.getAll();
+//        return ResponseEntity.ok(demo);
+//    }
+
+//    @PostMapping("/demo/{usn}")
+//    public ResponseEntity<Demo> getDemo(@PathVariable("usn") String usn){
+//        Demo demo = demoService.getByUsn(usn);
+//        return ResponseEntity.ok(demo);
+//    }
 }
