@@ -1,7 +1,5 @@
 package com.example.TelConnect.controller;
 
-import com.example.TelConnect.model.Demo;
-import com.example.TelConnect.service.DemoService;
 import jakarta.validation.Valid;
 import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.model.LoginRequest;
@@ -16,15 +14,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/")
-public class WebController {
+public class CustomerController {
 
     private final CustomerService customerService;
-    private final DemoService demoService;
 
     @Autowired
-    public WebController(CustomerService customerService, DemoService demoService) {
+    public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
-        this.demoService= demoService;
     }
 
     // Handler method to handle login request
@@ -59,9 +55,7 @@ public class WebController {
 
 //    @GetMapping("verifyEmail")
 //    public ResponseEntity<String> verifyCustomerEmail(@RequestParam String customerEmail){
-//
 //    }
-
 
 
     // Handler method to handle customer registration after verification of email
@@ -95,16 +89,4 @@ public class WebController {
     public ResponseEntity<String> logout() {
         return ResponseEntity.ok("Logged out successfully");
     }
-
-//    @GetMapping("/demo")
-//    public ResponseEntity<List<Demo>> demo(){
-//        List<Demo> demo = demoService.getAll();
-//        return ResponseEntity.ok(demo);
-//    }
-
-//    @PostMapping("/demo/{usn}")
-//    public ResponseEntity<Demo> getDemo(@PathVariable("usn") String usn){
-//        Demo demo = demoService.getByUsn(usn);
-//        return ResponseEntity.ok(demo);
-//    }
 }

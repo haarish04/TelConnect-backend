@@ -29,8 +29,9 @@ public class SpringSecurity {
                         .requestMatchers("/register/**").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/customers").permitAll()
+                        .requestMatchers("/demo/**").permitAll()
                 )
-                .httpBasic(); // Use HTTP Basic authentication for REST APIs
+                .httpBasic();
 
         return http.build();
     }
