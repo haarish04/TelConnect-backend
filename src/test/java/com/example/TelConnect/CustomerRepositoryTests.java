@@ -11,6 +11,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import java.time.LocalDate;
 
@@ -25,12 +27,25 @@ public class CustomerRepositoryTests {
     @Autowired
     private CustomerRepository repo;
 
+    private final PasswordEncoder passwordEncoder = new PasswordEncoder() {
+        @Override
+        public String encode(CharSequence rawPassword) {
+            return "";
+        }
+
+        @Override
+        public boolean matches(CharSequence rawPassword, String encodedPassword) {
+            return false;
+        }
+    };
+
     @Test
     public void testCreateCustomer() {
         Customer Customer = new Customer();
+
         Customer.setCustomerId(0L);
         Customer.setCustomerName("Admin");
-        Customer.setPassword("AdminPass");
+        Customer.setPassword(passwordEncoder.encode("adminPass"));
         Customer.setCustomerEmail("admin@gmail.com");
         Customer.setCustomerPhno("7897237891");
         Customer.setRole("Admin");

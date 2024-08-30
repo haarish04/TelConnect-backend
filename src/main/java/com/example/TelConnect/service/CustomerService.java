@@ -43,11 +43,9 @@ public class CustomerService {
         if (customer != null) {
             if(passwordEncoder.matches(password, customer.getPassword()))
                 return 1;
-
             else
                 return 0;
         }
-
         return -1;
     }
 

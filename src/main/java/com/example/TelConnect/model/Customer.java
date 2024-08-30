@@ -30,16 +30,6 @@ public class Customer {
     @Column
     private String role;
 
-
-//    public Customer(String customerName, String password, String customerEmail, String customerPhno) {
-//        this.customerName = customerName;
-//        this.password = password;
-//        this.customerEmail = customerEmail;
-//        this.customerPhno = customerPhno;
-//        this.accountCreationDate = LocalDate.now();
-//    }
-
-    // Getters and Setters
     public Long getCustomerId() {
         return customerId;
     }

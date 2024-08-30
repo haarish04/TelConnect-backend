@@ -77,6 +77,19 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Customer registered successfully");
     }
 
+    //Handler method to update customer details
+//    @PostMapping("/update")
+//    public ResponseEntity<String> updateCustomer(@RequestBody Customer customer){
+//
+//        Customer existingCustomer = customerService.getByCustomerEmail(customer.getCustomerEmail());
+//
+//        if (existingCustomer == null) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                    .body("Account does not exist with this email");
+//        }
+//
+//    }
+
     // Handler method to get list of customers
     @GetMapping("/customers")
     public ResponseEntity<List<Customer>> getCustomers() {
