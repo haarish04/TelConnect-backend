@@ -12,7 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
 
@@ -27,35 +27,28 @@ public class CustomerRepositoryTests {
     @Autowired
     private CustomerRepository repo;
 
-    private final PasswordEncoder passwordEncoder = new PasswordEncoder() {
-        @Override
-        public String encode(CharSequence rawPassword) {
-            return "";
-        }
-
-        @Override
-        public boolean matches(CharSequence rawPassword, String encodedPassword) {
-            return false;
-        }
-    };
+    @Autowired
+    public final PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Test
     public void testCreateCustomer() {
-        Customer Customer = new Customer();
+        Customer Customer1 = new Customer();
 
-        Customer.setCustomerId(0L);
-        Customer.setCustomerName("Admin");
-        Customer.setPassword(passwordEncoder.encode("adminPass"));
-        Customer.setCustomerEmail("admin@gmail.com");
-        Customer.setCustomerPhno("7897237891");
-        Customer.setRole("Admin");
+        Customer1.setCustomerId(0L);
+        Customer1.setCustomerName("telConnectAdmin");
+        Customer1.setPassword(passwordEncoder().encode("adminPass"));
+        Customer1.setCustomerEmail("admin@gmail.com");
+        Customer1.setCustomerPhno("7897237891");
+        Customer1.setRole("ADMIN");
+        Customer1.setCustomerAddress("508D Eugene Trailer, North Isaias");
+        Customer1.setCustomerDOB(LocalDate.parse("2024-08-28"));
+        Customer1.setAccountCreationDate(LocalDate.now());
 
-        Customer.setAccountCreationDate(LocalDate.now());
-
-        Customer savedCustomer = repo.save(Customer);
+        Customer savedCustomer = repo.save(Customer1);
 
         Customer existCustomer = entityManager.find(Customer.class, savedCustomer.getCustomerId());
-
-        assertThat(Customer.getCustomerEmail()).isEqualTo(existCustomer.getCustomerEmail());
+        assertThat(Customer1.getCustomerEmail()).isEqualTo(existCustomer.getCustomerEmail());
     }
 }
