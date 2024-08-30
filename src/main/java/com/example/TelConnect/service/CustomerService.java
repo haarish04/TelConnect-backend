@@ -5,6 +5,7 @@ import com.example.TelConnect.repository.CustomerRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,12 +21,15 @@ public class CustomerService {
     }
 
     public void saveCustomer(Customer customer) {
+
         customer.setCustomerName(customer.getCustomerName());
         customer.setCustomerEmail(customer.getCustomerEmail());
-
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
+        customer.setCustomerDOB(customer.getCustomerDOB());
+        customer.setCustomerAddress(customer.getCustomerAddress());
+        customer.setAccountCreationDate(LocalDate.now());
+        customer.setRole("USER");
 
-        customer.setRole("User");
         customerRepository.save(customer);
     }
 

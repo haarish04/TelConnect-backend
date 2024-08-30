@@ -10,6 +10,7 @@ import java.util.List;
 public class Customer {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customerId;
 
     @Column
@@ -23,6 +24,12 @@ public class Customer {
 
     @Column
     private String customerPhno;
+
+    @Column
+    private String customerAddress;
+
+    @Column
+    private LocalDate customerDOB;
 
     @Column
     private LocalDate accountCreationDate;
@@ -62,6 +69,22 @@ public class Customer {
         this.customerEmail = customerEmail;
     }
 
+    public String getCustomerAddress() {
+        return customerAddress;
+    }
+
+    public void setCustomerAddress(String customerAddress) {
+        this.customerAddress = customerAddress;
+    }
+
+    public LocalDate getCustomerDOB() {
+        return customerDOB;
+    }
+
+    public void setCustomerDOB(LocalDate customerDOB) {
+        this.customerDOB = customerDOB;
+    }
+
     public String getCustomerPhno() {
         return customerPhno;
     }
@@ -82,9 +105,10 @@ public class Customer {
         return role;
     }
 
-    public void setRole(String role) {
-        this.role= role;
+    public void setRole(String role){
+        this.role =role;
     }
+
 
     // Override toString for better logging or debugging
     @Override
@@ -94,6 +118,8 @@ public class Customer {
                 ", customerName='" + customerName + '\'' +
                 ", customerEmail='" + customerEmail + '\'' +
                 ", customerPhno='" + customerPhno + '\'' +
+                ", customerAddress='" + customerAddress + '\'' +
+                ", customerDOB='" + customerDOB + '\'' +
                 ", accountCreationDate=" + accountCreationDate +
                 ", roles=" + role +
                 '}';
