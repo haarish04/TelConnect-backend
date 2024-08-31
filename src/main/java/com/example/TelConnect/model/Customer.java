@@ -28,7 +28,7 @@ public class Customer {
     @Column
     private String customerAddress;
 
-    @Column
+    @Column(name = "customer_dob")
     private LocalDate customerDOB;
 
     @Column

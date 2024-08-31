@@ -13,7 +13,7 @@ import com.example.TelConnect.service.CustomerService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/customer")
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -91,15 +91,24 @@ public class CustomerController {
 //    }
 
     // Handler method to get list of customers
-    @GetMapping("/customers")
+    @GetMapping("/getAll")
     public ResponseEntity<List<Customer>> getCustomers() {
         List<Customer> customers = customerService.findAllCustomers();
         return ResponseEntity.ok(customers);
     }
 
-    // Handler method to handle logout
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout() {
-        return ResponseEntity.ok("Logged out successfully");
+    @DeleteMapping("delete{Id}")
+    public ResponseEntity<String> deleteCustomer(@PathVariable String customerId){
+        if(customerService.deleteCustomer(customerId))
+            return ResponseEntity.ok("Customer Deleted");
+        else
+            return ResponseEntity.ok("Customer Not found");
     }
+
+
+    // Handler method to handle logout
+//    @PostMapping("/logout")
+//    public ResponseEntity<String> logout() {
+//        return ResponseEntity.ok("Logged out successfully");
+//    }
 }

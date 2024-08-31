@@ -40,10 +40,11 @@ public class CustomerService {
 
     public int authenticateCustomer(String email, String password) {
         List<Customer> customers = customerRepository.findAll();
-        Customer customer = customers.stream()
-                .filter(c -> c.getCustomerEmail().equals(email))
-                .findFirst()
-                .orElse(null);
+//        Customer customer = customers.stream()
+//                .filter(c -> c.getCustomerEmail().equals(email))
+//                .findFirst()
+//                .orElse(null);
+        Customer customer = customerRepository.findByCustomerEmail(email);
         if (customer != null) {
             if(passwordEncoder.matches(password, customer.getPassword()))
                 return 1;
@@ -60,10 +61,19 @@ public class CustomerService {
                 .collect(Collectors.toList());
     }
 
+    public boolean deleteCustomer(String email){
+        if(customerRepository.findByCustomerEmail(email)!= null) {
+            customerRepository.
+                    deleteById((customerRepository.findByCustomerEmail(email)).getCustomerId());
+            return true;
+        }
+        else
+            return false;
+    }
+
     private Customer convertEntity(Customer customer) {
         customer.setCustomerName(customer.getCustomerName());
         customer.setCustomerEmail(customer.getCustomerEmail());
-        // Note: Set other fields if needed
         return customer;
     }
 }

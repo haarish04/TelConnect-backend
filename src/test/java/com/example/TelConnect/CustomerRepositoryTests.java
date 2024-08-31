@@ -36,7 +36,7 @@ public class CustomerRepositoryTests {
     public void testCreateCustomer() {
         Customer Customer1 = new Customer();
 
-        Customer1.setCustomerId(0L);
+        Customer1.setCustomerId(1L);
         Customer1.setCustomerName("telConnectAdmin");
         Customer1.setPassword(passwordEncoder().encode("adminPass"));
         Customer1.setCustomerEmail("admin@gmail.com");

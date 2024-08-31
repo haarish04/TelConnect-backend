@@ -30,13 +30,13 @@ public class SpringSecurity {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/register/**").permitAll()
                         .requestMatchers("/login").permitAll()
-                        .requestMatchers("/customers").permitAll()
+                        .requestMatchers("/customer/**").permitAll()
                         .requestMatchers("/demo/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/swagger-resources/**").permitAll()
                         .requestMatchers("/webjars/**").permitAll()
-                        .requestMatchers("/sendMail/**").permitAll()
+                        //.requestMatchers("/sendMail/**").permitAll()
 
                 )
                 .httpBasic();
