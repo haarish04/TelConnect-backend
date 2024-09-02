@@ -31,6 +31,8 @@ public class SpringSecurity {
                         .requestMatchers("/register/**").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/customer/**").permitAll()
+                                .requestMatchers("/document/**").permitAll()
+                                .requestMatchers("/Verification/**").permitAll()
                         .requestMatchers("/demo/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()

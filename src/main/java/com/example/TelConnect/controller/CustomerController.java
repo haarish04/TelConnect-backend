@@ -45,7 +45,6 @@ public class CustomerController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User does not exist");
             }
         } catch (Exception e) {
-            // Handle unexpected errors
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
 
@@ -97,12 +96,14 @@ public class CustomerController {
         return ResponseEntity.ok(customers);
     }
 
+    //Handler method to delete customer (Access only for admin)
+    //Modify method to accept customer_ID of sender of this request and match to the admin, else block the delete request
     @DeleteMapping("delete{Id}")
     public ResponseEntity<String> deleteCustomer(@PathVariable String customerId){
         if(customerService.deleteCustomer(customerId))
             return ResponseEntity.ok("Customer Deleted");
         else
-            return ResponseEntity.ok("Customer Not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found");
     }
 
 
