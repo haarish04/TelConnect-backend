@@ -3,14 +3,14 @@ package com.example.TelConnect.controller;
 import com.example.TelConnect.model.ServicePlan;
 import com.example.TelConnect.service.ServicePlanService;
 
-import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/plan")
+@RestController
+@RequestMapping("/plan")
 public class ServicePlanController {
 
     private ServicePlanService servicePlanService;
