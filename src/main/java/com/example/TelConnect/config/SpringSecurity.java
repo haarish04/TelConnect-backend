@@ -41,7 +41,7 @@ public class SpringSecurity {
                         .requestMatchers("/swagger-resources/**").permitAll()
                         .requestMatchers("/webjars/**").permitAll()
                                 .requestMatchers("/OCR/**").permitAll()
-                        //.requestMatchers("/sendMail/**").permitAll()
+                        .requestMatchers("/sendMail/**").permitAll()
 
                 )
                 .httpBasic();
