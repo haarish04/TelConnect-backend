@@ -38,17 +38,24 @@ public class ServicePlanController {
 
     }
 
-    @PostMapping("/createPlan")
-    public ResponseEntity<String> createPlan(@RequestBody ServicePlan plan){
-        if(servicePlanService.createPlan(plan))
-            return ResponseEntity.ok("New plan created");
-        else
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("PlanId already exists");
+    @PostMapping("/createPlan/admin?={adminId}")
+    public ResponseEntity<String> createPlan(@RequestBody ServicePlan plan,@PathVariable Long adminId){
+        if(adminId==1L){
+            if(servicePlanService.createPlan(plan))
+                return ResponseEntity.ok("New plan created");
+            else
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("PlanId already exists");
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized operation");
     }
 
-    @DeleteMapping("/deletePlan/{planId}")
-    public ResponseEntity<String> deletePlan(@PathVariable String planId){
-        servicePlanService.deletePlan(planId);
-        return ResponseEntity.ok("Plan Deleted");
+    @DeleteMapping("/deletePlan/{planId}/admin@={adminId}")
+    public ResponseEntity<String> deletePlan(@PathVariable String planId, @PathVariable Long adminId){
+        if(adminId==1L){
+            servicePlanService.deletePlan(planId);
+            return ResponseEntity.ok("Plan Deleted");
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized Operation");
     }
 }

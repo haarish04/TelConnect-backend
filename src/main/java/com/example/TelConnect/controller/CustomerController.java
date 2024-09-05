@@ -3,6 +3,7 @@ package com.example.TelConnect.controller;
 import jakarta.validation.Valid;
 import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.model.LoginRequest;
+import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -90,20 +91,27 @@ public class CustomerController {
 //    }
 
     // Handler method to get list of customers
-    @GetMapping("/getAll")
-    public ResponseEntity<List<Customer>> getCustomers() {
-        List<Customer> customers = customerService.findAllCustomers();
-        return ResponseEntity.ok(customers);
+    @GetMapping("/getAll/admin?={adminId}")
+    public ResponseEntity<String> getCustomers(@PathVariable Long adminId) {
+        if(adminId==1L){
+            List<Customer> customers = customerService.findAllCustomers();
+            return ResponseEntity.ok(customers.toString());
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized Operation");
+
     }
 
     //Handler method to delete customer (Access only for admin)
     //Modify method to accept customer_ID of sender of this request and match to the admin, else block the delete request
-    @DeleteMapping("delete{Id}")
-    public ResponseEntity<String> deleteCustomer(@PathVariable String customerId){
-        if(customerService.deleteCustomer(customerId))
-            return ResponseEntity.ok("Customer Deleted");
-        else
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found");
+    @DeleteMapping("/delete{email}/admin?={adminId}")
+    public ResponseEntity<String> deleteCustomer(@PathVariable String customerEmail, @PathVariable Long adminId){
+        if(adminId==1L){
+            if(customerService.deleteCustomer(customerEmail))
+                return ResponseEntity.ok("Customer Deleted");
+            else
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found");
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized operation");
     }
 
 

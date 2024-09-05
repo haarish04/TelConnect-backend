@@ -15,14 +15,14 @@ public class NotificationController {
         this.notificationService= notificationService;
     }
 
-    @PostMapping("create/{customerId}")
+    @PostMapping("/create/{customerId}")
     public ResponseEntity<String> createNotification(@PathVariable Long customerId, @RequestBody String message){
         notificationService.createNotification(customerId, message);
         return ResponseEntity.ok("Notification pushed to customer");
 
     }
 
-    @GetMapping("get/{customerId}")
+    @GetMapping("/get/{customerId}")
     public ResponseEntity<String> getNotification(@PathVariable Long customerId){
         String notifications = notificationService.getCustomerNotifications(customerId).toString();
         if(notifications.isEmpty())

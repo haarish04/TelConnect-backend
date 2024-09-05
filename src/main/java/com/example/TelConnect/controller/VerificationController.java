@@ -15,13 +15,13 @@ public class VerificationController {
         this.verificationService=verificationService;
     }
 
-    @PostMapping("save")
+    @PostMapping("/save")
     public ResponseEntity<String> saveNotification(@RequestParam Long documentId, @RequestParam Long customerId){
         verificationService.saveVerification(documentId,customerId);
         return ResponseEntity.ok("New verification request created");
     }
 
-    @GetMapping("getStatus/{customerId}")
+    @GetMapping("/getStatus/{customerId}")
     public ResponseEntity<String> getVerificationStatus(@PathVariable Long customerId){
         String response= verificationService.getVerificationStatus(customerId);
         if(response.isEmpty())
@@ -31,7 +31,7 @@ public class VerificationController {
 
     }
 
-    @PatchMapping("updateStatus/{customerId}/{documentType}/status={status}")
+    @PatchMapping("/updateStatus/{customerId}/{documentType}/status={status}")
     public ResponseEntity<String> updateVerificationStatus(@PathVariable Long customerId, @PathVariable String documentType, @PathVariable String status){
         verificationService.updateVerificationStatus(customerId, documentType, status);
         return ResponseEntity.ok("Status updated successfully");

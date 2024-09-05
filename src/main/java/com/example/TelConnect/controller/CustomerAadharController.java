@@ -16,7 +16,7 @@ public class CustomerAadharController {
     @Autowired
     private CustomerAadharRepository  customerAadharRepository;
 
-    @GetMapping("getAll")
+    @GetMapping("/getAll")
     public List<CustomerAadhar> getAllPersons() {
         return customerAadharRepository.findAll();
     }

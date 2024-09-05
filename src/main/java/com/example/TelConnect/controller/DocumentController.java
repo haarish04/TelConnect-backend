@@ -25,7 +25,7 @@ public class DocumentController {
         return ResponseEntity.ok("Document entry successfull");
     }
 
-    @GetMapping("get/{customerId}")
+    @GetMapping("/get/{customerId}")
     public ResponseEntity<?> getDocument(@PathVariable String customerId){
         List<Document> documents = documentService.getByCustomerId(customerId);
         if(documents!=null)
