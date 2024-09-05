@@ -65,4 +65,4 @@ TelConnect is designed to provide a platform for onboarding and managing custome
 
 ## API Documentation
 
-Access the API documentation at: http://localhost:8080/swagger-ui/index.html
+Access the API documentation at: http://localhost:8082/swagger-ui/index.html
