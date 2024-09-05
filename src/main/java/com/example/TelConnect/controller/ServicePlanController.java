@@ -19,7 +19,7 @@ public class ServicePlanController {
         this.servicePlanService=servicePlanService;
     }
 
-    @GetMapping("getPlan/{planId}")
+    @GetMapping("/getPlan/{planId}")
     public ResponseEntity<ServicePlan> getPlan(@PathVariable String planId){
         ServicePlan plan= servicePlanService.getPlan(planId);
         if(plan!=null)
@@ -28,7 +28,7 @@ public class ServicePlanController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
-    @GetMapping("getAllPlans")
+    @GetMapping("/getAllPlans")
     public ResponseEntity<List<ServicePlan>> getAllPlans(){
         List<ServicePlan> plans= servicePlanService.getAllPlans();
         if(plans.isEmpty())
@@ -38,7 +38,7 @@ public class ServicePlanController {
 
     }
 
-    @PostMapping("createPlan")
+    @PostMapping("/createPlan")
     public ResponseEntity<String> createPlan(@RequestBody ServicePlan plan){
         if(servicePlanService.createPlan(plan))
             return ResponseEntity.ok("New plan created");
@@ -46,7 +46,7 @@ public class ServicePlanController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("PlanId already exists");
     }
 
-    @DeleteMapping("deletePlan/{planId}")
+    @DeleteMapping("/deletePlan/{planId}")
     public ResponseEntity<String> deletePlan(@PathVariable String planId){
         servicePlanService.deletePlan(planId);
         return ResponseEntity.ok("Plan Deleted");
