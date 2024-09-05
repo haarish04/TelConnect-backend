@@ -36,25 +36,46 @@ public class EmailService {
 
     public EmailContent WelcomeMessage(){
         EmailContent email= new EmailContent();
-        email.setSubject("Welcome to TelConnect");
+        email.setSubject("Welcome to TelConnect! Your Connection Starts Here");
         email.setTextPart("Welcome to TelConnect! We're thrilled to have you as part of our mission to help you stay connected with your family and the people who matter most. Thank you for choosing us to strengthen the bonds that bring your world closer together!");
-        email.setHtmlPart("<h3> Welcome aboard! </h3> <br/> We're thrilled to have you as part of our mission to help you stay connected with your family and the people who matter most. <br/> Thank you for choosing us to strengthen the bonds that bring your world closer together!");
-        return email;
+        email.setHtmlPart(
+                "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;'>\n" +
+                        "   <h1 style='font-size: 24px; line-height: 32px;'>Your TelConnect Journey Begins</h1>\n" +
+                        "   <p style='font-size: 16px; line-height: 22px;'>Congratulations on creating your TelConnect account! We're excited to connect you to the world around you.</p>\n" +
+                        "   <br/><blockquote style='font-style: italic; font-size: 14px; margin: 20px 0; padding-left: 15px; border-left: 3px solid #ccc;'>\"Family is not an important thing. It's everything.\" - Michael J. Fox</blockquote>\n" +
+                        "   <br/><p style='font-size: 16px; line-height: 22px;'>At TelConnect, we believe in strengthening family bonds through seamless communication. Explore our range of services to discover how we can enhance your connections.</p>\n" +
+                        "   <br/><a href='https://www.telconnect.com/services' style='display: inline-block; background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px;'>View Our Services</a>\n" +
+                        "</div>"
+        );        return email;
     }
 
     public EmailContent OTPMessage(int OTP){
         EmailContent email= new EmailContent();
-        email.setSubject(OTP + "is your 2FA OTP");
+        email.setSubject(OTP + " is your 2FA OTP");
         email.setTextPart("OTP to verify your email account is: "+ OTP);
-        email.setHtmlPart("<h3>OTP to verify your email account is: <br/><h2>" + OTP + "</h2></h3>"+ "<br/><h3>I you did not initiate this request, someone may be trying to gain access to your account</h3>");
+        email.setHtmlPart(    "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;'>\n" +
+                "   <h1 style='font-size: 24px; line-height: 32px;'>Email Verification</h1>\n" +
+                "   <p style='font-size: 16px; line-height: 22px;'>Your One-Time Password (OTP) is:</p>\n" +
+                "   <h2 style='font-size: 36px; font-weight: bold; text-align: center;'>" + OTP + "</h2>\n" +
+                "   <p style='font-size: 14px; color: #666; margin-top: 20px;'>If you did not initiate this request, someone may be trying to gain unauthorized access to your account.</p>\n" +
+                "   <hr style='border: none; border-bottom: 1px solid #ccc; margin: 30px 0;' />\n" +
+                "   <p style='font-size: 12px; color: #666;'>If you need assistance or have concerns about account security, please contact our support team at <a href='mailto:telConnecta@gmail.com'>telconnecta@gmail.com</a>.</p>\n" +
+                "</div>"
+        );
         return email;
     }
 
     public EmailContent thankYouMessage(){
         EmailContent email= new EmailContent();
-        email.setSubject("Thank You for choosing us");
+        email.setSubject("Thank You for Choosing TelConnect - Connecting You to What Matters!");
         email.setTextPart("Thank you for selecting TelConnect as your service provider! We appreciate your trust and are committed to delivering exceptional connectivity that brings you closer to the people who matter most. Your journey with us starts now, and we're here to ensure it’s a smooth ride!");
-        email.setHtmlPart("<h3>Thank you for selecting TelConnect as your service provider! We appreciate your trust and are committed to delivering exceptional connectivity that brings you closer to the people who matter most.</h3>" + "<h3>Your journey with us starts now, and we're here to ensure it’s a smooth ride!</h3>");
+        email.setHtmlPart( "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;'>\n" +
+                "   <h1 style='font-size: 24px; line-height: 32px;'>Welcome to our network!</h1>\n" +
+                "   <p style='font-size: 16px; line-height: 22px;'>Thank you for choosing us as your telecom service provider! We're thrilled to have you on board and are committed to delivering exceptional connectivity that brings you closer to the people who matter most.</p>\n" +
+                "   <p style='font-size: 16px; line-height: 22px;'>Your journey with TelConnect starts now, and we're dedicated to ensuring it's a smooth ride!</p>\n" +
+                "   <hr style='border: none; border-bottom: 1px solid #ccc; margin: 30px 0;' />\n" +
+                "   <p style='font-size: 12px;'>Stay connected, stay closer.<br/>Best regards,<br/>The TelConnect Team</p>\n" +
+                "</div>");
         return email;
     }
 
@@ -62,7 +83,12 @@ public class EmailService {
         EmailContent email= new EmailContent();
         email.setSubject("Service Activation");
         email.setTextPart("Your selected plan has been activated on your mobile number. Reach out to customer support if you are having trouble using our services.");
-        email.setHtmlPart("<h3>Your selected plan has been activated on your mobile number</h3>"+"</br><h3>Reach out to customer support if you are having trouble using our services</h3>");
+        email.setHtmlPart( "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;'>\n" +
+                "   <h1 style='font-size: 24px; line-height: 32px;'>Your Connection Just Got Stronger</h1>\n" +
+                "   <p style='font-size: 16px; line-height: 22px;'>Congratulations! You've taken an important step towards staying closer to those who matter most.</p>\n" +
+                "   <p style='font-size: 16px; line-height: 22px;'>Your new service is now active, bringing you even closer to family, friends, and loved ones.</p>\n" +
+                "   <p style='font-size: 14px; color: #666; margin-top: 20px;'>Need assistance? Our friendly support team is here to help. Just reply to this email or visit our support page.</p>\n" +
+                "</div>");
         return email;
     }
 

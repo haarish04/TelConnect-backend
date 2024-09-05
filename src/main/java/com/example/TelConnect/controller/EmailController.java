@@ -3,7 +3,6 @@ package com.example.TelConnect.controller;
 import com.example.TelConnect.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +25,7 @@ public class EmailController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error sending mail");
     }
 
-    @PostMapping("/sendOTP")
+    @PostMapping("/OTP")
     public ResponseEntity<String> OTPMailSender(@RequestParam String recipient, String name){
         int otp=emailService.generateOTP();
         if(emailService.customEmailSender("otp",otp,recipient,name))
