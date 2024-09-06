@@ -9,7 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-@RestController("customer/plan")
+@RestController
+@RequestMapping("customer/plan")
 public class CustomerPlanController {
 
     private final CustomerPlanService customerPlanService;
