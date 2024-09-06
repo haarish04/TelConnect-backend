@@ -53,7 +53,7 @@ public class EmailService {
         EmailContent email= new EmailContent();
         email.setSubject(OTP + " is your 2FA OTP");
         email.setTextPart("OTP to verify your email account is: "+ OTP);
-        email.setHtmlPart(    "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;'>\n" +
+        email.setHtmlPart( "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;'>\n" +
                 "   <h1 style='font-size: 24px; line-height: 32px;'>Email Verification</h1>\n" +
                 "   <p style='font-size: 16px; line-height: 22px;'>Your One-Time Password (OTP) is:</p>\n" +
                 "   <h2 style='font-size: 36px; font-weight: bold; text-align: center;'>" + OTP + "</h2>\n" +

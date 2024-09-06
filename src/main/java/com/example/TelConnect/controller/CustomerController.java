@@ -101,6 +101,17 @@ public class CustomerController {
 
     }
 
+    //Handler to get one customer
+    @GetMapping("/getCustomerDetails")
+    public ResponseEntity<String> getCustomerById(@RequestBody String customerEmail) {
+        Customer customer=customerService.getByCustomerEmail(customerEmail);
+        if(customer!=null)
+            return ResponseEntity.ok(customer.toString());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Customer does not exist");
+
+    }
+
     //Handler method to delete customer (Access only for admin)
     //Modify method to accept customer_ID of sender of this request and match to the admin, else block the delete request
     @DeleteMapping("/delete{email}/admin?={adminId}")
