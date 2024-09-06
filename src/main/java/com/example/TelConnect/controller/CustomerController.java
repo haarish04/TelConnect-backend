@@ -103,7 +103,7 @@ public class CustomerController {
 
     //Handler to get one customer
     @GetMapping("/getCustomerDetails")
-    public ResponseEntity<String> getCustomerById(@RequestBody String customerEmail) {
+    public ResponseEntity<String> getCustomerById(@RequestParam String customerEmail) {
         Customer customer=customerService.getByCustomerEmail(customerEmail);
         if(customer!=null)
             return ResponseEntity.ok(customer.toString());

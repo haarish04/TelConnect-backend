@@ -16,7 +16,7 @@ public class NotificationController {
     }
 
     @PostMapping("/create/{customerId}")
-    public ResponseEntity<String> createNotification(@PathVariable Long customerId, @RequestBody String message){
+    public ResponseEntity<String> createNotification(@PathVariable Long customerId, @RequestParam String message){
         notificationService.createNotification(customerId, message);
         return ResponseEntity.ok("Notification pushed to customer");
 
