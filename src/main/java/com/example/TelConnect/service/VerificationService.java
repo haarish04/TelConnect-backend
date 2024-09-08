@@ -21,13 +21,13 @@ public class VerificationService {
         this.documentService=documentService;
     }
 
-    public void saveVerification(Long customerId, Long documentId){
+    public void saveVerification(Long documentId, Long customerId){
         Verification verification= new Verification();
 
         verification.setCustomerId(customerId);
         verification.setDocumentId(documentId);
         verification.setRequestDate(LocalDateTime.now());
-        verification.setRequestStatus("Pending");
+        verification.setRequestStatus("failed");
 
         verificationRepository.save(verification);
     }

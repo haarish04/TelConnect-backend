@@ -18,17 +18,17 @@ public class DocumentService {
         this.documentRepository = documentRepository;
     }
 
-    public void saveDocument(String customerId){
+    public void saveDocument(Long customerId, String DocumentType){
 
         Document document= new Document();
         document.setCustomerId(customerId);
         document.setUploadDate(LocalDate.now());
-        document.setDocumentType(document.getDocumentType());
+        document.setDocumentType(DocumentType);
 
         documentRepository.save(document);
     }
 
-    public List<Document> getByCustomerId(String customerId ){
+    public List<Document> getByCustomerId(Long customerId ){
         List<Document> documents= documentRepository.findByCustomerId(customerId);
         return documents.stream()
                 .map(this::convertEntity)

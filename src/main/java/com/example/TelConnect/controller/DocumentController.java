@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.TelConnect.service.DocumentService;
 
+import javax.print.Doc;
 import java.util.List;
 
 @RestController
@@ -20,13 +21,13 @@ public class DocumentController {
 
 
     @PostMapping("/save")
-    public ResponseEntity<String> saveDocument(@RequestParam String customerId){
-        documentService.saveDocument(customerId);
+    public ResponseEntity<String> saveDocument(@RequestParam Long customerId, @RequestParam String DocumentType){
+        documentService.saveDocument(customerId, DocumentType);
         return ResponseEntity.ok("Document entry successfull");
     }
 
     @GetMapping("/get/{customerId}")
-    public ResponseEntity<?> getDocument(@PathVariable String customerId){
+    public ResponseEntity<?> getDocument(@PathVariable Long customerId){
         List<Document> documents = documentService.getByCustomerId(customerId);
         if(documents!=null)
             return ResponseEntity.ok(documents);

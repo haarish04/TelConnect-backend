@@ -4,6 +4,8 @@ import com.example.TelConnect.repository.CustomerAadharRepository;
 
 import com.example.TelConnect.service.OcrService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +34,10 @@ public class OcrController {
         List<String> aadhaarNumbers = extractAadhaarNumbers(text);
         List<CustomerAadhar> verifiedPersons = findVerifiedPersons(aadhaarNumbers);
         String response = generateResponse(verifiedPersons);
-        return ResponseEntity.ok(response);
+        if(response.equals("Invalid"))
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error");
+        else
+            return ResponseEntity.ok(response);
     }
 
     private List<String> extractAadhaarNumbers(String text) {
@@ -56,7 +61,7 @@ public class OcrController {
 
     private String generateResponse(List<CustomerAadhar> verifiedPersons) {
         if (verifiedPersons.isEmpty()) {
-            return "No verified customers found.";
+            return "Invalid";
         }
 
         StringBuilder result = new StringBuilder();

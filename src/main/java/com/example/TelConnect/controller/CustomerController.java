@@ -1,5 +1,6 @@
 package com.example.TelConnect.controller;
 
+import com.example.TelConnect.model.RegisterCustomer;
 import jakarta.validation.Valid;
 import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.model.LoginRequest;
@@ -11,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import com.example.TelConnect.service.CustomerService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -60,20 +62,15 @@ public class CustomerController {
 
     // Handler method to handle customer registration after verification of email
     @PostMapping("/register")
-    public ResponseEntity<String> registerCustomer(@Valid @RequestBody Customer customer,
-                                                   BindingResult result) {
-        Customer existingCustomer = customerService.getByCustomerEmail(customer.getCustomerEmail());
+    public ResponseEntity<String> registerCustomer(@RequestBody RegisterCustomer newCustomer) {
+        Customer existingCustomer = customerService.getByCustomerEmail(newCustomer.getCustomerEmail());
 
         if (existingCustomer != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body("There is already an account registered with the same email");
         }
 
-        if (result.hasErrors()) {
-            return ResponseEntity.badRequest().body("Invalid registration data");
-        }
-
-        customerService.saveCustomer(customer);
+        customerService.saveCustomer(newCustomer);
         return ResponseEntity.status(HttpStatus.CREATED).body("Customer registered successfully");
     }
 

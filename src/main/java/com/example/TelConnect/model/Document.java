@@ -13,7 +13,7 @@ public class Document {
     private Long DocumentId;
 
     @Column
-    private String customerId;
+    private Long customerId;
 
     @Column
     private LocalDate uploadDate;
@@ -29,11 +29,11 @@ public class Document {
         DocumentId = documentId;
     }
 
-    public String getCustomerId() {
+    public Long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(String customerId) {
+    public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }
 
