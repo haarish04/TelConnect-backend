@@ -31,7 +31,7 @@ class DocumentServiceTest {
 
     @Test
     void testSaveDocument() {
-        String customerId = "12345";
+        Long customerId = 12345L;
         Document document = new Document();
         document.setCustomerId(customerId);
         document.setUploadDate(LocalDate.now());
@@ -40,7 +40,7 @@ class DocumentServiceTest {
         // Mocking the save operation
         when(documentRepository.save(any(Document.class))).thenReturn(document);
 
-        documentService.saveDocument(customerId);
+        documentService.saveDocument(customerId, "Aadhar");
 
         // Verifying that save method is called once
         verify(documentRepository, times(1)).save(any(Document.class));
@@ -48,7 +48,7 @@ class DocumentServiceTest {
 
     @Test
     void testGetByCustomerId() {
-        String customerId = "12345";
+        Long customerId = 12345L;
         List<Document> documents = new ArrayList<>();
         Document document1 = new Document();
         document1.setDocumentId(1L);
@@ -77,7 +77,7 @@ class DocumentServiceTest {
         Long documentId = 1L;
         Document document = new Document();
         document.setDocumentId(documentId);
-        document.setCustomerId("12345");
+        document.setCustomerId(12345L);
         document.setDocumentType("ID_CARD");
 
         // Mocking the findById operation
@@ -94,11 +94,11 @@ class DocumentServiceTest {
         List<Document> documents = new ArrayList<>();
         Document document1 = new Document();
         document1.setDocumentId(1L);
-        document1.setCustomerId("12345");
+        document1.setCustomerId(12345L);
         document1.setDocumentType("ID_CARD");
         Document document2 = new Document();
         document2.setDocumentId(2L);
-        document2.setCustomerId("67890");
+        document2.setCustomerId(67890L);
         document2.setDocumentType("PASSPORT");
 
         documents.add(document1);
