@@ -21,7 +21,7 @@ pipeline {
                 }
                 stage('Clone Frontend') {
                     steps {
-                        dir('frontend') {
+                        dir('../frontend') {
                             checkout([
                                 $class: 'GitSCM',
                                 branches: [[name: '*/main']],
@@ -56,7 +56,7 @@ pipeline {
                 // Use Node.js v22.x environment for frontend
                 bat "dir"
                 nodejs(nodeJSInstallationName: 'NodeJS_22.x') {
-                    dir('frontend') {
+                    dir('../frontend') {
                         // Install frontend dependencies for the React-Vite app
                         bat 'npm install'
                     }
@@ -68,35 +68,14 @@ pipeline {
             steps {
                 // Build the React-Vite frontend application using Node.js v22.x
                 nodejs(nodeJSInstallationName: 'NodeJS_22.x') {
-                    dir('frontend') {
+                    dir('../frontend') {
                         bat 'npm run build'
                     }
                 }
             }
         }
 
-        stage('Run Backend and Frontend') {
-            parallel {
-                stage('Run Backend') {
-                    steps {
-                        // Run the Spring Boot backend
-                        dir('TelConnect') {
-                            bat 'start java -jar target/*.jar'
-                        }
-                    }
-                }
-                stage('Run Frontend') {
-                    steps {
-                        // Run the React app locally in dev mode using Node.js v22.x
-                        nodejs(nodeJSInstallationName: 'NodeJS_22.x') {
-                            dir('frontend') {
-                                bat 'start npm run dev'
-                            }
-                        }
-                    }
-                }
-            }
-        }
+
     }
 
     post {
