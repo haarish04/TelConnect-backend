@@ -54,30 +54,24 @@ pipeline {
         stage('Install Frontend Dependencies') {
             steps {
                 // Use Node.js v22.x environment for frontend
-                bat "dir"
-                nodejs(nodeJSInstallationName: 'NodeJS_22.x') {
-                    dir('./frontend') {
-                        // Install frontend dependencies for the React-Vite app
-                        bat '''
-                        cd frontend
-                        dir
-                        dir
-                        npm install
-                        '''
-                    }
-                }
+                bat '''
+                cd frontend
+                dir
+                dir
+                npm install
+                '''
             }
         }
 
         stage('Build Frontend') {
             steps {
                 // Build the React-Vite frontend application using Node.js v22.x
-                nodejs(nodeJSInstallationName: 'NodeJS_22.x') {
-                    dir('./frontend') {
-                        bat "dir"
-                        bat 'npm run build'
-                    }
-                }
+                bat '''
+                cd frontend
+                dir
+                dir
+                npm install
+                '''
             }
         }
 
