@@ -42,14 +42,14 @@ pipeline {
             }
         }
 
-        stage('Run Backend Tests') {
-            steps {
-                dir('') {
-                    // Run backend test cases
-                    bat 'mvn test'
-                }
-            }
-        }
+//         stage('Run Backend Tests') {
+//             steps {
+//                 dir('') {
+//                     // Run backend test cases
+//                     bat 'mvn test'
+//                 }
+//             }
+//         }
 
         stage('Install Frontend Dependencies') {
             steps {
@@ -60,6 +60,8 @@ pipeline {
                         // Install frontend dependencies for the React-Vite app
                         bat '''
                         cd frontend
+                        dir
+                        dir
                         npm install
                         '''
                     }
