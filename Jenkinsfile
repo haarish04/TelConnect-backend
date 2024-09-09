@@ -35,7 +35,7 @@ pipeline {
 
         stage('Build Backend with Maven') {
             steps {
-                dir('TelConnect') {
+                dir('') {
                     // Maven build for the backend
                     bat 'mvn clean install'
                 }
