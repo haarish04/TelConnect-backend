@@ -21,7 +21,7 @@ pipeline {
                 }
                 stage('Clone Frontend') {
                     steps {
-                        dir('../frontend') {
+                        dir('./frontend') {
                             checkout([
                                 $class: 'GitSCM',
                                 branches: [[name: '*/main']],
@@ -56,8 +56,9 @@ pipeline {
                 // Use Node.js v22.x environment for frontend
                 bat "dir"
                 nodejs(nodeJSInstallationName: 'NodeJS_22.x') {
-                    dir('../frontend') {
+                    dir('./frontend') {
                         // Install frontend dependencies for the React-Vite app
+                        bat "dir"
                         bat 'npm install'
                     }
                 }
@@ -68,7 +69,8 @@ pipeline {
             steps {
                 // Build the React-Vite frontend application using Node.js v22.x
                 nodejs(nodeJSInstallationName: 'NodeJS_22.x') {
-                    dir('../frontend') {
+                    dir('./frontend') {
+                        bat "dir"
                         bat 'npm run build'
                     }
                 }
