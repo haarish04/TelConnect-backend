@@ -29,6 +29,7 @@ public class CustomerService {
         customer.setCustomerDOB(newCustomer.getCustomerDOB());
         customer.setCustomerAddress(newCustomer.getCustomerAddress());
         customer.setAccountCreationDate(LocalDate.now());
+        customer.setCustomerPhno(newCustomer.getCustomerPhno());
         customer.setRole("USER");
 
         customerRepository.save(customer);
