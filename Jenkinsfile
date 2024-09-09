@@ -58,8 +58,10 @@ pipeline {
                 nodejs(nodeJSInstallationName: 'NodeJS_22.x') {
                     dir('./frontend') {
                         // Install frontend dependencies for the React-Vite app
-                        bat "dir"
-                        bat 'npm install'
+                        bat '''
+                        cd frontend
+                        npm install
+                        '''
                     }
                 }
             }
