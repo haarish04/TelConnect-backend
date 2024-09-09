@@ -17,6 +17,7 @@ public class EmailController {
         this.emailService= emailService;
     }
 
+    //Handler to push welcome email
     @PostMapping("/welcome")
     public ResponseEntity<String> welcomeMailSender(@RequestParam String recipient, String name){
         if(emailService.customEmailSender("welcome",0,recipient,name))
@@ -25,6 +26,7 @@ public class EmailController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error sending mail");
     }
 
+    //Handler to push OTP mail
     @PostMapping("/OTP")
     public ResponseEntity<String> OTPMailSender(@RequestParam String recipient, String name){
         int otp=emailService.generateOTP();
@@ -34,6 +36,7 @@ public class EmailController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error sending mail");
     }
 
+    //Handler to push thank-you mail
     @PostMapping("/thankYou")
     public ResponseEntity<String> thankYouSender(@RequestParam String recipient, String name){
         if(emailService.customEmailSender("thankyou",0,recipient,name))
@@ -42,6 +45,7 @@ public class EmailController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error sending mail");
     }
 
+    //Handler to push service activation mail
     @PostMapping("/serviceActivation")
     public ResponseEntity<String> activationSender(@RequestParam String recipient, String name){
         if(emailService.customEmailSender("serviceactivation",0,recipient,name))
@@ -50,6 +54,7 @@ public class EmailController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error sending mail");
     }
 
+    //Handler to verify OTP submitted
     @PostMapping("/verifyOTP")
     public ResponseEntity<String> verifyOTP(@RequestParam String recipient, @RequestParam int otp) {
         if (emailService.verifyOTP(recipient, otp)) {

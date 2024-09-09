@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.TelConnect.service.NotificationService;
-import com.example.TelConnect.model.Notification;
 
 @RestController
 @RequestMapping("/notification")
@@ -15,6 +14,7 @@ public class NotificationController {
         this.notificationService= notificationService;
     }
 
+    //Handler to create new notification entry when email pushed to customer
     @PostMapping("/create/{customerId}")
     public ResponseEntity<String> createNotification(@PathVariable Long customerId, @RequestParam String message){
         notificationService.createNotification(customerId, message);
@@ -22,6 +22,7 @@ public class NotificationController {
 
     }
 
+    //Handler to get notifications sent to a customer
     @GetMapping("/get/{customerId}")
     public ResponseEntity<String> getNotification(@PathVariable Long customerId){
         String notifications = notificationService.getCustomerNotifications(customerId).toString();

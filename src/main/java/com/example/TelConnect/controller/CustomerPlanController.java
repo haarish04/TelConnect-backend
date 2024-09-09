@@ -3,7 +3,6 @@ package com.example.TelConnect.controller;
 import com.example.TelConnect.model.CustomerPlanMapping;
 import com.example.TelConnect.service.CustomerPlanService;
 
-import com.sun.mail.iap.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +18,7 @@ public class CustomerPlanController {
         this.customerPlanService=customerPlanService;
     }
 
+    //Handler to enroll new customer and map to a service
     @GetMapping("/enrollCustomer")
     public ResponseEntity<String> enrollCustomer(@RequestBody CustomerPlanMapping customerPlanMapping){
         if(customerPlanService.createNewCustomerPlanMapping(customerPlanMapping))
@@ -27,6 +27,7 @@ public class CustomerPlanController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to enroll customer");
     }
 
+    //Update status of the plan chosen by customer
     @PatchMapping("/updateStatus/{customerId}/{planId}/admin?={adminId}")
     public ResponseEntity<String> updateStatus(@PathVariable Long customerId, @PathVariable String planId, @RequestParam String status, @PathVariable Long adminId ){
         if(adminId==1L){
@@ -38,6 +39,7 @@ public class CustomerPlanController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
     }
 
+    //Handler to get status of customer and their plan
     @GetMapping("/getStatus/{customerId}")
     public ResponseEntity<String> getCustomerStatus(@PathVariable Long customerId){
         String response= customerPlanService.getCustomerPlanStatus(customerId);

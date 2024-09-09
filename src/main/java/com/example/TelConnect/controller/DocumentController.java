@@ -20,12 +20,14 @@ public class DocumentController {
     }
 
 
+    //Handler to create new document record
     @PostMapping("/save")
     public ResponseEntity<String> saveDocument(@RequestParam Long customerId, @RequestParam String DocumentType){
         documentService.saveDocument(customerId, DocumentType);
         return ResponseEntity.ok("Document entry successfull");
     }
 
+    //Get the documents and their details for a customer
     @GetMapping("/get/{customerId}")
     public ResponseEntity<?> getDocument(@PathVariable Long customerId){
         List<Document> documents = documentService.getByCustomerId(customerId);
@@ -35,13 +37,4 @@ public class DocumentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User has not submitted any documents");
     }
 
-//    @DeleteMapping("delete/{customerId}")
-//    public ResponseEntity<String> deleteDocument(@PathVariable String customerId){
-//        if(documentService.deleteDocument(customerId))
-//            return ResponseEntity.ok("Document Deleted successfully");
-//
-//        else
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Document does not exist");
-//
-//    }
 }

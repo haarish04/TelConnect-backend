@@ -23,6 +23,7 @@ public class OcrService {
     private Tesseract tesseract;
     CustomerAadharRepository customerAadharRepository;
 
+    //Extracts Test from document
     public String recognizeText(InputStream inputStream) throws IOException {
         List<BufferedImage> images = convertPdfToImages(inputStream);
         StringBuilder result = new StringBuilder();
@@ -38,6 +39,7 @@ public class OcrService {
         return result.toString().trim();
     }
 
+    //Convert pdf to image format
     public List<BufferedImage> convertPdfToImages(InputStream inputStream) throws IOException {
         List<BufferedImage> images = new ArrayList<>();
         try (PDDocument document = PDDocument.load(inputStream)) {
@@ -52,6 +54,7 @@ public class OcrService {
         return images;
     }
 
+    //Extract Aadhaar number from document
     public List<String> extractAadhaarNumbers(String text) {
         String regex = "\\b\\d{4} \\d{4} \\d{4}\\b";
         Pattern pattern = Pattern.compile(regex);
@@ -67,10 +70,12 @@ public class OcrService {
         return result;
     }
 
+    //Find aadhar record from database
     public List<CustomerAadhar> findVerifiedPersons(List<String> aadhaarNumbers) {
         return customerAadharRepository.findByIdVerificationIn(aadhaarNumbers);
     }
 
+    //Final method to verify aadhar number from document and DB
     public String generateResponse(List<CustomerAadhar> verifiedPersons) {
         if (verifiedPersons.isEmpty()) {
             return "No verified customers found.";

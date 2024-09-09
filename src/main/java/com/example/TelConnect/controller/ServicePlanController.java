@@ -19,6 +19,7 @@ public class ServicePlanController {
         this.servicePlanService=servicePlanService;
     }
 
+    //Handler to get plan details using Id
     @GetMapping("/getPlan/{planId}")
     public ResponseEntity<ServicePlan> getPlan(@PathVariable String planId){
         ServicePlan plan= servicePlanService.getPlan(planId);
@@ -28,6 +29,7 @@ public class ServicePlanController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 
+    //Handler to get all the plans
     @GetMapping("/getAllPlans")
     public ResponseEntity<List<ServicePlan>> getAllPlans(){
         List<ServicePlan> plans= servicePlanService.getAllPlans();
@@ -38,6 +40,7 @@ public class ServicePlanController {
 
     }
 
+    //Handler to create new plan, requires admin
     @PostMapping("/createPlan/admin?={adminId}")
     public ResponseEntity<String> createPlan(@RequestBody ServicePlan plan,@PathVariable Long adminId){
         if(adminId==1L){
@@ -50,7 +53,8 @@ public class ServicePlanController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized operation");
     }
 
-    @DeleteMapping("/deletePlan/{planId}/admin@={adminId}")
+    //Handler to delete existing plans
+    @DeleteMapping("/deletePlan/{planId}/admin={adminId}")
     public ResponseEntity<String> deletePlan(@PathVariable String planId, @PathVariable Long adminId){
         if(adminId==1L){
             servicePlanService.deletePlan(planId);

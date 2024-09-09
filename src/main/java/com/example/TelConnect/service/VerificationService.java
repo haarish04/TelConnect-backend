@@ -21,6 +21,7 @@ public class VerificationService {
         this.documentService=documentService;
     }
 
+    //Save verification status as failed by default for a customer and document
     public void saveVerification(Long documentId, Long customerId){
         Verification verification= new Verification();
 
@@ -32,6 +33,7 @@ public class VerificationService {
         verificationRepository.save(verification);
     }
 
+    //Get verification status of a customer
     public String getVerificationStatus(Long customerId) {
 
         // Get the list of verifications for the given customer ID
@@ -57,6 +59,7 @@ public class VerificationService {
         return String.join("\n", results);
     }
 
+    //Update verification status of a customer
     public void updateVerificationStatus(Long customerId, String documentType, String status) {
         // Get the list of verifications for the given customer ID
         List<Verification> verifications = verificationRepository.findByCustomerId(customerId);

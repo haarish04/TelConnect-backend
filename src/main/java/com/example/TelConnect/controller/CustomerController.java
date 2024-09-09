@@ -1,18 +1,14 @@
 package com.example.TelConnect.controller;
 
 import com.example.TelConnect.model.RegisterCustomer;
-import jakarta.validation.Valid;
 import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.model.LoginRequest;
-import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import com.example.TelConnect.service.CustomerService;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -55,10 +51,6 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred during login");
     }
 
-//    @GetMapping("verifyEmail")
-//    public ResponseEntity<String> verifyCustomerEmail(@RequestParam String customerEmail){
-//    }
-
 
     // Handler method to handle customer registration after verification of email
     @PostMapping("/register")
@@ -73,19 +65,6 @@ public class CustomerController {
         customerService.saveCustomer(newCustomer);
         return ResponseEntity.status(HttpStatus.CREATED).body("Customer registered successfully");
     }
-
-    //Handler method to update customer details
-//    @PostMapping("/update")
-//    public ResponseEntity<String> updateCustomer(@RequestBody Customer customer){
-//
-//        Customer existingCustomer = customerService.getByCustomerEmail(customer.getCustomerEmail());
-//
-//        if (existingCustomer == null) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//                    .body("Account does not exist with this email");
-//        }
-//
-//    }
 
     // Handler method to get list of customers
     @GetMapping("/getAll/admin?={adminId}")
@@ -123,9 +102,4 @@ public class CustomerController {
     }
 
 
-    // Handler method to handle logout
-//    @PostMapping("/logout")
-//    public ResponseEntity<String> logout() {
-//        return ResponseEntity.ok("Logged out successfully");
-//    }
 }

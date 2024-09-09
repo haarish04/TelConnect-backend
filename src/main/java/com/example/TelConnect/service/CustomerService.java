@@ -5,7 +5,6 @@ import com.example.TelConnect.model.RegisterCustomer;
 import com.example.TelConnect.repository.CustomerRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.List;

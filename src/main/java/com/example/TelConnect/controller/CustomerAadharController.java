@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/customer/Aadhar")
@@ -16,6 +15,7 @@ public class CustomerAadharController {
     @Autowired
     private CustomerAadharRepository  customerAadharRepository;
 
+    //Handler to get all aadhar details from DB
     @GetMapping("/getAll")
     public List<CustomerAadhar> getAllPersons() {
         return customerAadharRepository.findAll();

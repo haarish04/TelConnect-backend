@@ -71,6 +71,4 @@ public class CustomerPlanService {
         }
         return false;
     }
-
-
 }

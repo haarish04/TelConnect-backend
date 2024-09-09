@@ -18,6 +18,7 @@ public class NotificationService {
         this.notificationRepository=notificationRepository;
     }
 
+    //Create notification record when email is pushed to customer
     public void createNotification(Long customerId, String message) {
 
         Notification notification= new Notification();
@@ -28,6 +29,7 @@ public class NotificationService {
         notificationRepository.save(notification);
     }
 
+    //Get all notifications pushed to customer
     public List<String> getCustomerNotifications(Long customerId) {
         List<Notification> notifications = notificationRepository.findByCustomerId(customerId);
 
@@ -37,6 +39,5 @@ public class NotificationService {
                 )
                 .collect(Collectors.toList());
     }
-
 
 }

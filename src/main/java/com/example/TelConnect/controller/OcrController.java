@@ -5,7 +5,6 @@ import com.example.TelConnect.repository.CustomerAadharRepository;
 import com.example.TelConnect.service.OcrService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +27,7 @@ public class OcrController {
     @Autowired
     private CustomerAadharRepository customerAadharRepository;
 
+    //Handler to invoke OCR for document submitted
     @PostMapping("/")
     public ResponseEntity<String> recognizeText(@RequestParam("file") MultipartFile file) throws IOException {
         String text =  ocrService.recognizeText(file.getInputStream());

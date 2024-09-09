@@ -18,6 +18,7 @@ public class DocumentService {
         this.documentRepository = documentRepository;
     }
 
+    //Save new document entry
     public void saveDocument(Long customerId, String DocumentType){
 
         Document document= new Document();
@@ -28,6 +29,7 @@ public class DocumentService {
         documentRepository.save(document);
     }
 
+    //Get documents of customer
     public List<Document> getByCustomerId(Long customerId ){
         List<Document> documents= documentRepository.findByCustomerId(customerId);
         return documents.stream()
@@ -35,34 +37,18 @@ public class DocumentService {
                 .collect(Collectors.toList());
     }
 
+    //Get document by Id
     public Document getByDocumentId(Long documentId){
         return documentRepository.findById(documentId).orElse(null);
     }
-//
-//    public Document getByDocumentType(String documentType){
-//        return documentRepository.findByDocumentType(documentType);
-//
-//    }
+
+    //Get all the documents of all customers
     public List<Document> findAllDocuments() {
         List<Document> documents = documentRepository.findAll();
         return documents.stream()
                 .map(this::convertEntity)
                 .collect(Collectors.toList());
     }
-
-//    public boolean deleteDocument(String customerId,String documentType){
-//        if(documentRepository.findByCustomerId(customerId)!= null) {
-//            List<Document> documents=documentRepository.findByCustomerId(customerId);
-//              for(doc:documents)
-//                  if(doc.getDocumentType == documentType)
-//                      customerRepository.delete(doc)
-//
-//            return true;
-//        }
-//
-//        else
-//            return false;
-//    }
 
     private Document convertEntity(Document document) {
         document.setDocumentId(document.getDocumentId());

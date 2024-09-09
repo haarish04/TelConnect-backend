@@ -17,6 +17,7 @@ public class ServicePlanService {
         this.servicePlanRepository=servicePlanRepository;
     }
 
+    //Service to create new service plan
     public boolean createPlan(ServicePlan plan){
         if(servicePlanRepository.findByPlanId(plan.getPlanId())==null) {
             servicePlanRepository.save(plan);
@@ -26,14 +27,17 @@ public class ServicePlanService {
             return false;
     }
 
+    //Get service using Id
     public ServicePlan getPlan(String planId){
         return servicePlanRepository.findByPlanId(planId);
     }
 
+    //Get all the service plans
     public List<ServicePlan> getAllPlans(){
         return servicePlanRepository.findAll();
     }
 
+    //Delete specific plan
     public void deletePlan(String planId){
         servicePlanRepository.deleteById(planId);
     }
