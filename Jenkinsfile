@@ -44,7 +44,7 @@ pipeline {
 
         stage('Run Backend Tests') {
             steps {
-                dir('TelConnect') {
+                dir('') {
                     // Run backend test cases
                     bat 'mvn test'
                 }
