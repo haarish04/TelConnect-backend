@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Update the Maven path accordingly
-        PATH = "C:/Users/e031807/maven/apache-maven-3.9.6-bin/apache-maven-3.9.6/bin;${env.PATH}"
+        PATH = "C:/Users/e031975/Downloads/apache-maven-3.9.8-bin/apache-maven-3.9.8/bin;${env.PATH}"
         NODE_VERSION = '22.x'  // Update Node.js version to 22.x
     }
 
