@@ -19,17 +19,17 @@ pipeline {
                         ])
                     }
                 }
-                stage('Clone Frontend') {
-                    steps {
-                        dir('./frontend') {
-                            checkout([
-                                $class: 'GitSCM',
-                                branches: [[name: '*/main']],
-                                userRemoteConfigs: [[url: 'https://github.com/haarish04/telConnect-app.git']]
-                            ])
-                        }
-                    }
-                }
+//                 stage('Clone Frontend') {
+//                     steps {
+//                         dir('./frontend') {
+//                             checkout([
+//                                 $class: 'GitSCM',
+//                                 branches: [[name: '*/main']],
+//                                 userRemoteConfigs: [[url: 'https://github.com/haarish04/telConnect-app.git']]
+//                             ])
+//                         }
+//                     }
+//                 }
             }
         }
 
