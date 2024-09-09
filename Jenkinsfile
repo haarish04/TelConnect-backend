@@ -51,29 +51,29 @@ pipeline {
 //             }
 //         }
 
-        stage('Install Frontend Dependencies') {
-            steps {
-                // Use Node.js v22.x environment for frontend
-                bat '''
-                cd frontend
-                dir
-                dir
-                npm install
-                '''
-            }
-        }
-
-        stage('Build Frontend') {
-            steps {
-                // Build the React-Vite frontend application using Node.js v22.x
-                bat '''
-                cd frontend
-                dir
-                dir
-                npm install
-                '''
-            }
-        }
+//         stage('Install Frontend Dependencies') {
+//             steps {
+//                 // Use Node.js v22.x environment for frontend
+//                 bat '''
+//                 cd frontend
+//                 dir
+//                 dir
+//                 npm install
+//                 '''
+//             }
+//         }
+//
+//         stage('Build Frontend') {
+//             steps {
+//                 // Build the React-Vite frontend application using Node.js v22.x
+//                 bat '''
+//                 cd frontend
+//                 dir
+//                 dir
+//                 npm install
+//                 '''
+//             }
+//         }
 
 
     }
