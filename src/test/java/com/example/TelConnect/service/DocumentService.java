@@ -47,6 +47,17 @@ class DocumentServiceTest {
     }
 
     @Test
+    void testSaveDocument_NullValues() {
+        Long customerId = null;
+        String documentType = null;
+
+        documentService.saveDocument(customerId, documentType);
+
+        // Verifying that save method is called even with null values
+        verify(documentRepository, times(1)).save(any(Document.class));
+    }
+
+    @Test
     void testGetByCustomerId() {
         Long customerId = 12345L;
         List<Document> documents = new ArrayList<>();
@@ -73,6 +84,18 @@ class DocumentServiceTest {
     }
 
     @Test
+    void testGetByCustomerId_NoDocumentsFound() {
+        Long customerId = 12345L;
+
+        // Mocking the findByCustomerId operation
+        when(documentRepository.findByCustomerId(customerId)).thenReturn(new ArrayList<>());
+
+        List<Document> result = documentService.getByCustomerId(customerId);
+
+        assertEquals(0, result.size());
+    }
+
+    @Test
     void testGetByDocumentId() {
         Long documentId = 1L;
         Document document = new Document();
@@ -87,6 +110,18 @@ class DocumentServiceTest {
 
         assertNotNull(result);
         assertEquals(documentId, result.getDocumentId());
+    }
+
+    @Test
+    void testGetByDocumentId_NotFound() {
+        Long documentId = 1L;
+
+        // Mocking the findById operation
+        when(documentRepository.findById(documentId)).thenReturn(Optional.empty());
+
+        Document result = documentService.getByDocumentId(documentId);
+
+        assertNull(result);
     }
 
     @Test
@@ -112,5 +147,32 @@ class DocumentServiceTest {
         assertEquals(2, result.size());
         assertEquals("ID_CARD", result.get(0).getDocumentType());
         assertEquals("PASSPORT", result.get(1).getDocumentType());
+    }
+
+    @Test
+    void testFindAllDocuments_EmptyList() {
+        // Mocking the findAll operation
+        when(documentRepository.findAll()).thenReturn(new ArrayList<>());
+
+        List<Document> result = documentService.findAllDocuments();
+
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    void testDocumentTypeHandling() {
+        Long customerId = 12345L;
+        String documentType = "PAN_CARD";
+
+        Document document = new Document();
+        document.setCustomerId(customerId);
+        document.setDocumentType(documentType);
+        document.setUploadDate(LocalDate.now());
+
+        when(documentRepository.save(any(Document.class))).thenReturn(document);
+
+        documentService.saveDocument(customerId, documentType);
+
+        verify(documentRepository, times(1)).save(argThat(doc -> doc.getDocumentType().equals("PAN_CARD")));
     }
 }

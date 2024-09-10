@@ -46,6 +46,20 @@ class ServicePlanServiceTest {
     }
 
     @Test
+    void testCreatePlanWhenPlanExists() {
+        ServicePlan plan = new ServicePlan();
+        plan.setPlanId("PREP-TC-1234");
+
+        // Mocking the findByPlanId operation to return an existing plan
+        when(servicePlanRepository.findByPlanId(plan.getPlanId())).thenReturn(plan);
+
+        boolean result = servicePlanService.createPlan(plan);
+
+        assertFalse(result);
+        verify(servicePlanRepository, never()).save(any(ServicePlan.class));
+    }
+
+    @Test
     void testGetPlan() {
         String planId = "PREP-TC-1234";
         ServicePlan plan = new ServicePlan();
@@ -58,6 +72,18 @@ class ServicePlanServiceTest {
 
         assertNotNull(result);
         assertEquals(planId, result.getPlanId());
+    }
+
+    @Test
+    void testGetPlanWhenNotFound() {
+        String planId = "PREP-TC-1234";
+
+        // Mocking the findByPlanId operation to return null
+        when(servicePlanRepository.findByPlanId(planId)).thenReturn(null);
+
+        ServicePlan result = servicePlanService.getPlan(planId);
+
+        assertNull(result);
     }
 
     @Test
@@ -92,5 +118,16 @@ class ServicePlanServiceTest {
 
         // Verifying that deleteById method is called once
         verify(servicePlanRepository, times(1)).deleteById(planId);
+    }
+
+    @Test
+    void testDeletePlanWhenException() {
+        String planId = "PREP-TC-1234";
+
+        // Mocking the deleteById operation to throw an exception
+        doThrow(new RuntimeException("Database error")).when(servicePlanRepository).deleteById(planId);
+
+        // You might want to handle the exception in your service method or just verify it
+        assertDoesNotThrow(() -> servicePlanService.deletePlan(planId));
     }
 }

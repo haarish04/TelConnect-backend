@@ -69,4 +69,17 @@ class NotificationServiceTest {
         assertEquals("Notification: Your plan has been activated. | Timestamp: 2024-09-01T10:00", result.get(0));
         assertEquals("Notification: Your payment is due. | Timestamp: 2024-09-02T15:00", result.get(1));
     }
+
+    @Test
+    void testGetCustomerNotificationsNoNotifications() {
+        Long customerId = 12345L;
+
+        // Mocking the findByCustomerId operation to return an empty list
+        when(notificationRepository.findByCustomerId(customerId)).thenReturn(new ArrayList<>());
+
+        List<String> result = notificationService.getCustomerNotifications(customerId);
+
+        // Verifying that the result list is empty
+        assertEquals(0, result.size());
+    }
 }

@@ -12,7 +12,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -33,6 +32,7 @@ class CustomerPlanServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    // 1. Test case for adding a new plan when the customer has no existing plan
     @Test
     void testCreateNewCustomerPlanMapping_NewPlan() {
         CustomerPlanMapping newCustomerPlanMapping = new CustomerPlanMapping();
@@ -48,6 +48,7 @@ class CustomerPlanServiceTest {
         verify(customerPlanRepository, times(1)).save(newCustomerPlanMapping);
     }
 
+    // 2. Test case for not adding a duplicate plan
     @Test
     void testCreateNewCustomerPlanMapping_ExistingPlan() {
         CustomerPlanMapping newCustomerPlanMapping = new CustomerPlanMapping();
@@ -68,6 +69,16 @@ class CustomerPlanServiceTest {
         verify(customerPlanRepository, never()).save(newCustomerPlanMapping);
     }
 
+    // 3. Test case for null input when creating a new plan
+    @Test
+    void testCreateNewCustomerPlanMapping_NullInput() {
+        boolean result = customerPlanService.createNewCustomerPlanMapping(null);
+
+        assertFalse(result);
+        verify(customerPlanRepository, never()).save(any());
+    }
+
+    // 4. Test case for getting customer plan status when plans exist
     @Test
     void testGetCustomerPlanStatus_WithPlans() {
         Long customerId = 1L;
@@ -91,6 +102,7 @@ class CustomerPlanServiceTest {
         assertEquals("Plan: Test Plan, Status: Active\n", result);
     }
 
+    // 5. Test case for getting customer plan status when no plans exist
     @Test
     void testGetCustomerPlanStatus_NoPlans() {
         Long customerId = 1L;
@@ -103,6 +115,61 @@ class CustomerPlanServiceTest {
         assertEquals("", result);
     }
 
+    // 6. Test case for multiple plans under the same customer
+    @Test
+    void testGetCustomerPlanStatus_MultiplePlans() {
+        Long customerId = 1L;
+
+        CustomerPlanMapping plan1 = new CustomerPlanMapping();
+        plan1.setPlanId("PLAN123");
+        plan1.setStatus("Active");
+
+        CustomerPlanMapping plan2 = new CustomerPlanMapping();
+        plan2.setPlanId("PLAN456");
+        plan2.setStatus("Expired");
+
+        List<CustomerPlanMapping> customerPlans = new ArrayList<>();
+        customerPlans.add(plan1);
+        customerPlans.add(plan2);
+
+        ServicePlan servicePlan1 = new ServicePlan();
+        servicePlan1.setPlanId("PLAN123");
+        servicePlan1.setPlanName("Test Plan 1");
+
+        ServicePlan servicePlan2 = new ServicePlan();
+        servicePlan2.setPlanId("PLAN456");
+        servicePlan2.setPlanName("Test Plan 2");
+
+        when(customerPlanRepository.findByCustomerId(customerId)).thenReturn(customerPlans);
+        when(servicePlanRepository.findByPlanId("PLAN123")).thenReturn(servicePlan1);
+        when(servicePlanRepository.findByPlanId("PLAN456")).thenReturn(servicePlan2);
+
+        String result = customerPlanService.getCustomerPlanStatus(customerId);
+
+        assertEquals("Plan: Test Plan 1, Status: Active\nPlan: Test Plan 2, Status: Expired\n", result);
+    }
+
+    // 7. Test case for handling null ServicePlan when fetching plan status
+    @Test
+    void testGetCustomerPlanStatus_NullServicePlan() {
+        Long customerId = 1L;
+
+        CustomerPlanMapping planMapping = new CustomerPlanMapping();
+        planMapping.setPlanId("PLAN123");
+        planMapping.setStatus("Active");
+
+        List<CustomerPlanMapping> customerPlans = new ArrayList<>();
+        customerPlans.add(planMapping);
+
+        when(customerPlanRepository.findByCustomerId(customerId)).thenReturn(customerPlans);
+        when(servicePlanRepository.findByPlanId("PLAN123")).thenReturn(null);
+
+        String result = customerPlanService.getCustomerPlanStatus(customerId);
+
+        assertEquals("Plan: Unknown Plan, Status: Active\n", result);
+    }
+
+    // 8. Test case for updating the status of an existing plan
     @Test
     void testUpdateCustomerPlanStatus_ExistingPlan() {
         Long customerId = 1L;
@@ -125,6 +192,7 @@ class CustomerPlanServiceTest {
         verify(customerPlanRepository, times(1)).save(planMapping);
     }
 
+    // 9. Test case for failing to update the status if no such plan exists
     @Test
     void testUpdateCustomerPlanStatus_NoSuchPlan() {
         Long customerId = 1L;
@@ -140,4 +208,3 @@ class CustomerPlanServiceTest {
         verify(customerPlanRepository, never()).save(any());
     }
 }
-

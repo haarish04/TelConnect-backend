@@ -35,20 +35,19 @@ class CustomerServiceTest {
 
     @Test
     void testSaveCustomer() {
-        RegisterCustomer newcustomer= new RegisterCustomer();
-        newcustomer.setCustomerName("John Doe");
-        newcustomer.setCustomerEmail("john.doe@example.com");
-        newcustomer.setPassword(passwordEncoder.encode("password123"));
-        newcustomer.setCustomerDOB(LocalDate.of(1990, 1, 1));
-        newcustomer.setCustomerAddress("123 Main St");
+        RegisterCustomer newCustomer = new RegisterCustomer();
+        newCustomer.setCustomerName("John Doe");
+        newCustomer.setCustomerEmail("john.doe@example.com");
+        newCustomer.setPassword("password123");
+        newCustomer.setCustomerDOB(LocalDate.of(1990, 1, 1));
+        newCustomer.setCustomerAddress("123 Main St");
+        newCustomer.setCustomerPhno("1234567890");
 
         when(passwordEncoder.encode("password123")).thenReturn("encodedPassword");
 
-        customerService.saveCustomer(newcustomer);
+        customerService.saveCustomer(newCustomer);
 
-//        assertEquals("encodedPassword", newcustomer.getPassword());
-
-//        verify(customerRepository, times(1)).save(newcustomer);
+        verify(customerRepository, times(1)).save(any(Customer.class));
     }
 
     @Test
@@ -146,5 +145,22 @@ class CustomerServiceTest {
 
         assertFalse(result);
         verify(customerRepository, never()).deleteById(anyLong());
+    }
+
+    // Additional Test Case: Check if saveCustomer encodes the password correctly
+    @Test
+    void testSaveCustomer_PasswordEncoding() {
+        RegisterCustomer newCustomer = new RegisterCustomer();
+        newCustomer.setCustomerName("Alice");
+        newCustomer.setCustomerEmail("alice@example.com");
+        newCustomer.setPassword("plaintextpassword");
+
+        when(passwordEncoder.encode("plaintextpassword")).thenReturn("encodedPassword");
+
+        customerService.saveCustomer(newCustomer);
+
+        verify(customerRepository, times(1)).save(argThat(customer ->
+                "encodedPassword".equals(customer.getPassword())
+        ));
     }
 }
