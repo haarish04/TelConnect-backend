@@ -29,13 +29,13 @@ pipeline {
             steps {
                 script {
                     try{
-                        bat "docker rmi -f TelConnect"
+                        bat "docker rmi -f teleconnect"
                         echo "REMOVED existing docker image and building a new one"
                     }
                     catch(Exception e){
                         echo "Exception occurred "+e.toString()
                     }
-                    bat "docker build -t TelConnect ."
+                    bat "docker build -t teleconnect ."
                 }
             }
         }
