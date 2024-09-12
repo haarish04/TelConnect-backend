@@ -149,27 +149,7 @@ class CustomerPlanServiceTest {
         assertEquals("Plan: Test Plan 1, Status: Active\nPlan: Test Plan 2, Status: Expired\n", result);
     }
 
-    // 7. Test case for handling null ServicePlan when fetching plan status
-//    @Test
-//    void testGetCustomerPlanStatus_NullServicePlan() {
-//        Long customerId = 1L;
-//
-//        CustomerPlanMapping planMapping = new CustomerPlanMapping();
-//        planMapping.setPlanId("PLAN123");
-//        planMapping.setStatus("Active");
-//
-//        List<CustomerPlanMapping> customerPlans = new ArrayList<>();
-//        customerPlans.add(planMapping);
-//
-//        when(customerPlanRepository.findByCustomerId(customerId)).thenReturn(customerPlans);
-//        when(servicePlanRepository.findByPlanId("PLAN123")).thenReturn(null);
-//
-//        String result = customerPlanService.getCustomerPlanStatus(customerId);
-//
-//        assertEquals("Plan: Unknown Plan, Status: Active\n", result);
-//    }
-
-    // 8. Test case for updating the status of an existing plan
+    // 7. Test case for updating the status of an existing plan
     @Test
     void testUpdateCustomerPlanStatus_ExistingPlan() {
         Long customerId = 1L;
@@ -192,7 +172,7 @@ class CustomerPlanServiceTest {
         verify(customerPlanRepository, times(1)).save(planMapping);
     }
 
-    // 9. Test case for failing to update the status if no such plan exists
+    // 8. Test case for failing to update the status if no such plan exists
     @Test
     void testUpdateCustomerPlanStatus_NoSuchPlan() {
         Long customerId = 1L;
