@@ -20,11 +20,13 @@ import com.example.TelConnect.model.EmailContent;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.time.Instant;
 
 @Service
 public class EmailService {
 
-    private final ConcurrentMap<String, Integer> otpStore = new ConcurrentHashMap<>();
+    private final long OTP_EXPIRY_DURATION = 300_000;
+    private final ConcurrentMap<String, OtpEntry> otpStore = new ConcurrentHashMap<>();
     private final NotificationRepository notificationRepository;
     private final NotificationService notificationService;
     public EmailContent email;
@@ -32,6 +34,47 @@ public class EmailService {
     public EmailService(NotificationService notificationService, NotificationRepository notificationRepository){
         this.notificationRepository=notificationRepository;
         this.notificationService=notificationService;
+    }
+
+    private static class OtpEntry {
+        private final int otp;
+        private final long timestamp;
+
+        public OtpEntry(int otp) {
+            this.otp = otp;
+            this.timestamp = Instant.now().toEpochMilli();
+        }
+
+        public int getOtp() {
+            return otp;
+        }
+
+        public long getTimestamp() {
+            return timestamp;
+        }
+    }
+
+    public int generateOTP() {
+        Random random = new Random();
+        return 100000 + random.nextInt(900000); // 6-digit OTP
+    }
+
+    public boolean verifyOTP(String recipient, int otp) {
+        OtpEntry otpEntry = otpStore.get(recipient);
+
+        if (otpEntry == null) {
+            return false; // OTP doesn't exist for recipient
+        }
+
+        // Check if OTP is expired
+        long currentTime = Instant.now().toEpochMilli();
+        if (currentTime - otpEntry.getTimestamp() > OTP_EXPIRY_DURATION) {
+            otpStore.remove(recipient); // Remove expired OTP
+            return false; // OTP expired
+        }
+
+        // Check if OTP matches
+        return otpEntry.getOtp() == otp;
     }
 
     public EmailContent WelcomeMessage(){
@@ -110,7 +153,7 @@ public class EmailService {
                     mail= OTPMessage( OTP);
                     try {
                         sendMail(mail,recipient,name);
-                        otpStore.put(recipient, OTP);
+                        otpStore.put(recipient, new OtpEntry(OTP));
                         return true;
                     }catch(Exception e){
                         e.printStackTrace();
@@ -173,13 +216,4 @@ public class EmailService {
         System.out.println(response.getData());
     }
 
-    public int generateOTP() {
-        Random random = new Random();
-        return 100000 + random.nextInt(900000);
-    }
-
-    public boolean verifyOTP(String recipient, int otp) {
-        Integer storedOtp = otpStore.get(recipient);
-        return storedOtp != null && storedOtp.equals(otp);
-    }
 }
