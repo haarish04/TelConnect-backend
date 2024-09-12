@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        PATH = "C:/Users/e031807/maven/apache-maven-3.9.6-bin/apache-maven-3.9.6/bin;${env.PATH}"
+        PATH = "C:/Users/e031975/Downloads/apache-maven-3.9.8-bin/apache-maven-3.9.8/bin;${env.PATH}"
     }
     stages {
         stage('Clone') {
