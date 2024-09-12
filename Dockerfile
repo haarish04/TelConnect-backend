@@ -1,3 +1,3 @@
 FROM openjdk:8
-COPY target/billing-*.jar /billing-system.jar
-CMD ["java","-cp", "/*.jar", "com.example.TelConnect.TelConnectApplication"]
+COPY target/*.jar /teleconnect.jar
+CMD ["java","-cp", "/teleconnect.jar", "com.example.TelConnect.TelConnectApplication"]
