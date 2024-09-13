@@ -19,57 +19,27 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @RestController
-@RequestMapping("/OCR")
 public class OcrController {
+
     @Autowired
     private OcrService ocrService;
 
-    @Autowired
-    private CustomerAadharRepository customerAadharRepository;
+    @PostMapping("/OCR")
+    public ResponseEntity<String> recognizeText(@RequestParam("file") MultipartFile file) {
+        try {
+            String response = ocrService.recognizeText(file.getInputStream());
 
-    //Handler to invoke OCR for document submitted
-    @PostMapping("/")
-    public ResponseEntity<String> recognizeText(@RequestParam("file") MultipartFile file) throws IOException {
-        String text =  ocrService.recognizeText(file.getInputStream());
-        List<String> aadhaarNumbers = extractAadhaarNumbers(text);
-        List<CustomerAadhar> verifiedPersons = findVerifiedPersons(aadhaarNumbers);
-        String response = generateResponse(verifiedPersons);
-        if(response.equals("Invalid"))
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error");
-        else
-            return ResponseEntity.ok(response);
-    }
 
-    private List<String> extractAadhaarNumbers(String text) {
-        String regex = "\\b\\d{4} \\d{4} \\d{4}\\b";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(text);
-
-        List<String> result = new ArrayList<>();
-        while (matcher.find()) {
-            String match = matcher.group();
-            if (!result.contains(match)) {
-                result.add(match);
+            if ("verified".equals(response)) {
+                return ResponseEntity.ok("Customer verified");
+            } else if ("not_verified".equals(response)) {
+                return ResponseEntity.status(404).body("Customer not verified");
+            } else {
+                return ResponseEntity.status(500).body("Unexpected response");
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Failed to process the file");
         }
-        return result;
-    }
-
-    private List<CustomerAadhar> findVerifiedPersons(List<String> aadhaarNumbers) {
-        return customerAadharRepository.findByIdVerificationIn(aadhaarNumbers);
-    }
-
-    private String generateResponse(List<CustomerAadhar> verifiedPersons) {
-        if (verifiedPersons.isEmpty()) {
-            return "Invalid";
-        }
-
-        StringBuilder result = new StringBuilder();
-        for (CustomerAadhar customerAadhar : verifiedPersons) {
-            result.append("Verified customer: ").append(customerAadhar.getName())
-                    .append(" with ID Verification: ").append(customerAadhar.getIdVerification())
-                    .append("\n");
-        }
-        return result.toString().trim();
     }
 }
