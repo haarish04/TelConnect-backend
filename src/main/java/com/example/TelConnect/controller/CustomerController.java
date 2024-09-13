@@ -3,6 +3,7 @@ package com.example.TelConnect.controller;
 import com.example.TelConnect.model.RegisterCustomer;
 import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.model.LoginRequest;
+import com.example.TelConnect.model.UpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -85,6 +86,19 @@ public class CustomerController {
             return ResponseEntity.ok(customer);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+    }
+
+    @PatchMapping("/update/")
+    public ResponseEntity<String> updateCustomer(@RequestBody UpdateRequest updateCustomer){
+
+        boolean update =customerService.updateCustomerDetails(updateCustomer);
+
+        if (update)
+            return ResponseEntity.ok("Update Success");
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("Account does not exist with this email");
 
     }
 

@@ -2,6 +2,7 @@ package com.example.TelConnect.service;
 
 import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.model.RegisterCustomer;
+import com.example.TelConnect.model.UpdateRequest;
 import com.example.TelConnect.repository.CustomerRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -71,6 +72,25 @@ public class CustomerService {
         }
         else
             return false;
+    }
+
+    public boolean updateCustomerDetails(UpdateRequest updateCustomer){
+        Customer existingCustomer=customerRepository.findByCustomerEmail(updateCustomer.getCustomerEmail());
+        if(existingCustomer==null)
+            return false;
+
+        existingCustomer.setPassword(passwordEncoder.encode(updateCustomer.getPassword()));
+        existingCustomer.setCustomerAddress(updateCustomer.getCustomerAddress());
+        existingCustomer.setCustomerDOB(updateCustomer.getCustomerDOB());
+        existingCustomer.setCustomerId(existingCustomer.getCustomerId());
+        existingCustomer.setCustomerName(existingCustomer.getCustomerName());
+        existingCustomer.setCustomerEmail(existingCustomer.getCustomerEmail());
+        existingCustomer.setRole("USER");
+        existingCustomer.setAccountCreationDate(existingCustomer.getAccountCreationDate());
+
+        customerRepository.save(existingCustomer);
+        return true;
+
     }
 
     private Customer convertEntity(Customer customer) {

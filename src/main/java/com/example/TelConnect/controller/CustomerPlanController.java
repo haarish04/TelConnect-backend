@@ -19,7 +19,7 @@ public class CustomerPlanController {
     }
 
     //Handler to enroll new customer and map to a service
-    @GetMapping("/enrollCustomer")
+    @PostMapping("/enrollCustomer")
     public ResponseEntity<String> enrollCustomer(@RequestBody CustomerPlanMapping customerPlanMapping){
         if(customerPlanService.createNewCustomerPlanMapping(customerPlanMapping))
             return ResponseEntity.ok("Customer enrolled");
@@ -47,4 +47,6 @@ public class CustomerPlanController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer has no existing plans");
         return ResponseEntity.ok(response);
     }
+
+
 }
