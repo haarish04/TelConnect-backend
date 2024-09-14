@@ -1,21 +1,3 @@
----------------Customer Controller---------------------
-//    @GetMapping("verifyEmail")
-//    public ResponseEntity<String> verifyCustomerEmail(@RequestParam String customerEmail){
-//    }
-
-    //Handler method to update customer details
-//    @PostMapping("/update")
-//    public ResponseEntity<String> updateCustomer(@RequestBody Customer customer){
-//
-//        Customer existingCustomer = customerService.getByCustomerEmail(customer.getCustomerEmail());
-//
-//        if (existingCustomer == null) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//                    .body("Account does not exist with this email");
-//        }
-//
-//    }
-
     // Handler method to handle logout
 //    @PostMapping("/logout")
 //    public ResponseEntity<String> logout() {

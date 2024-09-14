@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.TelConnect.service.NotificationService;
 
 @RestController
-@RequestMapping("/notification")
+@RequestMapping("/api/notifications")
 public class NotificationController {
     private final NotificationService notificationService;
 
@@ -15,7 +15,7 @@ public class NotificationController {
     }
 
     //Handler to create new notification entry when email pushed to customer
-    @PostMapping("/create/{customerId}")
+    @PostMapping("/{customerId}")
     public ResponseEntity<String> createNotification(@PathVariable Long customerId, @RequestParam String message){
         notificationService.createNotification(customerId, message);
         return ResponseEntity.ok("Notification pushed to customer");
@@ -23,7 +23,7 @@ public class NotificationController {
     }
 
     //Handler to get notifications sent to a customer
-    @GetMapping("/get/{customerId}")
+    @GetMapping("/{customerId}")
     public ResponseEntity<String> getNotification(@PathVariable Long customerId){
         String notifications = notificationService.getCustomerNotifications(customerId).toString();
         if(notifications.isEmpty())

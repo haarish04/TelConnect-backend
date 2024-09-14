@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/sendMail")
+@RequestMapping("/api/emails")
 public class EmailController {
     private final EmailService emailService;
 
@@ -19,7 +19,7 @@ public class EmailController {
 
     //Handler to push welcome email
     @PostMapping("/welcome")
-    public ResponseEntity<String> welcomeMailSender(@RequestParam String recipient, String name){
+    public ResponseEntity<String> welcomeMailSender(@RequestParam String recipient,@RequestParam String name){
         if(emailService.customEmailSender("welcome",0,recipient,name))
             return ResponseEntity.ok().body("Email sent");
         else
@@ -28,7 +28,7 @@ public class EmailController {
 
     //Handler to push OTP mail
     @PostMapping("/OTP")
-    public ResponseEntity<String> OTPMailSender(@RequestParam String recipient, String name){
+    public ResponseEntity<String> OTPMailSender(@RequestParam String recipient, @RequestParam String name){
         int otp=emailService.generateOTP();
         if(emailService.customEmailSender("otp",otp,recipient,name))
             return ResponseEntity.ok().body("Email sent");
@@ -37,8 +37,8 @@ public class EmailController {
     }
 
     //Handler to push thank-you mail
-    @PostMapping("/thankYou")
-    public ResponseEntity<String> thankYouSender(@RequestParam String recipient, String name){
+    @PostMapping("/thank-you")
+    public ResponseEntity<String> thankYouSender(@RequestParam String recipient, @RequestParam String name){
         if(emailService.customEmailSender("thankyou",0,recipient,name))
             return ResponseEntity.ok().body("Email sent");
         else
@@ -46,8 +46,8 @@ public class EmailController {
     }
 
     //Handler to push service activation mail
-    @PostMapping("/serviceActivation")
-    public ResponseEntity<String> activationSender(@RequestParam String recipient, String name){
+    @PostMapping("/service-activation")
+    public ResponseEntity<String> activationSender(@RequestParam String recipient,@RequestParam String name){
         if(emailService.customEmailSender("serviceactivation",0,recipient,name))
             return ResponseEntity.ok().body("Email sent");
         else
@@ -55,7 +55,7 @@ public class EmailController {
     }
 
     //Handler to verify OTP submitted
-    @PostMapping("/verifyOTP")
+    @PostMapping("/otp/verify")
     public ResponseEntity<String> verifyOTP(@RequestParam String recipient, @RequestParam int otp) {
         if (emailService.verifyOTP(recipient, otp)) {
             return ResponseEntity.ok().body("OTP verified successfully");

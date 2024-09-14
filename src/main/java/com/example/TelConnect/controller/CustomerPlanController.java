@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("customer/plan")
+@RequestMapping("/api/customers/plans")
 public class CustomerPlanController {
 
     private final CustomerPlanService customerPlanService;
@@ -19,7 +19,7 @@ public class CustomerPlanController {
     }
 
     //Handler to enroll new customer and map to a service
-    @PostMapping("/enrollCustomer")
+    @PostMapping
     public ResponseEntity<String> enrollCustomer(@RequestBody CustomerPlanMapping customerPlanMapping){
         if(customerPlanService.createNewCustomerPlanMapping(customerPlanMapping))
             return ResponseEntity.ok("Customer enrolled");
@@ -28,8 +28,8 @@ public class CustomerPlanController {
     }
 
     //Update status of the plan chosen by customer
-    @PatchMapping("/updateStatus/{customerId}/{planId}/admin?={adminId}")
-    public ResponseEntity<String> updateStatus(@PathVariable Long customerId, @PathVariable String planId, @RequestParam String status, @PathVariable Long adminId ){
+    @PatchMapping("/{customerId}/plans/{planId}/status")
+    public ResponseEntity<String> updateStatus(@PathVariable Long customerId, @PathVariable String planId, @RequestParam String status, @RequestParam Long adminId ){
         if(adminId==1L){
             if(customerPlanService.updateCustomerPlanStatus(customerId,planId,status))
                 return ResponseEntity.ok("Status updated");
@@ -40,7 +40,7 @@ public class CustomerPlanController {
     }
 
     //Handler to get status of customer and their plan
-    @GetMapping("/getStatus/{customerId}")
+    @GetMapping("/{customerId}/plans/status")
     public ResponseEntity<String> getCustomerStatus(@PathVariable Long customerId){
         String response= customerPlanService.getCustomerPlanStatus(customerId);
         if(response.isEmpty())

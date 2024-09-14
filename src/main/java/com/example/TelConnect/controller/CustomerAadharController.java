@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/customer/Aadhar")
+@RequestMapping("/api/customers/aadhar")
 public class CustomerAadharController {
 
     @Autowired
     private CustomerAadharRepository  customerAadharRepository;
 
     //Handler to get all aadhar details from DB
-    @GetMapping("/getAll")
+    @GetMapping
     public List<CustomerAadhar> getAllPersons() {
         return customerAadharRepository.findAll();
     }

@@ -10,7 +10,7 @@ import javax.print.Doc;
 import java.util.List;
 
 @RestController
-@RequestMapping("/document")
+@RequestMapping("/api/customers/{customerId}/documents")
 public class DocumentController {
 
     private final DocumentService documentService;
@@ -21,14 +21,14 @@ public class DocumentController {
 
 
     //Handler to create new document record
-    @PostMapping("/save")
-    public ResponseEntity<String> saveDocument(@RequestParam Long customerId, @RequestParam String DocumentType){
+    @PostMapping
+    public ResponseEntity<String> saveDocument(@PathVariable  Long customerId, @RequestParam String DocumentType){
         documentService.saveDocument(customerId, DocumentType);
         return ResponseEntity.ok("Document entry successfull");
     }
 
     //Get the documents and their details for a customer
-    @GetMapping("/get/{customerId}")
+    @GetMapping
     public ResponseEntity<?> getDocument(@PathVariable Long customerId){
         List<Document> documents = documentService.getByCustomerId(customerId);
         if(documents!=null)

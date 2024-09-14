@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/plan")
+@RequestMapping("/api/plans")
 public class ServicePlanController {
 
     private ServicePlanService servicePlanService;
@@ -20,7 +20,7 @@ public class ServicePlanController {
     }
 
     //Handler to get plan details using Id
-    @GetMapping("/getPlan/{planId}")
+    @GetMapping("/{planId}")
     public ResponseEntity<ServicePlan> getPlan(@PathVariable String planId){
         ServicePlan plan= servicePlanService.getPlan(planId);
         if(plan!=null)
@@ -30,7 +30,7 @@ public class ServicePlanController {
     }
 
     //Handler to get all the plans
-    @GetMapping("/getAllPlans")
+    @GetMapping
     public ResponseEntity<List<ServicePlan>> getAllPlans(){
         List<ServicePlan> plans= servicePlanService.getAllPlans();
         if(plans.isEmpty())
@@ -41,8 +41,8 @@ public class ServicePlanController {
     }
 
     //Handler to create new plan, requires admin
-    @PostMapping("/createPlan/admin?={adminId}")
-    public ResponseEntity<String> createPlan(@RequestBody ServicePlan plan,@PathVariable Long adminId){
+    @PostMapping
+    public ResponseEntity<String> createPlan(@RequestBody ServicePlan plan,@RequestParam Long adminId){
         if(adminId==1L){
             if(servicePlanService.createPlan(plan))
                 return ResponseEntity.ok("New plan created");
@@ -54,8 +54,8 @@ public class ServicePlanController {
     }
 
     //Handler to delete existing plans
-    @DeleteMapping("/deletePlan/{planId}/admin={adminId}")
-    public ResponseEntity<String> deletePlan(@PathVariable String planId, @PathVariable Long adminId){
+    @DeleteMapping("/{planId}")
+    public ResponseEntity<String> deletePlan(@PathVariable String planId, @RequestParam Long adminId){
         if(adminId==1L){
             servicePlanService.deletePlan(planId);
             return ResponseEntity.ok("Plan Deleted");

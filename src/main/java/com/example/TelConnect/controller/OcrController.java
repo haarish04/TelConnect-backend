@@ -1,10 +1,7 @@
 package com.example.TelConnect.controller;
-import com.example.TelConnect.model.CustomerAadhar;
-import com.example.TelConnect.repository.CustomerAadharRepository;
 
 import com.example.TelConnect.service.OcrService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,18 +10,19 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @RestController
+@RequestMapping("/api/ocr")
 public class OcrController {
 
-    @Autowired
-    private OcrService ocrService;
+    private final OcrService ocrService;
 
-    @PostMapping("/OCR")
+    @Autowired
+    public OcrController(OcrService ocrService) {
+        this.ocrService = ocrService;
+    }
+
+    @PostMapping("/recognize")
     public ResponseEntity<String> recognizeText(@RequestParam("file") MultipartFile file) {
         try {
             String response = ocrService.recognizeText(file.getInputStream());
