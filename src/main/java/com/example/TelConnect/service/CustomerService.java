@@ -1,8 +1,8 @@
 package com.example.TelConnect.service;
 
 import com.example.TelConnect.model.Customer;
-import com.example.TelConnect.model.RegisterCustomer;
-import com.example.TelConnect.model.UpdateRequest;
+import com.example.TelConnect.DTO.RegisterCustomerDTO;
+import com.example.TelConnect.DTO.UpdateRequestDTO;
 import com.example.TelConnect.repository.CustomerRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class CustomerService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void saveCustomer(RegisterCustomer newCustomer) {
+    public void saveCustomer(RegisterCustomerDTO newCustomer) {
         Customer customer= new Customer();
         customer.setCustomerName(newCustomer.getCustomerName());
         customer.setCustomerEmail(newCustomer.getCustomerEmail());
@@ -42,11 +42,6 @@ public class CustomerService {
     }
 
     public int authenticateCustomer(String email, String password) {
-        List<Customer> customers = customerRepository.findAll();
-//        Customer customer = customers.stream()
-//                .filter(c -> c.getCustomerEmail().equals(email))
-//                .findFirst()
-//                .orElse(null);
         Customer customer = customerRepository.findByCustomerEmail(email);
         if (customer != null) {
             if(passwordEncoder.matches(password, customer.getPassword()))
@@ -74,7 +69,7 @@ public class CustomerService {
             return false;
     }
 
-    public boolean updateCustomerDetails(UpdateRequest updateCustomer){
+    public boolean updateCustomerDetails(UpdateRequestDTO updateCustomer){
         Customer existingCustomer=customerRepository.findByCustomerEmail(updateCustomer.getCustomerEmail());
         if(existingCustomer==null)
             return false;

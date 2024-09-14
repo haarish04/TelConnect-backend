@@ -1,6 +1,7 @@
 package com.example.TelConnect.service;
 
 import com.example.TelConnect.model.Verification;
+import com.example.TelConnect.DTO.VerificationRequestDTO;
 import com.example.TelConnect.repository.VerificationRepository;
 import com.example.TelConnect.model.Document;
 import org.springframework.stereotype.Service;
@@ -22,11 +23,11 @@ public class VerificationService {
     }
 
     //Save verification status as failed by default for a customer and document
-    public void saveVerification(Long documentId, Long customerId){
+    public void saveVerification(VerificationRequestDTO newVerificationRequest){
         Verification verification= new Verification();
 
-        verification.setCustomerId(customerId);
-        verification.setDocumentId(documentId);
+        verification.setCustomerId(newVerificationRequest.getCustomerId());
+        verification.setDocumentId(newVerificationRequest.getDocumentId());
         verification.setRequestDate(LocalDateTime.now());
         verification.setRequestStatus("failed");
 

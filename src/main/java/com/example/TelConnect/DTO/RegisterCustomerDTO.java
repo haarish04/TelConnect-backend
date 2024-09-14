@@ -1,10 +1,10 @@
-package com.example.TelConnect.model;
+package com.example.TelConnect.DTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
 
-public class RegisterCustomer {
+public class RegisterCustomerDTO {
 
     private String customerName;
 
@@ -67,6 +67,4 @@ public class RegisterCustomer {
     public void setPassword(String password) {
         this.password = password;
     }
-
-
 }

@@ -1,8 +1,8 @@
-package com.example.TelConnect.model;
+package com.example.TelConnect.DTO;
 
 import java.time.LocalDate;
 
-public class UpdateRequest {
+public class UpdateRequestDTO {
     private LocalDate customerDOB;
     private String customerAddress;
     private String password;

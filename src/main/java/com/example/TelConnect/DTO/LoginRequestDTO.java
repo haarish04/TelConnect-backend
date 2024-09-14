@@ -1,5 +1,6 @@
-package com.example.TelConnect.model;
-public class LoginRequest {
+package com.example.TelConnect.DTO;
+
+public class LoginRequestDTO {
     private String customerEmail;
     private String password;
 
