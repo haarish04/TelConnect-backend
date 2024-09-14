@@ -28,19 +28,16 @@ public class SpringSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/register/**").permitAll()
-                        .requestMatchers("/login").permitAll()
-                        .requestMatchers("/customer/**").permitAll()
-                                .requestMatchers("/document/**").permitAll()
-                                .requestMatchers("/verification/**").permitAll()
-                                .requestMatchers("/notification/**").permitAll()
-                                .requestMatchers("/plan/**").permitAll()
+                        .requestMatchers("/api/customers**").permitAll()
+                                .requestMatchers("/api/verification**").permitAll()
+                                .requestMatchers("/api/notifications**").permitAll()
+                                .requestMatchers("/api/plans**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/swagger-resources/**").permitAll()
                         .requestMatchers("/webjars/**").permitAll()
-                                .requestMatchers("/OCR/**").permitAll()
-                        .requestMatchers("/sendMail/**").permitAll()
+                                .requestMatchers("/api/ocr**").permitAll()
+                        .requestMatchers("/api/emails**").permitAll()
 
                 )
                 .httpBasic();
