@@ -61,7 +61,8 @@ public class VerificationService {
     }
 
     //Update verification status of a customer
-    public void updateVerificationStatus(Long customerId, String documentType, String status) {
+    public void updateVerificationStatus(Long customerId, String status) {
+        String documentType= "Aadhar";
         // Get the list of verifications for the given customer ID
         List<Verification> verifications = verificationRepository.findByCustomerId(customerId);
 

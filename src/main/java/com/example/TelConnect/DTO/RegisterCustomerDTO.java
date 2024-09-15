@@ -1,6 +1,5 @@
 package com.example.TelConnect.DTO;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
 
@@ -8,7 +7,6 @@ public class RegisterCustomerDTO {
 
     private String customerName;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     private String customerEmail;
