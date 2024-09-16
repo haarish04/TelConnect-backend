@@ -3,6 +3,7 @@ package com.example.TelConnect.controller;
 import com.example.TelConnect.model.ServicePlan;
 import com.example.TelConnect.service.ServicePlanService;
 
+import okhttp3.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -59,6 +60,18 @@ public class ServicePlanController {
         if(adminId==1L){
             servicePlanService.deletePlan(planId);
             return ResponseEntity.ok("Plan Deleted");
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized Operation");
+    }
+
+    //Handler to edit existing plan
+    @PatchMapping("/{planId")
+    public ResponseEntity<String> updatePlan(@RequestBody ServicePlan plan, @RequestParam Long adminId){
+        if(adminId==1L){
+            if(servicePlanService.updatePlan(plan))
+                return ResponseEntity.ok("Plan updated");
+            else
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Plan not found");
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized Operation");
     }
