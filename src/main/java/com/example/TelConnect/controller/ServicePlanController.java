@@ -65,10 +65,10 @@ public class ServicePlanController {
     }
 
     //Handler to edit existing plan
-    @PatchMapping("/{planId")
-    public ResponseEntity<String> updatePlan(@RequestBody ServicePlan plan, @RequestParam Long adminId){
+    @PatchMapping("/{planId}")
+    public ResponseEntity<String> updatePlan(@PathVariable String planId, @RequestBody ServicePlan plan, @RequestParam Long adminId){
         if(adminId==1L){
-            if(servicePlanService.updatePlan(plan))
+            if(servicePlanService.updatePlan(plan,planId))
                 return ResponseEntity.ok("Plan updated");
             else
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Plan not found");

@@ -27,15 +27,15 @@ public class ServicePlanService {
             return false;
     }
 
-    //Update service plan
-    public boolean updatePlan(ServicePlan plan){
-        ServicePlan existingPlan= servicePlanRepository.findByPlanId(plan.getPlanId());
+    //Update existing service plan
+    public boolean updatePlan(ServicePlan plan, String planId){
+        ServicePlan existingPlan= servicePlanRepository.findByPlanId(planId);
         if(plan==null)
             return false;
 
         existingPlan.setPlanName(plan.getPlanName());
         existingPlan.setPlanDescription(plan.getPlanDescription());
-        existingPlan.setPlanId(plan.getPlanId());
+        existingPlan.setPlanId(planId);
         existingPlan.setPlanDuration(plan.getPlanDuration());
         existingPlan.setPlanPrice(plan.getPlanPrice());
         servicePlanRepository.save(existingPlan);
