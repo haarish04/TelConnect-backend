@@ -74,7 +74,7 @@ public class CustomerService {
         if(existingCustomer==null)
             return false;
 
-        existingCustomer.setPassword(passwordEncoder.encode(updateCustomer.getPassword()));
+        existingCustomer.setPassword(passwordEncoder.encode(existingCustomer.getPassword()));
         existingCustomer.setCustomerAddress(updateCustomer.getCustomerAddress());
         existingCustomer.setCustomerDOB(updateCustomer.getCustomerDOB());
         existingCustomer.setCustomerId(existingCustomer.getCustomerId());
