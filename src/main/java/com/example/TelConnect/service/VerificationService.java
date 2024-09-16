@@ -81,4 +81,9 @@ public class VerificationService {
                     verificationRepository.save(verification); // Save the updated verification
                 });
     }
+
+    //Get all the verification attempts
+    public List<Verification> getAllVerificationAttempts(){
+        return verificationRepository.findAll();
+    }
 }
