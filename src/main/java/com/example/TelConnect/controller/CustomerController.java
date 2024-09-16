@@ -69,12 +69,12 @@ public class CustomerController {
 
     // Handler method to get list of customers
     @GetMapping
-    public ResponseEntity<String> getCustomers(@RequestParam Long adminId) {
+    public ResponseEntity<List<Customer>> getCustomers(@RequestParam Long adminId) {
         if(adminId==1L){
             List<Customer> customers = customerService.findAllCustomers();
-            return ResponseEntity.ok(customers.toString());
+            return ResponseEntity.ok(customers);
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized Operation");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 
     }
 
