@@ -74,14 +74,14 @@ public class CustomerService {
         if(existingCustomer==null)
             return false;
 
-        existingCustomer.setPassword(passwordEncoder.encode(existingCustomer.getPassword()));
+        existingCustomer.setPassword(passwordEncoder.encode(updateCustomer.getPassword()));
         existingCustomer.setCustomerAddress(updateCustomer.getCustomerAddress());
         existingCustomer.setCustomerDOB(updateCustomer.getCustomerDOB());
-        existingCustomer.setCustomerId(existingCustomer.getCustomerId());
-        existingCustomer.setCustomerName(existingCustomer.getCustomerName());
-        existingCustomer.setCustomerEmail(existingCustomer.getCustomerEmail());
-        existingCustomer.setRole("USER");
-        existingCustomer.setAccountCreationDate(existingCustomer.getAccountCreationDate());
+        //existingCustomer.setCustomerId(existingCustomer.getCustomerId());
+        //existingCustomer.setCustomerName(existingCustomer.getCustomerName());
+        //existingCustomer.setCustomerEmail(existingCustomer.getCustomerEmail());
+        //existingCustomer.setRole("USER");
+        //existingCustomer.setAccountCreationDate(existingCustomer.getAccountCreationDate());
 
         customerRepository.save(existingCustomer);
         return true;
