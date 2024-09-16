@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/customers/plans")
@@ -46,6 +48,15 @@ public class CustomerPlanController {
         if(response.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer has no existing plans");
         return ResponseEntity.ok(response);
+    }
+
+    //Handler to get details of all customers and their chosen plans
+    @GetMapping
+    public ResponseEntity<?> getCustomerPlans(@RequestParam Long adminId){
+        if(adminId==1L)
+            return ResponseEntity.ok(customerPlanService.getAllCustomerPlans());
+        else
+            return (ResponseEntity<?>) ResponseEntity.badRequest();
     }
 
 

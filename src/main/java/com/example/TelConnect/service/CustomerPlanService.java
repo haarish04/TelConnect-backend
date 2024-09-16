@@ -71,4 +71,9 @@ public class CustomerPlanService {
         }
         return false;
     }
+
+    public List<CustomerPlanMapping> getAllCustomerPlans(){
+        return customerPlanRepository.findAll();
+    }
+
 }
