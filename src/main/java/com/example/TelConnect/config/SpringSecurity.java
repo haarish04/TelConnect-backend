@@ -12,12 +12,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.example.TelConnect.security.JwtRequestFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 @Configuration
 @EnableWebSecurity
 public class SpringSecurity {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtRequestFilter jwtRequestFilter;
 
     @Bean
     public static PasswordEncoder passwordEncoder() {
@@ -28,6 +34,8 @@ public class SpringSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/login").permitAll()
+                        .requestMatchers("/api/register").permitAll()
                         .requestMatchers("/api/customers/**").permitAll()
                                 .requestMatchers("/api/verification/**").permitAll()
                                 .requestMatchers("/api/notifications/**").permitAll()
@@ -38,6 +46,10 @@ public class SpringSecurity {
                         .requestMatchers("/webjars/**").permitAll()
                                 .requestMatchers("/api/ocr/**").permitAll()
                         .requestMatchers("/api/emails/**").permitAll()
+                        .requestMatchers("/api/admin/**").authenticated()
+                        .and()
+                        .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class) // Add JWT filter
+
 
                 )
                 .httpBasic();
@@ -52,7 +64,7 @@ public class SpringSecurity {
                 .passwordEncoder(passwordEncoder());
     }
 
-    // Define the AuthenticationManager bean explicitly if needed
+    // Define the AuthenticationManager bean explicitly
     @Bean
     public AuthenticationManager authenticationManagerBean(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class).build();
