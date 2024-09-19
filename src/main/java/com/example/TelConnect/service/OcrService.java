@@ -45,7 +45,7 @@ public class OcrService {
         return "not_verified";
     }
 
-    private List<BufferedImage> extractImagesFromPdf(InputStream pdfStream) throws IOException {
+    public List<BufferedImage> extractImagesFromPdf(InputStream pdfStream) throws IOException {
         List<BufferedImage> images = new ArrayList<>();
         try (PDDocument document = PDDocument.load(pdfStream)) {
             PDFRenderer pdfRenderer = new PDFRenderer(document);
@@ -59,7 +59,7 @@ public class OcrService {
         return images;
     }
 
-    private String performOcr(BufferedImage image) throws IOException {
+    public String performOcr(BufferedImage image) throws IOException {
 
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             ImageIO.write(image, "png", baos);
@@ -109,7 +109,7 @@ public class OcrService {
         }
     }
 
-    private String verifyNameInText(String text) {
+    public String verifyNameInText(String text) {
 
         List<CustomerAadhar> customers = customerAadharRepository.findAll();
 

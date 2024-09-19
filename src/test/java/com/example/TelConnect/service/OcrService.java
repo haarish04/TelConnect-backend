@@ -39,19 +39,19 @@ class OcrServiceTest {
         // Prepare test data
         List<CustomerAadhar> customers = new ArrayList<>();
         CustomerAadhar customer = new CustomerAadhar();
-        customer.setName("John Doe");
+        customer.setName("Haarish Anandan");
         customers.add(customer);
 
         when(customerAadharRepository.findAll()).thenReturn(customers);
 
         // Simulate the PDF InputStream
-        Resource pdfFile = new ClassPathResource("sample.pdf"); // Replace with your sample PDF path
+        Resource pdfFile = new ClassPathResource("TestAadhar.pdf");
         InputStream fileStream = new FileInputStream(pdfFile.getFile());
 
         // Simulate the OCR result to contain the customer name
         OcrService spyOcrService = spy(ocrService);
         doReturn(List.of(new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB))).when(spyOcrService).extractImagesFromPdf(fileStream);
-        doReturn("John Doe").when(spyOcrService).performOcr(any());
+        doReturn("Haarish Anandan").when(spyOcrService).performOcr(any());
 
         // Act
         String result = spyOcrService.recognizeText(fileStream);
@@ -72,7 +72,7 @@ class OcrServiceTest {
         when(customerAadharRepository.findAll()).thenReturn(customers);
 
         // Simulate the PDF InputStream
-        Resource pdfFile = new ClassPathResource("sample.pdf"); // Replace with your sample PDF path
+        Resource pdfFile = new ClassPathResource("TestAadhar.pdf"); // Replace with your sample PDF path
         InputStream fileStream = new FileInputStream(pdfFile.getFile());
 
         // Simulate the OCR result without the customer name
@@ -91,7 +91,7 @@ class OcrServiceTest {
     @Test
     void testExtractImagesFromPdf() throws IOException {
         // Simulate the PDF InputStream
-        Resource pdfFile = new ClassPathResource("sample.pdf"); // Replace with your sample PDF path
+        Resource pdfFile = new ClassPathResource("TestAadhar.pdf"); // Replace with your sample PDF path
         InputStream fileStream = new FileInputStream(pdfFile.getFile());
 
         // Act
@@ -123,16 +123,16 @@ class OcrServiceTest {
         // Prepare test data
         List<CustomerAadhar> customers = new ArrayList<>();
         CustomerAadhar customer = new CustomerAadhar();
-        customer.setName("John Doe");
+        customer.setName("Haarish Anandan");
         customers.add(customer);
 
         when(customerAadharRepository.findAll()).thenReturn(customers);
 
         // Act
-        String result = ocrService.verifyNameInText("Some text containing John Doe");
+        String result = ocrService.verifyNameInText("Some text containing Haarish Anandan");
 
         // Assert
-        assertEquals("John Doe", result);
+        assertEquals("Haarish Anandan", result);
     }
 
     @Test

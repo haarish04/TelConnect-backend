@@ -97,7 +97,7 @@ class CustomerPlanServiceTest {
         when(customerPlanRepository.findByCustomerId(customerId)).thenReturn(customerPlans);
         when(servicePlanRepository.findByPlanId("PLAN123")).thenReturn(servicePlan);
 
-        String result = customerPlanService.getCustomerPlanStatus(customerId);
+        List<CustomerPlanMapping> result = customerPlanService.getCustomerPlanStatus(customerId);
 
         assertEquals("Plan: Test Plan, Status: Active\n", result);
     }
@@ -110,7 +110,7 @@ class CustomerPlanServiceTest {
         List<CustomerPlanMapping> customerPlans = new ArrayList<>();
         when(customerPlanRepository.findByCustomerId(customerId)).thenReturn(customerPlans);
 
-        String result = customerPlanService.getCustomerPlanStatus(customerId);
+        List<CustomerPlanMapping> result = customerPlanService.getCustomerPlanStatus(customerId);
 
         assertEquals("", result);
     }
@@ -144,7 +144,7 @@ class CustomerPlanServiceTest {
         when(servicePlanRepository.findByPlanId("PLAN123")).thenReturn(servicePlan1);
         when(servicePlanRepository.findByPlanId("PLAN456")).thenReturn(servicePlan2);
 
-        String result = customerPlanService.getCustomerPlanStatus(customerId);
+        List<CustomerPlanMapping> result = customerPlanService.getCustomerPlanStatus(customerId);
 
         assertEquals("Plan: Test Plan 1, Status: Active\nPlan: Test Plan 2, Status: Expired\n", result);
     }
