@@ -31,8 +31,8 @@ public class CustomerPlanController {
 
     //Handler to get status of customer and their plan
     @GetMapping("/{customerId}/status")
-    public ResponseEntity<String> getCustomerStatus(@PathVariable Long customerId){
-        String response= customerPlanService.getCustomerPlanStatus(customerId);
+    public ResponseEntity<?> getCustomerStatus(@PathVariable Long customerId){
+        List<CustomerPlanMapping> response= customerPlanService.getCustomerPlanStatus(customerId);
         if(response.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer has no existing plans");
         return ResponseEntity.ok(response);

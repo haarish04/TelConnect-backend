@@ -34,25 +34,14 @@ public class CustomerPlanService {
         return true;
     }
 
-    public String getCustomerPlanStatus(Long customerId) {
+    public List<CustomerPlanMapping> getCustomerPlanStatus(Long customerId) {
         List<CustomerPlanMapping> customerPlans = customerPlanRepository.findByCustomerId(customerId);
 
         //If customer has plans
         if (!customerPlans.isEmpty()) {
-            StringBuilder statusBuilder = new StringBuilder();
-
-            //Iterate through all the plans and find out the plan name and status
-            for (CustomerPlanMapping customerPlan : customerPlans) {
-                ServicePlan plan= servicePlanRepository.findByPlanId(customerPlan.getPlanId());
-                String planName =plan.getPlanName();
-                String status = customerPlan.getStatus();
-                statusBuilder.append("Plan: ").append(planName)
-                        .append(", Status: ").append(status)
-                        .append("\n");
-            }
-            return statusBuilder.toString();
+            return customerPlans;
         } else {
-            return "";
+            return null;
         }
     }
 
