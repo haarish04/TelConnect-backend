@@ -8,7 +8,7 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private final String SECRET_KEY = "your_secret_key";
+    private final String SECRET_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImFkbWluIiwiaWF0IjoxNTE2MjM5MDIyfQ.vuVjQ5DpW01iyXNRNJenosW7LndiG0uDK0CpCf7uoFE";
 
     // Generate a JWT token
     public String generateToken(String email) {
