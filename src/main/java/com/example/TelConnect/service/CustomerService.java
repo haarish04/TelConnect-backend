@@ -41,6 +41,9 @@ public class CustomerService {
         return customerRepository.findByCustomerEmail(email);
     }
 
+    public Customer getByCustomerId(Long customerId){
+        return customerRepository.findById(customerId).orElse(null);
+    }
     public int authenticateCustomer(String email, String password) {
         Customer customer = customerRepository.findByCustomerEmail(email);
         if (customer != null) {
@@ -77,11 +80,7 @@ public class CustomerService {
         existingCustomer.setPassword(passwordEncoder.encode(updateCustomer.getPassword()));
         existingCustomer.setCustomerAddress(updateCustomer.getCustomerAddress());
         existingCustomer.setCustomerDOB(updateCustomer.getCustomerDOB());
-        //existingCustomer.setCustomerId(existingCustomer.getCustomerId());
-        //existingCustomer.setCustomerName(existingCustomer.getCustomerName());
-        //existingCustomer.setCustomerEmail(existingCustomer.getCustomerEmail());
-        //existingCustomer.setRole("USER");
-        //existingCustomer.setAccountCreationDate(existingCustomer.getAccountCreationDate());
+
 
         customerRepository.save(existingCustomer);
         return true;

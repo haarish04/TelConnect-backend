@@ -41,38 +41,4 @@ public class ServicePlanController {
 
     }
 
-    //Handler to create new plan, requires admin
-    @PostMapping
-    public ResponseEntity<String> createPlan(@RequestBody ServicePlan plan,@RequestParam Long adminId){
-        if(adminId==1L){
-            if(servicePlanService.createPlan(plan))
-                return ResponseEntity.ok("New plan created");
-            else
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("PlanId already exists");
-        }
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized operation");
-    }
-
-    //Handler to delete existing plans
-    @DeleteMapping("/{planId}")
-    public ResponseEntity<String> deletePlan(@PathVariable String planId, @RequestParam Long adminId){
-        if(adminId==1L){
-            servicePlanService.deletePlan(planId);
-            return ResponseEntity.ok("Plan Deleted");
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized Operation");
-    }
-
-    //Handler to edit existing plan
-    @PatchMapping("/{planId}")
-    public ResponseEntity<String> updatePlan(@PathVariable String planId, @RequestBody ServicePlan plan, @RequestParam Long adminId){
-        if(adminId==1L){
-            if(servicePlanService.updatePlan(plan,planId))
-                return ResponseEntity.ok("Plan updated");
-            else
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Plan not found");
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized Operation");
-    }
 }

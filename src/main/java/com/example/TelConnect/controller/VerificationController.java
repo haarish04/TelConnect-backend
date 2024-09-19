@@ -34,20 +34,4 @@ public class VerificationController {
 
     }
 
-    //Handler to update verification status
-    @PatchMapping("/{customerId}/status")
-    public ResponseEntity<String> updateVerificationStatus( @PathVariable Long customerId,@RequestParam String status){
-        verificationService.updateVerificationStatus(customerId, status);
-        return ResponseEntity.ok("Status updated successfully");
-    }
-
-    //Handler to get all the verification attempts
-    @GetMapping
-    public ResponseEntity<?> getAllVerificationAttempts(@RequestParam Long adminId){
-        if(adminId==1L)
-            return ResponseEntity.ok(verificationService.getAllVerificationAttempts());
-        else
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized operation");
-
-    }
 }

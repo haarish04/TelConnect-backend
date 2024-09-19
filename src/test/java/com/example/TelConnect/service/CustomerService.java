@@ -1,7 +1,7 @@
 package com.example.TelConnect.service;
 
 import com.example.TelConnect.model.Customer;
-import com.example.TelConnect.model.RegisterCustomer;
+import com.example.TelConnect.DTO.RegisterCustomerDTO;
 import com.example.TelConnect.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ class CustomerServiceTest {
 
     @Test
     void testSaveCustomer() {
-        RegisterCustomer newCustomer = new RegisterCustomer();
+        RegisterCustomerDTO newCustomer = new RegisterCustomerDTO();
         newCustomer.setCustomerName("John Doe");
         newCustomer.setCustomerEmail("john.doe@example.com");
         newCustomer.setPassword("password123");
@@ -150,7 +150,7 @@ class CustomerServiceTest {
     // Additional Test Case: Check if saveCustomer encodes the password correctly
     @Test
     void testSaveCustomer_PasswordEncoding() {
-        RegisterCustomer newCustomer = new RegisterCustomer();
+        RegisterCustomerDTO newCustomer = new RegisterCustomerDTO();
         newCustomer.setCustomerName("Alice");
         newCustomer.setCustomerEmail("alice@example.com");
         newCustomer.setPassword("plaintextpassword");

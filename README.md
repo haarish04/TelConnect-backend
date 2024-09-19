@@ -43,7 +43,7 @@ TelConnect is designed to provide a platform for onboarding and managing custome
 ## Installation
 - Clone the repository:
    ```bash
-   git clone https://github.com/your-username/telconnect-backend.git
+   git clone https://github.com/haarish04/telconnect.git
    cd telconnect-backend
    mvn clean install
 
