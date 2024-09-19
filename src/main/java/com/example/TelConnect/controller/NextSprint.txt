@@ -1,0 +1,16 @@
+    // Handler method to handle logout
+//    @PostMapping("/logout")
+//    public ResponseEntity<String> logout() {
+//        return ResponseEntity.ok("Logged out successfully");
+//    }
+
+-----------------Document Controller------------------------
+//    @DeleteMapping("delete/{customerId}")
+//    public ResponseEntity<String> deleteDocument(@PathVariable String customerId){
+//        if(documentService.deleteDocument(customerId))
+//            return ResponseEntity.ok("Document Deleted successfully");
+//
+//        else
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Document does not exist");
+//
+//    }
