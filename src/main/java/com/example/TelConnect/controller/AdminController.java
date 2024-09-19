@@ -92,11 +92,5 @@ public class AdminController {
         return ResponseEntity.ok(verificationService.getAllVerificationAttempts());
     }
 
-    // Handler to update verification status
-    @PatchMapping("/{customerId}/status")
-    public ResponseEntity<String> updateVerificationStatus(@PathVariable Long customerId, @RequestParam String status) {
-        verificationService.updateVerificationStatus(customerId, status);
-        return ResponseEntity.ok("Status updated successfully");
-    }
 }
 
