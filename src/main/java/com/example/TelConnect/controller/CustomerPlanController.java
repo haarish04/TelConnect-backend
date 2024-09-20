@@ -31,10 +31,10 @@ public class CustomerPlanController {
 
     //Handler to get status of customer and their plan
     @GetMapping("/{customerId}/status")
-    public ResponseEntity<?> getCustomerStatus(@PathVariable Long customerId){
+    public ResponseEntity<List<CustomerPlanMapping>> getCustomerStatus(@PathVariable Long customerId){
         List<CustomerPlanMapping> response= customerPlanService.getCustomerPlanStatus(customerId);
         if(response.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer has no existing plans");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         return ResponseEntity.ok(response);
     }
 
