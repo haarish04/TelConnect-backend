@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -201,5 +202,48 @@ class CustomerPlanServiceTest {
 
         assertFalse(result);
         verify(customerPlanRepository, never()).save(any());
+    }
+
+    @Test
+    void testGetAllCustomerPlans() {
+        // Prepare test data
+        CustomerPlanMapping customerPlan1 = new CustomerPlanMapping();
+        customerPlan1.setCustomerId(1L);
+        customerPlan1.setPlanId("plan1");
+
+        CustomerPlanMapping customerPlan2 = new CustomerPlanMapping();
+        customerPlan2.setCustomerId(2L);
+        customerPlan2.setPlanId("plan2");
+
+        // Mock repository behavior
+        when(customerPlanRepository.findAll()).thenReturn(Arrays.asList(customerPlan1, customerPlan2));
+
+        // Act
+        List<CustomerPlanMapping> result = customerPlanService.getAllCustomerPlans();
+
+        // Assert
+        assertNotNull(result); // Ensure result is not null
+        assertEquals(2, result.size()); // Check if the list contains 2 elements
+        assertEquals(customerPlan1, result.get(0)); // Verify the first element
+        assertEquals(customerPlan2, result.get(1)); // Verify the second element
+
+        // Verify that the repository's findAll method was called once
+        verify(customerPlanRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testGetAllCustomerPlans_EmptyList() {
+        // Mock repository behavior to return an empty list
+        when(customerPlanRepository.findAll()).thenReturn(Arrays.asList());
+
+        // Act
+        List<CustomerPlanMapping> result = customerPlanService.getAllCustomerPlans();
+
+        // Assert
+        assertNotNull(result); // Ensure result is not null
+        assertTrue(result.isEmpty()); // Check if the result is an empty list
+
+        // Verify that the repository's findAll method was called once
+        verify(customerPlanRepository, times(1)).findAll();
     }
 }

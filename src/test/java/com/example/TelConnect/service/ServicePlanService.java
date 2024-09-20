@@ -120,6 +120,60 @@ class ServicePlanServiceTest {
         verify(servicePlanRepository, times(1)).deleteById(planId);
     }
 
+    @Test
+    void testUpdatePlan_withValidPlan() {
+        // Prepare test data
+        String planId = "PLAN123";
+        ServicePlan existingPlan = new ServicePlan();
+        existingPlan.setPlanId(planId);
+        existingPlan.setPlanName("Old Plan");
+        existingPlan.setPlanDescription("Old Description");
+        existingPlan.setPlanDuration("30 days");
+        existingPlan.setPlanPrice("100");
+
+        ServicePlan newPlan = new ServicePlan();
+        newPlan.setPlanName("New Plan");
+        newPlan.setPlanDescription("New Description");
+        newPlan.setPlanDuration("25 days");
+        newPlan.setPlanPrice("300");
+
+        // Mock the repository behavior
+        when(servicePlanRepository.findByPlanId(planId)).thenReturn(existingPlan);
+
+        // Act
+        boolean result = servicePlanService.updatePlan(newPlan, planId);
+
+        // Assert
+        assertTrue(result); // Verify that the method returns true
+        assertEquals("New Plan", existingPlan.getPlanName()); // Check if planName was updated
+        assertEquals("New Description", existingPlan.getPlanDescription()); // Check if planDescription was updated
+        assertEquals("25 days", existingPlan.getPlanDuration()); // Check if planDuration was updated
+        assertEquals("300", existingPlan.getPlanPrice()); // Check if planPrice was updated
+
+        // Verify that save was called on the repository
+        verify(servicePlanRepository, times(1)).save(existingPlan);
+    }
+
+    @Test
+    void testUpdatePlan_withNullPlan() {
+        // Prepare test data
+        String planId = "PLAN123";
+        ServicePlan existingPlan = new ServicePlan();
+        existingPlan.setPlanId(planId);
+
+        // Mock the repository behavior
+        when(servicePlanRepository.findByPlanId(planId)).thenReturn(existingPlan);
+
+        // Act
+        boolean result = servicePlanService.updatePlan(null, planId);
+
+        // Assert
+        assertFalse(result); // Verify that the method returns false
+
+        // Verify that save was not called since the plan is null
+        verify(servicePlanRepository, never()).save(any());
+    }
+
 //    @Test
 //    void testDeletePlanWhenException() {
 //        String planId = "PREP-TC-1234";

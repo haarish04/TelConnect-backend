@@ -57,63 +57,63 @@ class EmailServiceTest {
         assertNotNull(emailContent.getHtmlPart());
     }
 
-//    @Test
-//    public void testCustomEmailSender_Welcome() {
-//        String recipient = "1ms20cs049@gmail.com";
-//        String name = "Test User";
-//        boolean result = emailService.customEmailSender("welcome", null, recipient, name);
-//
-//        assertTrue(result);
-//    }
-//
-//    @Test
-//    public void testCustomEmailSender_OTP() {
-//        String recipient = "1ms20cs049@gmail.com";
-//        String name = "Test User";
-//        int otp = emailService.generateOTP();
-//        boolean result = emailService.customEmailSender("otp", otp, recipient, name);
-//
-//        assertTrue(result);
-//    }
-//
-//    @Test
-//    public void testCustomEmailSender_ThankYou() {
-//        String recipient = "1ms20cs049@gmail.com";
-//        String name = "Test User";
-//        boolean result = emailService.customEmailSender("thankyou", null, recipient, name);
-//
-//        assertTrue(result);
-//    }
-//
-//    @Test
-//    public void testCustomEmailSender_ServiceActivation() {
-//        String recipient = "1ms20cs049@gmail.com";
-//        String name = "Test User";
-//        boolean result = emailService.customEmailSender("serviceactivation", null, recipient, name);
-//
-//        assertTrue(result);
-//    }
-//
-//    @Test
-//    public void testGenerateOTP() {
-//        int otp = emailService.generateOTP();
-//        assertTrue(otp >= 100000 && otp <= 999999);
-//    }
-//
-//    @Test
-//    public void testVerifyOTP_Success() {
-//        String recipient = "1ms20cs049@gmail.com";
-//        int otp = emailService.generateOTP();
-//        emailService.customEmailSender("otp", otp, recipient, "Test User");
-//
-//        assertTrue(emailService.verifyOTP(recipient, otp));
-//    }
+    @Test
+    public void testCustomEmailSender_Welcome() {
+        String recipient = "test@email.com";
+        String name = "Test User";
+        boolean result = emailService.customEmailSender("welcome", null, recipient, name);
 
-//    @Test
-//    public void testVerifyOTP_Failure() {
-//        String recipient = "1ms20cs049@gmail.com";
-//        int otp = emailService.generateOTP();
-//
-//        assertFalse(emailService.verifyOTP(recipient, otp));
-//    }
+        assertTrue(result);
+    }
+
+    @Test
+    public void testCustomEmailSender_OTP() {
+        String recipient = "test@email.com";
+        String name = "Test User";
+        int otp = emailService.generateOTP();
+        boolean result = emailService.customEmailSender("otp", otp, recipient, name);
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void testCustomEmailSender_ThankYou() {
+        String recipient = "test@email.com";
+        String name = "Test User";
+        boolean result = emailService.customEmailSender("thankyou", null, recipient, name);
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void testCustomEmailSender_ServiceActivation() {
+        String recipient = "1ms20cs049@email.com";
+        String name = "Test User";
+        boolean result = emailService.customEmailSender("serviceactivation", null, recipient, name);
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void testGenerateOTP() {
+        int otp = emailService.generateOTP();
+        assertTrue(otp >= 100000 && otp <= 999999);
+    }
+
+    @Test
+    public void testVerifyOTP_Success() {
+        String recipient = "1ms20cs049@email.com";
+        int otp = emailService.generateOTP();
+        emailService.customEmailSender("otp", otp, recipient, "Test User");
+
+        assertTrue(emailService.verifyOTP(recipient, otp));
+    }
+
+    @Test
+    public void testVerifyOTP_Failure() {
+        String recipient = "1ms20cs049@email.com";
+        int otp = emailService.generateOTP();
+
+        assertFalse(emailService.verifyOTP(recipient, otp));
+    }
 }
