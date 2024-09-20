@@ -69,38 +69,42 @@ class CustomerPlanServiceTest {
         verify(customerPlanRepository, never()).save(newCustomerPlanMapping);
     }
 
-    // 3. Test case for null input when creating a new plan
-//    @Test
-//    void testCreateNewCustomerPlanMapping_NullInput() {
-//        boolean result = customerPlanService.createNewCustomerPlanMapping(null);
-//
-//        assertFalse(result);
-//        verify(customerPlanRepository, never()).save(any());
-//    }
 
     // 4. Test case for getting customer plan status when plans exist
     @Test
     void testGetCustomerPlanStatus_WithPlans() {
         Long customerId = 1L;
 
+        // Create and configure a CustomerPlanMapping object
         CustomerPlanMapping planMapping = new CustomerPlanMapping();
         planMapping.setPlanId("PLAN123");
         planMapping.setStatus("Active");
 
+        // Add the CustomerPlanMapping object to a list
         List<CustomerPlanMapping> customerPlans = new ArrayList<>();
         customerPlans.add(planMapping);
 
+        // Create and configure a ServicePlan object
         ServicePlan servicePlan = new ServicePlan();
         servicePlan.setPlanId("PLAN123");
         servicePlan.setPlanName("Test Plan");
 
+        // Mock the behavior of repositories
         when(customerPlanRepository.findByCustomerId(customerId)).thenReturn(customerPlans);
         when(servicePlanRepository.findByPlanId("PLAN123")).thenReturn(servicePlan);
 
+        // Call the method being tested
         List<CustomerPlanMapping> result = customerPlanService.getCustomerPlanStatus(customerId);
 
-        assertEquals("Plan: Test Plan, Status: Active\n", result);
+        // Assert the result size
+        assertEquals(1, result.size());
+
+        // Assert the fields of the first (and only) element in the result list
+        CustomerPlanMapping resultPlan = result.get(0);
+        assertEquals("PLAN123", resultPlan.getPlanId());
+        assertEquals("Active", resultPlan.getStatus());
     }
+
 
     // 5. Test case for getting customer plan status when no plans exist
     @Test
@@ -112,7 +116,7 @@ class CustomerPlanServiceTest {
 
         List<CustomerPlanMapping> result = customerPlanService.getCustomerPlanStatus(customerId);
 
-        assertEquals("", result);
+        assertNull(result);
     }
 
     // 6. Test case for multiple plans under the same customer
@@ -146,7 +150,18 @@ class CustomerPlanServiceTest {
 
         List<CustomerPlanMapping> result = customerPlanService.getCustomerPlanStatus(customerId);
 
-        assertEquals("Plan: Test Plan 1, Status: Active\nPlan: Test Plan 2, Status: Expired\n", result);
+        // Assert the size of the result list
+        assertEquals(2, result.size());
+
+        // Assert the first element in the list
+        CustomerPlanMapping resultPlan1 = result.get(0);
+        assertEquals("PLAN123", resultPlan1.getPlanId());
+        assertEquals("Active", resultPlan1.getStatus());
+
+        // Assert the second element in the list
+        CustomerPlanMapping resultPlan2 = result.get(1);
+        assertEquals("PLAN456", resultPlan2.getPlanId());
+        assertEquals("Expired", resultPlan2.getStatus());
     }
 
     // 7. Test case for updating the status of an existing plan
