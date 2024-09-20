@@ -4,7 +4,7 @@ pipeline {
         PATH = "C:/Users/e031975/Downloads/apache-maven-3.9.8-bin/apache-maven-3.9.8/bin;${env.PATH}"
     }
     stages {
-        stage('Clone') {
+        stage('Git Clone') {
             steps {
                 checkout([
                     $class: 'GitSCM',
@@ -13,14 +13,14 @@ pipeline {
                 ])
             }
         }
-        stage("Maven") {
+        stage("Maven Install and Test") {
             steps {
                 bat '''
                 mvn install
                 '''
             }
         }
-        stage("Pull an image to check if docker exists"){
+        stage("Validate Docker"){
             steps{
                 bat "docker pull alpine"
             }
