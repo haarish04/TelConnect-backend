@@ -20,10 +20,7 @@ TelConnect is a backend application for onboarding customer and manage service p
 ## Environment Variables
 
 ### Configure environment variables:
-
-- SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/telconnect
-- SPRING_DATASOURCE_USERNAME=root
-- SPRING_DATASOURCE_PASSWORD=password
+Setup account on mailjet and configure the api_keys in an .env file or path variable of system
 - MJ_APIKEY= apikey
 - MJ_SECRETKEY= secretKey
 

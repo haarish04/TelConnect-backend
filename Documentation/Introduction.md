@@ -6,6 +6,7 @@ This is a backend application for providing telecom services. It comprises user 
 
 - User registration and login with secure encryption of credentials.
 - Browse and select service plans from list of plans.
+- OCR implementation to read documents for customer verification
 - Aadhaar verification of customers
 - Map customers to their selected service plans.
 - Admin approval of customer selected plans
