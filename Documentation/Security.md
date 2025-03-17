@@ -56,3 +56,13 @@ Define the custom auth manager to use the auth managerbuilder from HttpSecurity 
 
 ---
 
+## CustomCustomerDetailsService
+
+This is a custom implementation of the UserDetailsService which is used to retreive user data at the time of auth. This is marked with @Service annotation as it is a service provider during authentication.
+
+We initialize a customerRepository instance to interact with the database.
+
+### loadUserByUsername
+We override this method to retreive the user by username from the database using the customerRepository. The username here is the email, the repo finds the user by email and returns a customer. If the customer is null throw exception.
+
+If the customer is found, we create a new user bean and pass the email and password which is used for authentication, along with this we pass the role to differentiate between normal user and admin.
