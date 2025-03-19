@@ -204,6 +204,7 @@ class CustomerPlanServiceTest {
         verify(customerPlanRepository, never()).save(any());
     }
 
+    // Test to get all the customer plans
     @Test
     void testGetAllCustomerPlans() {
         // Prepare test data
