@@ -22,6 +22,7 @@ public class CustomerService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    //Method to create new customer entry in database
     public void saveCustomer(RegisterCustomerDTO newCustomer) {
         Customer customer= new Customer();
         customer.setCustomerName(newCustomer.getCustomerName());
@@ -37,13 +38,17 @@ public class CustomerService {
     }
 
 
+    //Utility method to find customer by email
     public Customer getByCustomerEmail(String email) {
         return customerRepository.findByCustomerEmail(email);
     }
 
+    //Method to find customer by Id
     public Customer getByCustomerId(Long customerId){
         return customerRepository.findById(customerId).orElse(null);
     }
+
+    //Method to authenticate the customer manually by checking email and password and matching with db entry
     public int authenticateCustomer(String email, String password) {
         Customer customer = customerRepository.findByCustomerEmail(email);
         if (customer != null) {
@@ -55,6 +60,7 @@ public class CustomerService {
         return -1;
     }
 
+    //Utility method to find all customers
     public List<Customer> findAllCustomers() {
         List<Customer> customers = customerRepository.findAll();
         return customers.stream()
@@ -62,6 +68,7 @@ public class CustomerService {
                 .collect(Collectors.toList());
     }
 
+    //Method to delete customer entry
     public boolean deleteCustomer(String email){
         if(customerRepository.findByCustomerEmail(email)!= null) {
             customerRepository.
@@ -72,6 +79,7 @@ public class CustomerService {
             return false;
     }
 
+    //Method to update customer details limited to updating password and or address and or DOB
     public boolean updateCustomerDetails(UpdateRequestDTO updateCustomer){
         Customer existingCustomer=customerRepository.findByCustomerEmail(updateCustomer.getCustomerEmail());
         if(existingCustomer==null)
@@ -87,6 +95,7 @@ public class CustomerService {
 
     }
 
+    //Utility class to stream customers based on name and email
     private Customer convertEntity(Customer customer) {
         customer.setCustomerName(customer.getCustomerName());
         customer.setCustomerEmail(customer.getCustomerEmail());

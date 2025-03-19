@@ -20,6 +20,7 @@ public class CustomerPlanService {
         this.servicePlanRepository=servicePlanRepository;
     }
 
+    //Service to create a new mapping between customer and a selected plan
     public boolean createNewCustomerPlanMapping(CustomerPlanMapping newCustomerPlanMapping){
         List<CustomerPlanMapping> customerPlans = customerPlanRepository.findByCustomerId(newCustomerPlanMapping.getCustomerId());
         //If customer already has plans
@@ -34,6 +35,8 @@ public class CustomerPlanService {
         return true;
     }
 
+
+    //Service to get the status of an existing customer and their existing plans (if present)
     public List<CustomerPlanMapping> getCustomerPlanStatus(Long customerId) {
         List<CustomerPlanMapping> customerPlans = customerPlanRepository.findByCustomerId(customerId);
 
@@ -45,6 +48,7 @@ public class CustomerPlanService {
         }
     }
 
+    //Service to update the plan status (invoked after admin approves the plan)
     public boolean updateCustomerPlanStatus(Long customerId, String planId, String status){
         List<CustomerPlanMapping> customerPlans = customerPlanRepository.findByCustomerId(customerId);
         //If customer has the specified plan
@@ -61,6 +65,7 @@ public class CustomerPlanService {
         return false;
     }
 
+    //Utility method to get all customer and plans mappings
     public List<CustomerPlanMapping> getAllCustomerPlans(){
         return customerPlanRepository.findAll();
     }
