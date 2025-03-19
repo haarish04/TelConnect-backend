@@ -29,6 +29,7 @@ class DocumentServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    //Test to save new document entry
     @Test
     void testSaveDocument() {
         Long customerId = 12345L;
@@ -46,6 +47,7 @@ class DocumentServiceTest {
         verify(documentRepository, times(1)).save(any(Document.class));
     }
 
+    //Test to save null document
     @Test
     void testSaveDocument_NullValues() {
         Long customerId = null;
@@ -57,6 +59,7 @@ class DocumentServiceTest {
         verify(documentRepository, times(1)).save(any(Document.class));
     }
 
+    //Test to get customer by
     @Test
     void testGetByCustomerId() {
         Long customerId = 12345L;
@@ -83,6 +86,7 @@ class DocumentServiceTest {
         assertEquals("PASSPORT", result.get(1).getDocumentType());
     }
 
+    //Test to get customer by Id when they do not have documents in repository
     @Test
     void testGetByCustomerId_NoDocumentsFound() {
         Long customerId = 12345L;
@@ -95,6 +99,7 @@ class DocumentServiceTest {
         assertEquals(0, result.size());
     }
 
+    //Test to get document by Id
     @Test
     void testGetByDocumentId() {
         Long documentId = 1L;
@@ -112,6 +117,7 @@ class DocumentServiceTest {
         assertEquals(documentId, result.getDocumentId());
     }
 
+    //Test to get non-existing document
     @Test
     void testGetByDocumentId_NotFound() {
         Long documentId = 1L;
@@ -124,6 +130,7 @@ class DocumentServiceTest {
         assertNull(result);
     }
 
+    //Test to retrieve all documents in DB
     @Test
     void testFindAllDocuments() {
         List<Document> documents = new ArrayList<>();
@@ -149,6 +156,7 @@ class DocumentServiceTest {
         assertEquals("PASSPORT", result.get(1).getDocumentType());
     }
 
+    //Test to find all documents when there are none present
     @Test
     void testFindAllDocuments_EmptyList() {
         // Mocking the findAll operation
@@ -159,6 +167,7 @@ class DocumentServiceTest {
         assertEquals(0, result.size());
     }
 
+    //Test retrieving the document type
     @Test
     void testDocumentTypeHandling() {
         Long customerId = 12345L;

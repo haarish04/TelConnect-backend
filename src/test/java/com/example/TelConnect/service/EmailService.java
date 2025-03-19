@@ -23,6 +23,7 @@ class EmailServiceTest {
         emailService = new EmailService(notificationService, notificationRepository);
     }
 
+    //Test the email method for packaging welcome message
     @Test
     public void testWelcomeMessage() {
         EmailContent emailContent = emailService.WelcomeMessage();
@@ -32,6 +33,7 @@ class EmailServiceTest {
         assertNotNull(emailContent.getTextPart());
     }
 
+    //Test the email method for packaging OTP message
     @Test
     public void testOTPMessage() {
         int otp = 123456;
@@ -41,6 +43,7 @@ class EmailServiceTest {
         assertTrue(emailContent.getHtmlPart().contains(String.valueOf(otp)));
     }
 
+    //Test the email method for packaging thank you message
     @Test
     public void testThankYouMessage() {
         EmailContent emailContent = emailService.thankYouMessage();
@@ -49,6 +52,7 @@ class EmailServiceTest {
         assertNotNull(emailContent.getHtmlPart());
     }
 
+    //Test the email method for packaging activation message
     @Test
     public void testServiceActivationMessage() {
         EmailContent emailContent = emailService.ServiceActivationMessage();
@@ -57,6 +61,7 @@ class EmailServiceTest {
         assertNotNull(emailContent.getHtmlPart());
     }
 
+    //Test the custom Email Sender to package the appropriate email for "welcome" case
     @Test
     public void testCustomEmailSender_Welcome() {
         String recipient = "test@email.com";
@@ -66,6 +71,7 @@ class EmailServiceTest {
         assertTrue(result);
     }
 
+    //Test the custom Email Sender to package the appropriate email for "OTP" case
     @Test
     public void testCustomEmailSender_OTP() {
         String recipient = "test@email.com";
@@ -76,6 +82,7 @@ class EmailServiceTest {
         assertTrue(result);
     }
 
+    //Test the custom Email Sender to package the appropriate email for "thankyou" case
     @Test
     public void testCustomEmailSender_ThankYou() {
         String recipient = "test@email.com";
@@ -85,6 +92,7 @@ class EmailServiceTest {
         assertTrue(result);
     }
 
+    //Test the custom Email Sender to package the appropriate email for "activation" case
     @Test
     public void testCustomEmailSender_ServiceActivation() {
         String recipient = "1ms20cs049@email.com";
@@ -94,12 +102,14 @@ class EmailServiceTest {
         assertTrue(result);
     }
 
+    //Test the OTP generation
     @Test
     public void testGenerateOTP() {
         int otp = emailService.generateOTP();
         assertTrue(otp >= 100000 && otp <= 999999);
     }
 
+    //Test to verify OTP
     @Test
     public void testVerifyOTP_Success() {
         String recipient = "1ms20cs049@email.com";
@@ -109,6 +119,7 @@ class EmailServiceTest {
         assertTrue(emailService.verifyOTP(recipient, otp));
     }
 
+    //Test the case where OTP verification fails
     @Test
     public void testVerifyOTP_Failure() {
         String recipient = "1ms20cs049@email.com";
