@@ -29,6 +29,7 @@ class NotificationServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    //Test creation of new notification object
     @Test
     void testCreateNotification() {
         Long customerId = 12345L;
@@ -43,6 +44,7 @@ class NotificationServiceTest {
         verify(notificationRepository, times(1)).save(any(Notification.class));
     }
 
+    //Test retrieving the notifications of a customer
     @Test
     void testGetCustomerNotifications() {
         Long customerId = 12345L;
@@ -70,8 +72,9 @@ class NotificationServiceTest {
         assertEquals("Notification: Your payment is due. | Timestamp: 2024-09-02T15:00", result.get(1));
     }
 
+    //Test retrieving customer notifications when empty
     @Test
-    void testGetCustomerNotificationsNoNotifications() {
+    void testGetCustomerNotifications_Empty() {
         Long customerId = 12345L;
 
         // Mocking the findByCustomerId operation to return an empty list

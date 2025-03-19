@@ -37,6 +37,7 @@ class OcrServiceTest {
 
     }
 
+    //Test recognition of text with valid name from DB
     @Test
     void testRecognizeText_withValidName() throws IOException {
         // Prepare test data
@@ -64,6 +65,7 @@ class OcrServiceTest {
         verify(customerAadharRepository, times(1)).findAll();
     }
 
+    //Test the OCR retrieving the text from given image (no text in image)
     @Test
     void testPerformOCR_Successful() throws Exception {
         // Arrange
@@ -81,6 +83,7 @@ class OcrServiceTest {
         assertEquals(expectedOutput, result);
     }
 
+    //Test invalid image handler for OCR service
     @Test
     void testPerformOCR_InvalidImage() {
         // Arrange
@@ -90,6 +93,7 @@ class OcrServiceTest {
         assertThrows(IllegalArgumentException.class, () -> ocrService.performOcr(invalidImage));
     }
 
+    //Test failure handler of OCR service
     @Test
     void testPerformOcr_withExecutionFailure() throws IOException {
         // Prepare test image
@@ -106,6 +110,7 @@ class OcrServiceTest {
     }
 
 
+    //Test OCR service with no text in image
     @Test
     void testPerformOcr_withEmptyText() throws IOException {
         // Prepare test image
@@ -122,6 +127,7 @@ class OcrServiceTest {
         assertEquals("", result); // Expecting empty string
     }
 
+    //Test name mismatch with DB
     @Test
     void testVerifyNameInText_withNoMatches() {
         // Prepare test data with customer names that are not in the text
@@ -139,7 +145,7 @@ class OcrServiceTest {
         assertNull(result); // No match found
     }
 
-
+    //Test mismatch of name with text input by user and name coming from OCR
     @Test
     void testRecognizeText_withInvalidName() throws IOException {
         // Prepare test data
@@ -167,6 +173,7 @@ class OcrServiceTest {
         verify(customerAadharRepository, times(1)).findAll();
     }
 
+    //Test extracting images from PDF
     @Test
     void testExtractImagesFromPdf() throws IOException {
         // Simulate the PDF InputStream
@@ -181,6 +188,7 @@ class OcrServiceTest {
         assertTrue(images.size() > 0);
     }
 
+    //Test the OCR service to be invoked
     @Test
     void testPerformOcr() throws IOException {
         // Prepare test image
@@ -197,6 +205,7 @@ class OcrServiceTest {
         assertEquals("Extracted Text", result);
     }
 
+    //Test name input from user matching with name in text
     @Test
     void testVerifyNameInText_withValidName() {
         // Prepare test data
@@ -231,6 +240,7 @@ class OcrServiceTest {
         assertNull(result);
     }
 
+    //Test Invalid Tesseract path
     @Test
     void testPerformOcr_withInvalidTesseractPath() throws IOException {
         // Prepare test image
