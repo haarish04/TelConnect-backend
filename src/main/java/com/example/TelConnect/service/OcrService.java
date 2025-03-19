@@ -23,10 +23,10 @@ public class OcrService {
 
     private final String tesseractPath = "C:/Users/e031975/Downloads/tesseract.exe"; // Path to Tesseract executable
 
+    //Main method to recognize text from the image
     public String recognizeText(InputStream fileStream) throws IOException {
 
         List<BufferedImage> images = extractImagesFromPdf(fileStream);
-
 
         for (BufferedImage image : images) {
             String extractedText = performOcr(image);
@@ -43,6 +43,8 @@ public class OcrService {
         return "not_verified";
     }
 
+    //Method to extract images from given pdf
+    //We parse the pdf through the input stream and use pdf.renderer to render image with specified DPI
     public List<BufferedImage> extractImagesFromPdf(InputStream pdfStream) throws IOException {
         List<BufferedImage> images = new ArrayList<>();
         try (PDDocument document = PDDocument.load(pdfStream)) {
@@ -57,6 +59,7 @@ public class OcrService {
         return images;
     }
 
+    //Method to call the OCR tesseract module from local machine and invoke the run command
     public String performOcr(BufferedImage image) throws IOException {
 
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
@@ -69,13 +72,11 @@ public class OcrService {
                     "cmd.exe", "/c", tesseractPath, "stdin", "stdout"
             };
 
-
+            //ProcessBuilder required to execute an action at the OS level
             ProcessBuilder processBuilder = new ProcessBuilder(command);
             processBuilder.redirectErrorStream(true);
 
-
             Process process = processBuilder.start();
-
 
             try (OutputStream processOutputStream = process.getOutputStream()) {
                 byte[] buffer = new byte[4096];
@@ -86,7 +87,6 @@ public class OcrService {
                 processOutputStream.flush();
             }
 
-
             StringBuilder result = new StringBuilder();
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
                 String line;
@@ -94,7 +94,6 @@ public class OcrService {
                     result.append(line).append("\n");
                 }
             }
-
 
             try {
                 process.waitFor();
@@ -107,21 +106,19 @@ public class OcrService {
         }
     }
 
+    //Method to verify the name from the given document matches with name in repository
     public String verifyNameInText(String text) {
 
         List<CustomerAadhar> customers = customerAadharRepository.findAll();
 
-
         for (CustomerAadhar customer : customers) {
             String name = customer.getName();
-
 
             if (text.contains(name)) {
 
                 return name;
             }
         }
-
         return null;
     }
 }

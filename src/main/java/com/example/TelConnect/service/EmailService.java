@@ -54,11 +54,13 @@ public class EmailService {
         }
     }
 
+    //Method to generate new OTP
     public int generateOTP() {
         Random random = new Random();
         return 100000 + random.nextInt(900000); // 6-digit OTP
     }
 
+    //Method to verify OTP
     public boolean verifyOTP(String recipient, int otp) {
         OtpEntry otpEntry = otpStore.get(recipient);
 
@@ -77,6 +79,7 @@ public class EmailService {
         return otpEntry.getOtp() == otp;
     }
 
+    //Method to generate welcome email
     public EmailContent WelcomeMessage(){
         EmailContent email= new EmailContent();
         email.setSubject("Welcome to TelConnect! Your Connection Starts Here");
@@ -92,6 +95,7 @@ public class EmailService {
         );        return email;
     }
 
+    //Method to generate email for OTP verification
     public EmailContent OTPMessage(int OTP){
         EmailContent email= new EmailContent();
         email.setSubject(OTP + " is your 2FA OTP");
@@ -108,6 +112,7 @@ public class EmailService {
         return email;
     }
 
+    //Method to generate thank you email after customer purchases a plan
     public EmailContent thankYouMessage(){
         EmailContent email= new EmailContent();
         email.setSubject("Thank You for Choosing TelConnect - Connecting You to What Matters!");
@@ -122,6 +127,7 @@ public class EmailService {
         return email;
     }
 
+    //Method to generate service activation mail after admin approves a customer's request
     public EmailContent ServiceActivationMessage(){
         EmailContent email= new EmailContent();
         email.setSubject("Service Activation");
@@ -135,6 +141,7 @@ public class EmailService {
         return email;
     }
 
+    //Custom email sender method to package the email based on requirement
     public boolean customEmailSender(String type,Integer OTP, String recipient, String name) {
         EmailContent mail;
         switch (type.toLowerCase()) {
@@ -189,6 +196,9 @@ public class EmailService {
         return false;
     }
 
+    //Method to fire the email using MailJet API
+    //Here we use MailJet's API to invoke the mailjet client using the secret key and access key
+    //After retrieving the email contents from the EmailContent object we make a post request
     public void sendMail(EmailContent email, String recipient, String name) throws MailjetException {
 
         MailjetClient client;
