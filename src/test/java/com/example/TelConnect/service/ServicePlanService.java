@@ -28,6 +28,7 @@ class ServicePlanServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    //Test creating new plan
     @Test
     void testCreatePlan() {
         ServicePlan plan = new ServicePlan();
@@ -45,6 +46,7 @@ class ServicePlanServiceTest {
         verify(servicePlanRepository, times(1)).save(any(ServicePlan.class));
     }
 
+    //Test creating existing plan
     @Test
     void testCreatePlanWhenPlanExists() {
         ServicePlan plan = new ServicePlan();
@@ -59,6 +61,7 @@ class ServicePlanServiceTest {
         verify(servicePlanRepository, never()).save(any(ServicePlan.class));
     }
 
+    //Test retrieving plan
     @Test
     void testGetPlan() {
         String planId = "PREP-TC-1234";
@@ -74,6 +77,7 @@ class ServicePlanServiceTest {
         assertEquals(planId, result.getPlanId());
     }
 
+    //Test retrieving non-existent plan
     @Test
     void testGetPlanWhenNotFound() {
         String planId = "PREP-TC-1234";
@@ -86,6 +90,7 @@ class ServicePlanServiceTest {
         assertNull(result);
     }
 
+    //Test get all plans
     @Test
     void testGetAllPlans() {
         List<ServicePlan> plans = new ArrayList<>();
@@ -107,6 +112,7 @@ class ServicePlanServiceTest {
         assertEquals("POST-TC-5678", result.get(1).getPlanId());
     }
 
+    //Test deleting plans
     @Test
     void testDeletePlan() {
         String planId = "PREP-TC-1234";
@@ -120,6 +126,7 @@ class ServicePlanServiceTest {
         verify(servicePlanRepository, times(1)).deleteById(planId);
     }
 
+    //Test updating plan
     @Test
     void testUpdatePlan_withValidPlan() {
         // Prepare test data
@@ -154,6 +161,7 @@ class ServicePlanServiceTest {
         verify(servicePlanRepository, times(1)).save(existingPlan);
     }
 
+    //Test updating non-existing plan
     @Test
     void testUpdatePlan_withNullPlan() {
         // Prepare test data

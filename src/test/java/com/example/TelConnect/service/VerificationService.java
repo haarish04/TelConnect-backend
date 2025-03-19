@@ -37,6 +37,7 @@ class VerificationServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    //Test saving new verification request
     @Test
     void testSaveVerification() {
         VerificationRequestDTO requestDTO = new VerificationRequestDTO();
@@ -48,6 +49,7 @@ class VerificationServiceTest {
         verify(verificationRepository, times(1)).save(any(Verification.class));
     }
 
+    //Test retrieving verification status
     @Test
     void testGetVerificationStatus() {
         List<Verification> mockVerifications = new ArrayList<>();
@@ -69,6 +71,7 @@ class VerificationServiceTest {
         assertEquals("Document Type: Aadhar, Status: failed", result);
     }
 
+    //Test retrieving non-existent verification request
     @Test
     void testGetVerificationStatus_Empty() {
         when(verificationRepository.findByCustomerId(1L)).thenReturn(new ArrayList<>());
@@ -78,6 +81,7 @@ class VerificationServiceTest {
         assertEquals("", result);
     }
 
+    //Test updating verification request status
     @Test
     void testUpdateVerificationStatus() {
         List<Verification> mockVerifications = new ArrayList<>();
@@ -99,6 +103,7 @@ class VerificationServiceTest {
         assertEquals("success", verification.getRequestStatus());
     }
 
+    //Test updating verification status of non-existent document
     @Test
     void testUpdateVerificationStatus_NoMatchingDocument() {
         List<Verification> mockVerifications = new ArrayList<>();
@@ -122,6 +127,7 @@ class VerificationServiceTest {
         assertEquals("failed", verification.getRequestStatus());
     }
 
+    //Test retrieve all verification attempts
     @Test
     void testGetAllVerificationAttempts() {
         List<Verification> mockVerifications = new ArrayList<>();
