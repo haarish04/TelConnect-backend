@@ -21,7 +21,7 @@ public class OcrService {
     @Autowired
     private CustomerAadharRepository customerAadharRepository;
 
-    private final String tesseractPath = "C:/Users/e031975/Downloads/tesseract.exe"; // Path to Tesseract executable
+    private final String tesseractPath = "C:/Users/e031975/AppData/Local/Programs/Tesseract-OCR/tesseract.exe"; // Path to Tesseract executable
 
     //Main method to recognize text from the image
     public String recognizeText(InputStream fileStream) throws IOException {
