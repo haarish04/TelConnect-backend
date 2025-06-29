@@ -3,14 +3,16 @@ package com.example.TelConnect.security;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
 
+@Component
 public class JwtTokenProvider {
 
     @Value("${app.jwt-secret}")
