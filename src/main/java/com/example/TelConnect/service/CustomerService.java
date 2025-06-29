@@ -23,19 +23,19 @@ public class CustomerService {
     }
 
     //Method to create new customer entry in database
-    public void saveCustomer(RegisterCustomerDTO newCustomer) {
-        Customer customer= new Customer();
-        customer.setCustomerName(newCustomer.getCustomerName());
-        customer.setCustomerEmail(newCustomer.getCustomerEmail());
-        customer.setPassword(passwordEncoder.encode(newCustomer.getPassword()));
-        customer.setCustomerDOB(newCustomer.getCustomerDOB());
-        customer.setCustomerAddress(newCustomer.getCustomerAddress());
-        customer.setAccountCreationDate(LocalDate.now());
-        customer.setCustomerPhno(newCustomer.getCustomerPhno());
-        customer.setRole("USER");
-
-        customerRepository.save(customer);
-    }
+//    public void saveCustomer(RegisterCustomerDTO newCustomer) {
+//        Customer customer= new Customer();
+//        customer.setCustomerName(newCustomer.getCustomerName());
+//        customer.setCustomerEmail(newCustomer.getCustomerEmail());
+//        customer.setPassword(passwordEncoder.encode(newCustomer.getPassword()));
+//        customer.setCustomerDOB(newCustomer.getCustomerDOB());
+//        customer.setCustomerAddress(newCustomer.getCustomerAddress());
+//        customer.setAccountCreationDate(LocalDate.now());
+//        customer.setCustomerPhno(newCustomer.getCustomerPhno());
+//        customer.setRole("USER");
+//
+//        customerRepository.save(customer);
+//    }
 
 
     //Utility method to find customer by email

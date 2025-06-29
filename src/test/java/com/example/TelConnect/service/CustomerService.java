@@ -30,6 +30,9 @@ class CustomerServiceTest {
     @InjectMocks
     private CustomerService customerService;
 
+    @InjectMocks
+    private AuthService authService;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -49,7 +52,7 @@ class CustomerServiceTest {
 
         when(passwordEncoder.encode("password123")).thenReturn("encodedPassword");
 
-        customerService.saveCustomer(newCustomer);
+        authService.register(newCustomer);
 
         verify(customerRepository, times(1)).save(any(Customer.class));
     }
@@ -202,7 +205,7 @@ class CustomerServiceTest {
 
         when(passwordEncoder.encode("plaintextpassword")).thenReturn("encodedPassword");
 
-        customerService.saveCustomer(newCustomer);
+        authService.register(newCustomer);
 
         verify(customerRepository, times(1)).save(argThat(customer ->
                 "encodedPassword".equals(customer.getPassword())
