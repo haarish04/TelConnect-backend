@@ -1,5 +1,7 @@
 package com.example.TelConnect.security;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @EnableMethodSecurity
+@Configuration
 public class SpringSecurityConfig {
 
     private final UserDetailsService userDetailsService;
@@ -28,6 +31,7 @@ public class SpringSecurityConfig {
         this.jwtAuthEntryPoint = jwtAuthEntryPoint;
     }
 
+    @Bean
     public static PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
