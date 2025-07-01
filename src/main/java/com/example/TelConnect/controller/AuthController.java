@@ -15,13 +15,11 @@ import com.example.TelConnect.service.CustomerService;
 @RequestMapping("/api")
 public class AuthController {
     private final CustomerService customerService;
-//    private final JwtUtil jwtUtil;
     private final AuthService authService;
 
     @Autowired
     public AuthController(CustomerService customerService, AuthService authService) {
         this.customerService = customerService;
-//        this.jwtUtil=jwtUtil;
         this.authService=authService;
     }
 
@@ -66,17 +64,17 @@ public class AuthController {
     }
 
     // Handler method to handle customer registration after verification of email
-//    @PostMapping("/register")
-//    public ResponseEntity<String> registerCustomer(@RequestBody RegisterCustomerDTO newCustomer) {
-//        Customer existingCustomer = customerService.getByCustomerEmail(newCustomer.getCustomerEmail());
-//
-//        if (existingCustomer != null) {
-//            return ResponseEntity.status(HttpStatus.CONFLICT)
-//                    .body("There is already an account registered with the same email");
-//        }
-//
-//        customerService.saveCustomer(newCustomer);
-//        return ResponseEntity.status(HttpStatus.CREATED).body("Customer registered successfully");
-//    }
+    @PostMapping("/register")
+    public ResponseEntity<String> registerCustomer(@RequestBody RegisterCustomerDTO newCustomer) {
+        Customer existingCustomer = customerService.getByCustomerEmail(newCustomer.getCustomerEmail());
+
+        if (existingCustomer != null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("There is already an account registered with the same email");
+        }
+
+        authService.register(newCustomer);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Customer registered successfully");
+    }
 
 }

@@ -14,19 +14,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Service
 public class AuthService {
-    private AuthenticationManager authenticationManager;
-    private JwtTokenProvider JwtTokenProvider;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
 
-    public AuthService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+    public AuthService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager) {
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
+        this.authenticationManager=authenticationManager;
+        this.jwtTokenProvider=jwtTokenProvider;
     }
 
     public String login(LoginRequestDTO loginRequestDTO){
@@ -37,7 +40,7 @@ public class AuthService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return JwtTokenProvider.generateToken(authentication);
+        return jwtTokenProvider.generateToken(authentication);
     }
 
     public void register(RegisterCustomerDTO newCustomer){
@@ -49,7 +52,7 @@ public class AuthService {
         customer.setCustomerAddress(newCustomer.getCustomerAddress());
         customer.setAccountCreationDate(LocalDate.now());
         customer.setCustomerPhno(newCustomer.getCustomerPhno());
-        customer.getRole().add(roleRepository.findByRoleName("USER"));
+        customer.setRole(Set.of(roleRepository.findByRoleName("USER")));
 
         customerRepository.save(customer);
     }
