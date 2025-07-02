@@ -1,7 +1,6 @@
 package com.example.TelConnect.service;
 
 import com.example.TelConnect.model.Customer;
-import com.example.TelConnect.DTO.RegisterCustomerDTO;
 import com.example.TelConnect.DTO.UpdateRequestDTO;
 import com.example.TelConnect.repository.CustomerRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,22 +20,6 @@ public class CustomerService {
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
     }
-
-    //Method to create new customer entry in database
-//    public void saveCustomer(RegisterCustomerDTO newCustomer) {
-//        Customer customer= new Customer();
-//        customer.setCustomerName(newCustomer.getCustomerName());
-//        customer.setCustomerEmail(newCustomer.getCustomerEmail());
-//        customer.setPassword(passwordEncoder.encode(newCustomer.getPassword()));
-//        customer.setCustomerDOB(newCustomer.getCustomerDOB());
-//        customer.setCustomerAddress(newCustomer.getCustomerAddress());
-//        customer.setAccountCreationDate(LocalDate.now());
-//        customer.setCustomerPhno(newCustomer.getCustomerPhno());
-//        customer.setRole("USER");
-//
-//        customerRepository.save(customer);
-//    }
-
 
     //Utility method to find customer by email
     public Customer getByCustomerEmail(String email) {

@@ -23,36 +23,7 @@ public class AuthController {
         this.authService=authService;
     }
 
-    // Handler method to handle login request
-//    @PostMapping("/login")
-//    public ResponseEntity<?> handleLogin(@RequestBody LoginRequestDTO loginRequest) {
-//        String email = loginRequest.getCustomerEmail();
-//        String password = loginRequest.getPassword();
-//        try {
-//            // Authenticate the customer using your custom service
-//            int authenticate = customerService.authenticateCustomer(email, password);
-//
-//            if (authenticate == 1) {
-//                Customer customer = customerService.getByCustomerEmail(email);
-//                if (customer.getCustomerId() == 1) {
-//                    // Generate JWT token for the admin
-//                    String token = jwtUtil.generateToken(email);
-//                    return ResponseEntity.ok(Collections.singletonMap("token", token));
-//                } else {
-//                    return ResponseEntity.ok("Login successful, but no admin privileges.");
-//                }
-//            } else if (authenticate == 0) {
-//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
-//            } else if (authenticate == -1) {
-//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User does not exist");
-//            }
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-//        }
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred during login");
-//    }
-
-    //Handler method to handle JWT auth
+    //Handler method to handle login with JWT auth
     @PostMapping("/login")
     public ResponseEntity<JwtAuthResponse> login(@RequestBody LoginRequestDTO loginRequestDTO){
         String token = authService.login(loginRequestDTO);
@@ -63,7 +34,7 @@ public class AuthController {
         return new ResponseEntity<>(jwtAuthResponse, HttpStatus.OK);
     }
 
-    // Handler method to handle customer registration after verification of email
+    // Handler method to handle customer registration with email
     @PostMapping("/register")
     public ResponseEntity<String> registerCustomer(@RequestBody RegisterCustomerDTO newCustomer) {
         Customer existingCustomer = customerService.getByCustomerEmail(newCustomer.getCustomerEmail());
