@@ -1,10 +1,8 @@
 package com.example.TelConnect.security;
 
-import com.example.TelConnect.config.JwtProperties;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -16,24 +14,12 @@ import java.security.Key;
 @Component
 public class JwtTokenProvider {
 
-    private final JwtProperties jwtProperties;
-
-//    @Value("${app.jwt-secret}")
-//    private String jwtSecret;
-//
-//    @Value("${app-jwt-expiration-milliseconds}")
-//    private long jwtExpirationDate;
-
-    public JwtTokenProvider(JwtProperties jwtProperties) {
-        this.jwtProperties = jwtProperties;
-    }
-
     public String generateToken(Authentication authentication){
 
         String name = authentication.getName();
         Date currentDate= new Date();
 
-        Date expireDate= new Date(currentDate.getTime() + jwtProperties.getExpirationMilliseconds());
+        Date expireDate= new Date(currentDate.getTime() + 604800000);
 
         return Jwts.builder()
                 .setSubject(name)
@@ -44,7 +30,7 @@ public class JwtTokenProvider {
     }
 
     private Key key(){
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtProperties.getSecret()));
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode("daf66e01593f61a15b857cf433aae03a005812b31234e149036bcc8dee755dbb"));
     }
 
     public String getUserName(String token){
