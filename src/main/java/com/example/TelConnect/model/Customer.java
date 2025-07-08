@@ -3,8 +3,7 @@ package com.example.TelConnect.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "customers")
@@ -36,8 +35,9 @@ public class Customer {
     @Column
     private LocalDate accountCreationDate;
 
-    @Column
-    private String role;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_roles",joinColumns = @JoinColumn(name="user_id",referencedColumnName = "customerId"), inverseJoinColumns = @JoinColumn(name = "roleId", referencedColumnName = "roleId"))
+    private Set<Role> role;
 
     public Long getCustomerId() {
         return customerId;
@@ -103,14 +103,13 @@ public class Customer {
         this.accountCreationDate = accountCreationDate;
     }
 
-    public String getRole() {
+    public Set<Role> getRole() {
         return role;
     }
 
-    public void setRole(String role){
-        this.role =role;
+    public void setRole(Set<Role> role) {
+        this.role = role;
     }
-
 
     // Override toString for better logging or debugging
     @Override

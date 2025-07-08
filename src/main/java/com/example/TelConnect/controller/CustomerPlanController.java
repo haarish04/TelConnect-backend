@@ -5,6 +5,7 @@ import com.example.TelConnect.service.CustomerPlanService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,5 +39,22 @@ public class CustomerPlanController {
         return ResponseEntity.ok(response);
     }
 
+    // Update status of the plan chosen by customer
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/{customerId}/{planId}/status")
+    public ResponseEntity<String> updateStatus(@PathVariable Long customerId, @PathVariable String planId, @RequestParam String status) {
+        if (customerPlanService.updateCustomerPlanStatus(customerId, planId, status)) {
+            return ResponseEntity.ok("Status updated");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Update failed");
+        }
+    }
+
+    // Handler to get details of all customers and their chosen plans
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping
+    public ResponseEntity<?> getCustomerPlans() {
+        return ResponseEntity.ok(customerPlanService.getAllCustomerPlans());
+    }
 
 }

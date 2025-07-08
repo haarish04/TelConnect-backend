@@ -3,6 +3,7 @@ package com.example.TelConnect.controller;
 import com.example.TelConnect.DTO.VerificationRequestDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.example.TelConnect.service.VerificationService;
 
@@ -39,6 +40,14 @@ public class VerificationController {
     public ResponseEntity<String> updateVerificationStatus(@PathVariable Long customerId, @RequestParam String status) {
         verificationService.updateVerificationStatus(customerId, status);
         return ResponseEntity.ok("Status updated successfully");
+    }
+
+
+    // Handler to get all the verification attempts
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping
+    public ResponseEntity<?> getAllVerificationAttempts() {
+        return ResponseEntity.ok(verificationService.getAllVerificationAttempts());
     }
 
 }
