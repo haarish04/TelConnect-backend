@@ -5,6 +5,7 @@ import com.example.TelConnect.DTO.UpdateRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.example.TelConnect.service.CustomerService;
 
@@ -52,5 +53,24 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("Account does not exist with this email");
 
+    }
+
+    //Handler to get all customers, admin only
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping
+    public ResponseEntity<?> getCustomers() {
+        List<Customer> customers = customerService.findAllCustomers();
+        return ResponseEntity.ok(customers);
+    }
+
+    // Modify method to delete customer, admin only
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{customerEmail}")
+    public ResponseEntity<String> deleteCustomer(@PathVariable String customerEmail) {
+        if (customerService.deleteCustomer(customerEmail)) {
+            return ResponseEntity.ok("Customer Deleted");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Customer not found");
+        }
     }
 }

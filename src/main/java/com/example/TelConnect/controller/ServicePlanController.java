@@ -6,6 +6,7 @@ import com.example.TelConnect.service.ServicePlanService;
 import okhttp3.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,6 +40,36 @@ public class ServicePlanController {
         else
             return ResponseEntity.ok(plans);
 
+    }
+
+    // Handler to create a new plan
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/newPlan")
+    public ResponseEntity<String> createPlan(@RequestBody ServicePlan plan) {
+        if (servicePlanService.createPlan(plan)) {
+            return ResponseEntity.ok("New plan created");
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("PlanId already exists");
+        }
+    }
+
+    // Handler to delete existing plans
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/deletePlan/planID={planId}")
+    public ResponseEntity<String> deletePlan(@PathVariable String planId) {
+        servicePlanService.deletePlan(planId);
+        return ResponseEntity.ok("Plan Deleted");
+    }
+
+    // Handler to edit existing plans
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/editPlan/planID={planId}")
+    public ResponseEntity<String> updatePlan(@PathVariable String planId, @RequestBody ServicePlan plan) {
+        if (servicePlanService.updatePlan(plan, planId)) {
+            return ResponseEntity.ok("Plan updated");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Plan not found");
+        }
     }
 
 }
