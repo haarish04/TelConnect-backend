@@ -42,9 +42,9 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/login").permitAll()
                         .requestMatchers("/api/register").permitAll()
-                        .requestMatchers("/api/customers/**").permitAll()
-                        .requestMatchers("/api/verification/**").permitAll()
-                        .requestMatchers("/api/notifications/**").permitAll()
+                        .requestMatchers("/api/customers/**").authenticated()
+                        .requestMatchers("/api/verification/**").authenticated()
+                        .requestMatchers("/api/notifications/**").authenticated()
                         .requestMatchers("/api/plans/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
