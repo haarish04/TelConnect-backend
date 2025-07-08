@@ -52,7 +52,7 @@ public class AuthService {
         customer.setCustomerAddress(newCustomer.getCustomerAddress());
         customer.setAccountCreationDate(LocalDate.now());
         customer.setCustomerPhno(newCustomer.getCustomerPhno());
-        customer.setRole(Set.of(roleRepository.findByRoleName("USER")));
+        customer.setRole(Set.of(roleRepository.findByRoleName("ROLE_USER")));
 
         customerRepository.save(customer);
     }
