@@ -3,6 +3,7 @@ package com.example.TelConnect.controller;
 import com.example.TelConnect.model.CustomerPlanMapping;
 import com.example.TelConnect.service.CustomerPlanService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+@Tag(name= "CustomerPlansMapping", description = "Operations related to customers and their respective plans")
 @RestController
 @RequestMapping("/api/customers/plans")
 public class CustomerPlanController {

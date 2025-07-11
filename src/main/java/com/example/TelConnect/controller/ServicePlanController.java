@@ -3,6 +3,7 @@ package com.example.TelConnect.controller;
 import com.example.TelConnect.model.ServicePlan;
 import com.example.TelConnect.service.ServicePlanService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import okhttp3.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name= "Plans", description = "Service plans operations")
 @RestController
 @RequestMapping("/api/plans")
 public class ServicePlanController {

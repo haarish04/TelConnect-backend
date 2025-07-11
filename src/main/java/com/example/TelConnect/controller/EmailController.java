@@ -1,12 +1,13 @@
 package com.example.TelConnect.controller;
 
 import com.example.TelConnect.service.EmailService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
+@Tag(name= "Email", description = "Email operations")
 @RestController
 @RequestMapping("/api/emails")
 public class EmailController {

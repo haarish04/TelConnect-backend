@@ -1,5 +1,6 @@
 package com.example.TelConnect.service;
 
+import com.mailjet.client.ClientOptions;
 import com.mailjet.client.errors.MailjetException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
@@ -199,15 +200,13 @@ public class EmailService {
     //Method to fire the email using MailJet API
     //Here we use MailJet's API to invoke the mailjet client using the secret key and access key
     //After retrieving the email contents from the EmailContent object we make a post request
-    public void sendMail(EmailContent email, String recipient, String name) throws MailjetException {
+    public void sendMail(EmailContent email, String recipient, String name) throws MailjetException, NullPointerException {
 
-        MailjetClient client;
-        MailjetRequest request;
-        MailjetResponse response;
-        String apiKey = System.getenv("MJ_APIKEY");
-        String apiSecretKey = System.getenv("MJ_SECRETKEY");
-        client = new MailjetClient(apiKey,apiSecretKey);
-        request = new MailjetRequest(Emailv31.resource)
+        MailjetClient client = new MailjetClient(ClientOptions.builder()
+                .apiKey(System.getenv("MJ_APIKEY"))
+                .apiSecretKey(System.getenv("MJ_SECRETKEY"))
+                .build());
+        MailjetRequest request = new MailjetRequest(Emailv31.resource)
                 .property(Emailv31.MESSAGES, new JSONArray()
                         .put(new JSONObject()
                                 .put(Emailv31.Message.FROM, new JSONObject()
@@ -221,7 +220,7 @@ public class EmailService {
                                 .put(Emailv31.Message.TEXTPART, email.getTextPart())
                                 .put(Emailv31.Message.HTMLPART, email.getHtmlPart())
                                 .put(Emailv31.Message.CUSTOMID, "PushEmail")));
-        response = client.post(request);
+        MailjetResponse response = client.post(request);
         System.out.println(response.getStatus());
         System.out.println(response.getData());
     }
