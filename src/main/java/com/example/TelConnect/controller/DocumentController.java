@@ -1,6 +1,7 @@
 package com.example.TelConnect.controller;
 
 import com.example.TelConnect.model.Document;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,7 @@ import com.example.TelConnect.service.DocumentService;
 import javax.print.Doc;
 import java.util.List;
 
+@Tag(name= "Document", description = "Document operations")
 @RestController
 @RequestMapping("/api/customers/{customerId}/documents")
 public class DocumentController {

@@ -2,6 +2,7 @@ package com.example.TelConnect.controller;
 
 import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.DTO.UpdateRequestDTO;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import com.example.TelConnect.service.CustomerService;
 
 import java.util.List;
 
+@Tag(name= "Customer", description = "Customer details operations")
 @RestController
 @RequestMapping("/api/customers")
 public class CustomerController {

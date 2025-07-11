@@ -5,12 +5,14 @@ import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.DTO.RegisterCustomerDTO;
 import com.example.TelConnect.DTO.LoginRequestDTO;
 import com.example.TelConnect.service.AuthService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.TelConnect.service.CustomerService;
 
+@Tag(name= "Auth", description = "Auth operations")
 @RestController
 @RequestMapping("/api")
 public class AuthController {
