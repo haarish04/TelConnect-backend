@@ -22,9 +22,11 @@ public class JwtTokenProvider {
         Date expireDate= new Date(currentDate.getTime() + 604800000);
 
         return Jwts.builder()
-                .setSubject(name)
-                .setIssuedAt(new Date())
-                .setExpiration(expireDate)
+                .claims()
+                .subject(name)
+                .issuedAt(new Date())
+                .expiration(expireDate)
+                .and()
                 .signWith(key())
                 .compact();
     }
