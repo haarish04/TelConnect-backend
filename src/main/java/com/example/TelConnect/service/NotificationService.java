@@ -1,5 +1,7 @@
 package com.example.TelConnect.service;
 
+import com.example.TelConnect.model.Customer;
+import com.example.TelConnect.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.TelConnect.model.Notification;
@@ -13,16 +15,19 @@ import java.util.stream.Collectors;
 public class NotificationService {
     @Autowired
     private final NotificationRepository notificationRepository;
+    private final CustomerRepository customerRepository;
 
-    public NotificationService(NotificationRepository notificationRepository){
+    public NotificationService(NotificationRepository notificationRepository, CustomerRepository customerRepository){
         this.notificationRepository=notificationRepository;
+        this.customerRepository=customerRepository;
     }
 
     //Create notification record when email is pushed to customer
     public void createNotification(Long customerId, String message) {
 
         Notification notification= new Notification();
-        notification.setCustomerId(customerId);
+        Customer customer= customerRepository.findById(customerId).orElse(null);
+        notification.setCustomer(customer);
         notification.setNotificationTimestamp(LocalDateTime.now());
         notification.setMessage(message);
 

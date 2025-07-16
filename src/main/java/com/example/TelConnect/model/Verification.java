@@ -2,7 +2,6 @@ package com.example.TelConnect.model;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
@@ -20,7 +19,7 @@ public class Verification {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "document_id", referencedColumnName = "documentId", nullable = false)
-    private Document documentId;
+    private Document document;
 
     @Column
     private LocalDateTime requestDate;
@@ -60,11 +59,11 @@ public class Verification {
         this.customer = customer;
     }
 
-    public Document getDocumentId() {
-        return documentId;
+    public Document getDocument() {
+        return document;
     }
 
-    public void setDocumentId(Document documentId) {
-        this.documentId = documentId;
+    public void setDocument(Document document) {
+        this.document = document;
     }
 }

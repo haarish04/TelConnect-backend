@@ -1,6 +1,8 @@
 package com.example.TelConnect.service;
 
+import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.model.Document;
+import com.example.TelConnect.repository.CustomerRepository;
 import com.example.TelConnect.repository.DocumentRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,16 +15,19 @@ import java.util.stream.Collectors;
 public class DocumentService {
 
     private final DocumentRepository documentRepository;
+    private final CustomerRepository customerRepository;
 
-    public DocumentService(DocumentRepository documentRepository){
+    public DocumentService(DocumentRepository documentRepository, CustomerRepository customerRepository){
         this.documentRepository = documentRepository;
+        this.customerRepository=customerRepository;
     }
 
     //Save new document entry
     public void saveDocument(Long customerId, String DocumentType){
 
         Document document= new Document();
-        document.setCustomerId(customerId);
+        Customer customer= customerRepository.findById(customerId).orElse(null);
+        document.setCustomer(customer);
         document.setUploadDate(LocalDate.now());
         document.setDocumentType(DocumentType);
 

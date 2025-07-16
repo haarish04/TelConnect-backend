@@ -1,7 +1,9 @@
 package com.example.TelConnect.service;
 
+import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.model.CustomerPlanMapping;
 import com.example.TelConnect.repository.CustomerPlanRepository;
+import com.example.TelConnect.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 import com.example.TelConnect.repository.ServicePlanRepository;
 import com.example.TelConnect.model.ServicePlan;
@@ -14,20 +16,22 @@ public class CustomerPlanService {
 
     private final CustomerPlanRepository customerPlanRepository;
     private final ServicePlanRepository servicePlanRepository;
+    private final CustomerRepository customerRepository;
 
-    public CustomerPlanService(CustomerPlanRepository customerPlanRepository, ServicePlanRepository servicePlanRepository){
+    public CustomerPlanService(CustomerPlanRepository customerPlanRepository, ServicePlanRepository servicePlanRepository, CustomerRepository customerRepository){
         this.customerPlanRepository=customerPlanRepository;
         this.servicePlanRepository=servicePlanRepository;
+        this.customerRepository=customerRepository;
     }
 
     //Service to create a new mapping between customer and a selected plan
     public boolean createNewCustomerPlanMapping(CustomerPlanMapping newCustomerPlanMapping){
-        List<CustomerPlanMapping> customerPlans = customerPlanRepository.findByCustomerId(newCustomerPlanMapping.getCustomerId());
+        List<CustomerPlanMapping> customerPlans = customerPlanRepository.findByCustomer(newCustomerPlanMapping.getCustomer());
         //If customer already has plans
         if (!customerPlans.isEmpty()) {
             for (CustomerPlanMapping customerPlan : customerPlans) {
                 //If customer already has the same plan
-                if (Objects.equals(customerPlan.getPlanId(), newCustomerPlanMapping.getPlanId()))
+                if (Objects.equals(customerPlan.getPlan().getPlanId(), newCustomerPlanMapping.getPlan().getPlanId()))
                     return false;
             }
         }
@@ -38,7 +42,8 @@ public class CustomerPlanService {
 
     //Service to get the status of an existing customer and their existing plans (if present)
     public List<CustomerPlanMapping> getCustomerPlanStatus(Long customerId) {
-        List<CustomerPlanMapping> customerPlans = customerPlanRepository.findByCustomerId(customerId);
+        Customer customer = customerRepository.findById(customerId).orElse(null);
+        List<CustomerPlanMapping> customerPlans = customerPlanRepository.findByCustomer(customer);
 
         //If customer has plans
         if (!customerPlans.isEmpty()) {
@@ -50,11 +55,11 @@ public class CustomerPlanService {
 
     //Service to update the plan status (invoked after admin approves the plan)
     public boolean updateCustomerPlanStatus(Long customerId, String planId, String status){
-        List<CustomerPlanMapping> customerPlans = customerPlanRepository.findByCustomerId(customerId);
-        //If customer has the specified plan
+        Customer customer = customerRepository.findById(customerId).orElse(null);
+        List<CustomerPlanMapping> customerPlans = customerPlanRepository.findByCustomer(customer);        //If customer has the specified plan
         if (!customerPlans.isEmpty()) {
             for (CustomerPlanMapping customerPlan : customerPlans) {
-                if(customerPlan.getPlanId().equals(planId)) {
+                if(customerPlan.getPlan().getPlanId().equals(planId)) {
                     customerPlan.setStatus(status);
                     customerPlanRepository.save(customerPlan);
                     return true;
