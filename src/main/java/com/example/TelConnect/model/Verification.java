@@ -14,11 +14,13 @@ public class Verification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long verificationId;
 
-    @Column
-    private Long customerId;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "customer_id", referencedColumnName = "customerId", nullable = false)
+    private Customer customer;
 
-    @Column
-    private Long documentId;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "document_id", referencedColumnName = "documentId", nullable = false)
+    private Document documentId;
 
     @Column
     private LocalDateTime requestDate;
@@ -32,22 +34,6 @@ public class Verification {
 
     public void setVerificationId(Long verificationId) {
         this.verificationId = verificationId;
-    }
-
-    public Long getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
-    }
-
-    public Long getDocumentId() {
-        return documentId;
-    }
-
-    public void setDocumentId(Long documentId) {
-        this.documentId = documentId;
     }
 
     public LocalDateTime getRequestDate() {
@@ -66,14 +52,19 @@ public class Verification {
         this.requestStatus = requestStatus;
     }
 
-    @Override
-    public String toString() {
-        return "Verification{" +
-                "verificationId=" + verificationId +
-                ", customerId='" + customerId + '\'' +
-                ", documentId='" + documentId + '\'' +
-                ", requestDate=" + requestDate +
-                ", requestStatus='" + requestStatus + '\'' +
-                '}';
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Document getDocumentId() {
+        return documentId;
+    }
+
+    public void setDocumentId(Document documentId) {
+        this.documentId = documentId;
     }
 }

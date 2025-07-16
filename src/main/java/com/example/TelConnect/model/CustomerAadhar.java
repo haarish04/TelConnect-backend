@@ -6,11 +6,15 @@ import jakarta.persistence.*;
 @Table(name = "customer_aadhar")
 public class CustomerAadhar {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToOne
+    @JoinColumn(name ="customer_id", referencedColumnName = "customerId" , nullable = false)
+    private Customer customer;
+
     @Column
-    private String name;
-    @Column(name = "id_verification")
-    private String idVerification;
+    private String customerName;
 
     public Long getId() {
         return id;
@@ -20,20 +24,20 @@ public class CustomerAadhar {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getCustomerName() {
+        return customerName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
-    public String getIdVerification() {
-        return idVerification;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setIdVerification(String idVerification) {
-        this.idVerification = idVerification;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public CustomerAadhar() {

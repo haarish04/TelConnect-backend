@@ -12,8 +12,9 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long notificationId;
 
-    @Column
-    private Long customerId;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "customer_id", referencedColumnName = "customerId", nullable = false)
+    private Customer customer;
 
     @Column
     private LocalDateTime notificationTimestamp;
@@ -27,14 +28,6 @@ public class Notification {
 
     public void setNotificationId(Long notificationId) {
         this.notificationId = notificationId;
-    }
-
-    public Long getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
     }
 
     public String getMessage() {
@@ -53,13 +46,11 @@ public class Notification {
         this.notificationTimestamp = notificationTimestamp;
     }
 
-    @Override
-    public String toString() {
-        return "Notification{" +
-                "notificationId=" + notificationId +
-                ", customerId=" + customerId +
-                ", notificationTimestamp=" + notificationTimestamp +
-                ", message='" + message + '\'' +
-                '}';
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }

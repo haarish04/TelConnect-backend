@@ -2,8 +2,6 @@ package com.example.TelConnect.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-
 
 @Entity
 @Table(name = "customer_plans_mapping")
@@ -13,11 +11,13 @@ public class CustomerPlanMapping {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long customerPlanId;
 
-    @Column
-    private Long customerId;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "customer_id", referencedColumnName = "customerId", nullable = false)
+    private Customer customer;
 
-    @Column
-    private String planId;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "plan_id", referencedColumnName = "planId", nullable = false)
+    private ServicePlan plan;
 
     @Column
     private LocalDate startDate;
@@ -34,22 +34,6 @@ public class CustomerPlanMapping {
 
     public void setCustomerPlanId(Long customerPlanId) {
         this.customerPlanId = customerPlanId;
-    }
-
-    public Long getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
-    }
-
-    public String getPlanId() {
-        return planId;
-    }
-
-    public void setPlanId(String planId) {
-        this.planId = planId;
     }
 
     public LocalDate getStartDate() {
@@ -76,15 +60,19 @@ public class CustomerPlanMapping {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "CustomerPlanMapping{" +
-                "customerPlanId=" + customerPlanId +
-                ", customerId=" + customerId +
-                ", planId=" + planId +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", status='" + status + '\'' +
-                '}';
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public ServicePlan getPlan() {
+        return plan;
+    }
+
+    public void setPlan(ServicePlan plan) {
+        this.plan = plan;
     }
 }
