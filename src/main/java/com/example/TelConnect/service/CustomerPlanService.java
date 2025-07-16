@@ -5,8 +5,6 @@ import com.example.TelConnect.model.CustomerPlanMapping;
 import com.example.TelConnect.repository.CustomerPlanRepository;
 import com.example.TelConnect.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
-import com.example.TelConnect.repository.ServicePlanRepository;
-import com.example.TelConnect.model.ServicePlan;
 
 import java.util.List;
 import java.util.Objects;
@@ -15,12 +13,11 @@ import java.util.Objects;
 public class CustomerPlanService {
 
     private final CustomerPlanRepository customerPlanRepository;
-    private final ServicePlanRepository servicePlanRepository;
+
     private final CustomerRepository customerRepository;
 
-    public CustomerPlanService(CustomerPlanRepository customerPlanRepository, ServicePlanRepository servicePlanRepository, CustomerRepository customerRepository){
+    public CustomerPlanService(CustomerPlanRepository customerPlanRepository, CustomerRepository customerRepository){
         this.customerPlanRepository=customerPlanRepository;
-        this.servicePlanRepository=servicePlanRepository;
         this.customerRepository=customerRepository;
     }
 

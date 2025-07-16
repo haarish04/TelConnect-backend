@@ -5,7 +5,6 @@ import com.mailjet.client.errors.MailjetException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Email;
 import com.mailjet.client.resource.Emailv31;
 import java.util.Random;
 
