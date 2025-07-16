@@ -21,8 +21,6 @@ public class OcrService {
     @Autowired
     private CustomerAadharRepository customerAadharRepository;
 
-    private final String tesseractPath = "C:/Users/e031975/AppData/Local/Programs/Tesseract-OCR/tesseract.exe"; // Path to Tesseract executable
-
     //Main method to recognize text from the image
     public String recognizeText(InputStream fileStream) throws IOException {
 
@@ -68,6 +66,8 @@ public class OcrService {
             InputStream imageStream = new ByteArrayInputStream(baos.toByteArray());
 
 
+            // Path to Tesseract executable
+            String tesseractPath = "C:/Users/e031975/AppData/Local/Programs/Tesseract-OCR/tesseract.exe";
             String[] command = {
                     "cmd.exe", "/c", tesseractPath, "stdin", "stdout"
             };
@@ -112,7 +112,7 @@ public class OcrService {
         List<CustomerAadhar> customers = customerAadharRepository.findAll();
 
         for (CustomerAadhar customer : customers) {
-            String name = customer.getName();
+            String name = customer.getCustomerName();
 
             if (text.contains(name)) {
 

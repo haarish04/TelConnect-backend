@@ -43,7 +43,7 @@ class OcrServiceTest {
         // Prepare test data
         List<CustomerAadhar> customers = new ArrayList<>();
         CustomerAadhar customer = new CustomerAadhar();
-        customer.setName("Haarish Anandan");
+        customer.setCustomerName("Haarish Anandan");
         customers.add(customer);
 
         when(customerAadharRepository.findAll()).thenReturn(customers);
@@ -133,7 +133,7 @@ class OcrServiceTest {
         // Prepare test data with customer names that are not in the text
         List<CustomerAadhar> customers = new ArrayList<>();
         CustomerAadhar customer1 = new CustomerAadhar();
-        customer1.setName("Alice Wonderland");
+        customer1.setCustomerName("Alice Wonderland");
         customers.add(customer1);
 
         when(customerAadharRepository.findAll()).thenReturn(customers);
@@ -151,7 +151,7 @@ class OcrServiceTest {
         // Prepare test data
         List<CustomerAadhar> customers = new ArrayList<>();
         CustomerAadhar customer = new CustomerAadhar();
-        customer.setName("John Doe");
+        customer.setCustomerName("John Doe");
         customers.add(customer);
 
         when(customerAadharRepository.findAll()).thenReturn(customers);
@@ -211,7 +211,7 @@ class OcrServiceTest {
         // Prepare test data
         List<CustomerAadhar> customers = new ArrayList<>();
         CustomerAadhar customer = new CustomerAadhar();
-        customer.setName("Haarish Anandan");
+        customer.setCustomerName("Haarish Anandan");
         customers.add(customer);
 
         when(customerAadharRepository.findAll()).thenReturn(customers);
@@ -228,7 +228,7 @@ class OcrServiceTest {
         // Prepare test data
         List<CustomerAadhar> customers = new ArrayList<>();
         CustomerAadhar customer = new CustomerAadhar();
-        customer.setName("John Doe");
+        customer.setCustomerName("John Doe");
         customers.add(customer);
 
         when(customerAadharRepository.findAll()).thenReturn(customers);
