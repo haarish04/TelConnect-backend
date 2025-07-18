@@ -30,18 +30,6 @@ public class CustomerService {
         return customerRepository.findById(customerId).orElse(null);
     }
 
-    //Method to authenticate the customer manually by checking email and password and matching with db entry
-    public int authenticateCustomer(String email, String password) {
-        Customer customer = customerRepository.findByCustomerEmail(email);
-        if (customer != null) {
-            if(passwordEncoder.matches(password, customer.getPassword()))
-                return 1;
-            else
-                return 0;
-        }
-        return -1;
-    }
-
     //Utility method to find all customers
     public List<Customer> findAllCustomers() {
         List<Customer> customers = customerRepository.findAll();
