@@ -43,7 +43,7 @@ public class AuthService {
         return jwtTokenProvider.generateToken(authentication);
     }
 
-    public void register(RegisterCustomerDTO newCustomer){
+    public boolean register(RegisterCustomerDTO newCustomer){
         Customer customer= new Customer();
         customer.setCustomerName(newCustomer.getCustomerName());
         customer.setCustomerEmail(newCustomer.getCustomerEmail());
@@ -54,6 +54,7 @@ public class AuthService {
         customer.setCustomerPhno(newCustomer.getCustomerPhno());
         customer.setRole(Set.of(roleRepository.findByRoleName("ROLE_USER")));
 
-        customerRepository.save(customer);
+        Customer savedCustomer =customerRepository.save(customer);
+        return savedCustomer.getCustomerId() != null;
     }
 }

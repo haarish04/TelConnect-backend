@@ -46,8 +46,9 @@ public class AuthController {
                     .body("There is already an account registered with the same email");
         }
 
-        authService.register(newCustomer);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Customer registered successfully");
+        if(authService.register(newCustomer))
+            return ResponseEntity.status(HttpStatus.CREATED).body("Customer registered successfully");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error while creating new user");
     }
 
 }
