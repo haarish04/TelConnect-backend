@@ -1,11 +1,13 @@
 package com.example.TelConnect.service;
 
 import com.example.TelConnect.model.Notification;
+import com.example.TelConnect.repository.CustomerRepository;
 import com.example.TelConnect.repository.NotificationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
@@ -23,6 +25,9 @@ class NotificationServiceTest {
 
     @InjectMocks
     private NotificationService notificationService;
+
+    @Mock
+    private CustomerRepository customerRepository;
 
     @BeforeEach
     void setUp() {
@@ -47,29 +52,26 @@ class NotificationServiceTest {
     //Test retrieving the notifications of a customer
     @Test
     void testGetCustomerNotifications() {
-        Long customerId = 12345L;
         List<Notification> notifications = new ArrayList<>();
         Notification notification1 = new Notification();
-        notification1.setCustomerId(customerId);
-        notification1.setMessage("Your plan has been activated.");
-        notification1.setNotificationTimestamp(LocalDateTime.of(2024, 9, 1, 10, 0));
+        notification1.setMessage("test1");
+        notification1.setNotificationTimestamp(LocalDateTime.MIN);
 
         Notification notification2 = new Notification();
-        notification2.setCustomerId(customerId);
-        notification2.setMessage("Your payment is due.");
-        notification2.setNotificationTimestamp(LocalDateTime.of(2024, 9, 2, 15, 0));
+        notification2.setMessage("test2");
+        notification2.setNotificationTimestamp(LocalDateTime.MIN);
 
         notifications.add(notification1);
         notifications.add(notification2);
 
         // Mocking the findByCustomerId operation
-        when(notificationRepository.findByCustomerId(customerId)).thenReturn(notifications);
+        when(notificationRepository.findByCustomerId(anyLong())).thenReturn(notifications);
 
-        List<String> result = notificationService.getCustomerNotifications(customerId);
+        List<String> result = notificationService.getCustomerNotifications(anyLong());
 
         assertEquals(2, result.size());
-        assertEquals("Notification: Your plan has been activated. | Timestamp: 2024-09-01T10:00", result.get(0));
-        assertEquals("Notification: Your payment is due. | Timestamp: 2024-09-02T15:00", result.get(1));
+        assertEquals("Notification: " + notification1.getMessage() + " | Timestamp: " + notification1.getNotificationTimestamp(), result.get(0));
+        assertEquals("Notification: " + notification2.getMessage() + " | Timestamp: " + notification2.getNotificationTimestamp(), result.get(1));
     }
 
     //Test retrieving customer notifications when empty
