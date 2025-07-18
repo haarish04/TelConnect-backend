@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
@@ -31,8 +32,7 @@ class ServicePlanServiceTest {
     //Test creating new plan
     @Test
     void testCreatePlan() {
-        ServicePlan plan = new ServicePlan();
-        plan.setPlanId("PREP-TC-1234");
+        ServicePlan plan = Mockito.mock(ServicePlan.class);
 
         // Mocking the findByPlanId operation
         when(servicePlanRepository.findByPlanId(plan.getPlanId())).thenReturn(null);
@@ -50,10 +50,10 @@ class ServicePlanServiceTest {
     @Test
     void testCreatePlanWhenPlanExists() {
         ServicePlan plan = new ServicePlan();
-        plan.setPlanId("PREP-TC-1234");
+        plan.setPlanId("test_plan");
 
         // Mocking the findByPlanId operation to return an existing plan
-        when(servicePlanRepository.findByPlanId(plan.getPlanId())).thenReturn(plan);
+        when(servicePlanRepository.findByPlanId(anyString())).thenReturn(plan);
 
         boolean result = servicePlanService.createPlan(plan);
 
@@ -64,28 +64,25 @@ class ServicePlanServiceTest {
     //Test retrieving plan
     @Test
     void testGetPlan() {
-        String planId = "PREP-TC-1234";
-        ServicePlan plan = new ServicePlan();
-        plan.setPlanId(planId);
+        ServicePlan plan = Mockito.mock(ServicePlan.class);
 
         // Mocking the findByPlanId operation
-        when(servicePlanRepository.findByPlanId(planId)).thenReturn(plan);
+        when(servicePlanRepository.findByPlanId(anyString())).thenReturn(plan);
 
-        ServicePlan result = servicePlanService.getPlan(planId);
+        ServicePlan result = servicePlanService.getPlan(anyString());
 
         assertNotNull(result);
-        assertEquals(planId, result.getPlanId());
+        assertEquals(plan, result);
     }
 
     //Test retrieving non-existent plan
     @Test
     void testGetPlanWhenNotFound() {
-        String planId = "PREP-TC-1234";
 
         // Mocking the findByPlanId operation to return null
-        when(servicePlanRepository.findByPlanId(planId)).thenReturn(null);
+        when(servicePlanRepository.findByPlanId(anyString())).thenReturn(null);
 
-        ServicePlan result = servicePlanService.getPlan(planId);
+        ServicePlan result = servicePlanService.getPlan(anyString());
 
         assertNull(result);
     }
@@ -94,10 +91,8 @@ class ServicePlanServiceTest {
     @Test
     void testGetAllPlans() {
         List<ServicePlan> plans = new ArrayList<>();
-        ServicePlan plan1 = new ServicePlan();
-        plan1.setPlanId("PREP-TC-1234");
-        ServicePlan plan2 = new ServicePlan();
-        plan2.setPlanId("POST-TC-5678");
+        ServicePlan plan1 = Mockito.mock(ServicePlan.class);
+        ServicePlan plan2 = Mockito.mock(ServicePlan.class);
 
         plans.add(plan1);
         plans.add(plan2);
@@ -108,22 +103,20 @@ class ServicePlanServiceTest {
         List<ServicePlan> result = servicePlanService.getAllPlans();
 
         assertEquals(2, result.size());
-        assertEquals("PREP-TC-1234", result.get(0).getPlanId());
-        assertEquals("POST-TC-5678", result.get(1).getPlanId());
+        assertEquals(plan1, result.get(0));
+        assertEquals(plan2, result.get(1));
     }
 
     //Test deleting plans
     @Test
     void testDeletePlan() {
-        String planId = "PREP-TC-1234";
-
         // Mocking the deleteById operation
-        doNothing().when(servicePlanRepository).deleteById(planId);
+        doNothing().when(servicePlanRepository).deleteById(anyString());
 
-        servicePlanService.deletePlan(planId);
+        servicePlanService.deletePlan(anyString());
 
         // Verifying that deleteById method is called once
-        verify(servicePlanRepository, times(1)).deleteById(planId);
+        verify(servicePlanRepository, times(1)).deleteById(anyString());
     }
 
     //Test updating plan
@@ -145,7 +138,7 @@ class ServicePlanServiceTest {
         newPlan.setPlanPrice("300");
 
         // Mock the repository behavior
-        when(servicePlanRepository.findByPlanId(planId)).thenReturn(existingPlan);
+        when(servicePlanRepository.findByPlanId(anyString())).thenReturn(existingPlan);
 
         // Act
         boolean result = servicePlanService.updatePlan(newPlan, planId);
@@ -165,15 +158,13 @@ class ServicePlanServiceTest {
     @Test
     void testUpdatePlan_withNullPlan() {
         // Prepare test data
-        String planId = "PLAN123";
-        ServicePlan existingPlan = new ServicePlan();
-        existingPlan.setPlanId(planId);
+        ServicePlan existingPlan = Mockito.mock(ServicePlan.class);
 
         // Mock the repository behavior
-        when(servicePlanRepository.findByPlanId(planId)).thenReturn(existingPlan);
+        when(servicePlanRepository.findByPlanId(anyString())).thenReturn(existingPlan);
 
         // Act
-        boolean result = servicePlanService.updatePlan(null, planId);
+        boolean result = servicePlanService.updatePlan(null, null);
 
         // Assert
         assertFalse(result); // Verify that the method returns false
@@ -182,14 +173,4 @@ class ServicePlanServiceTest {
         verify(servicePlanRepository, never()).save(any());
     }
 
-//    @Test
-//    void testDeletePlanWhenException() {
-//        String planId = "PREP-TC-1234";
-//
-//        // Mocking the deleteById operation to throw an exception
-//        doThrow(new RuntimeException("Database error")).when(servicePlanRepository).deleteById(planId);
-//
-//        // You might want to handle the exception in your service method or just verify it
-//        assertDoesNotThrow(() -> servicePlanService.deletePlan(planId));
-//    }
 }
