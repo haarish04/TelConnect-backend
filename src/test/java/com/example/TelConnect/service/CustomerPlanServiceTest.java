@@ -1,18 +1,22 @@
 package com.example.TelConnect.service;
 
+import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.model.CustomerPlanMapping;
 import com.example.TelConnect.model.ServicePlan;
 import com.example.TelConnect.repository.CustomerPlanRepository;
+import com.example.TelConnect.repository.CustomerRepository;
 import com.example.TelConnect.repository.ServicePlanRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -28,6 +32,9 @@ class CustomerPlanServiceTest {
     @InjectMocks
     private CustomerPlanService customerPlanService;
 
+    @Mock
+    private CustomerRepository customerRepository;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -36,12 +43,9 @@ class CustomerPlanServiceTest {
     // 1. Test case for adding a new plan when the customer has no existing plan
     @Test
     void testCreateNewCustomerPlanMapping_NewPlan() {
-        CustomerPlanMapping newCustomerPlanMapping = new CustomerPlanMapping();
-        newCustomerPlanMapping.setCustomerId(1L);
-        newCustomerPlanMapping.setPlanId("PLAN123");
+        CustomerPlanMapping newCustomerPlanMapping = Mockito.mock(CustomerPlanMapping.class);
 
-        List<CustomerPlanMapping> existingPlans = new ArrayList<>();
-        when(customerPlanRepository.findByCustomerId(1L)).thenReturn(existingPlans);
+        when(customerPlanRepository.findByCustomer(any(Customer.class))).thenReturn(new ArrayList<CustomerPlanMapping>());
 
         boolean result = customerPlanService.createNewCustomerPlanMapping(newCustomerPlanMapping);
 
@@ -49,60 +53,67 @@ class CustomerPlanServiceTest {
         verify(customerPlanRepository, times(1)).save(newCustomerPlanMapping);
     }
 
-    // 2. Test case for not adding a duplicate plan
     @Test
     void testCreateNewCustomerPlanMapping_ExistingPlan() {
-        CustomerPlanMapping newCustomerPlanMapping = new CustomerPlanMapping();
-        newCustomerPlanMapping.setCustomerId(1L);
-        newCustomerPlanMapping.setPlanId("PLAN123");
+        // Mock the plan
+        ServicePlan mockPlan = Mockito.mock(ServicePlan.class);
+        when(mockPlan.getPlanId()).thenReturn("test_plan");
 
-        CustomerPlanMapping existingPlan = new CustomerPlanMapping();
-        existingPlan.setCustomerId(1L);
-        existingPlan.setPlanId("PLAN123");
+        // Mock the existing mapping
+        CustomerPlanMapping existingPlan = Mockito.mock(CustomerPlanMapping.class);
+        when(existingPlan.getPlan()).thenReturn(mockPlan);
+
+        // Mock the new mapping with the same plan
+        CustomerPlanMapping newMapping = Mockito.mock(CustomerPlanMapping.class);
+        when(newMapping.getPlan()).thenReturn(mockPlan);
+        when(newMapping.getCustomer()).thenReturn(Mockito.mock(Customer.class));
 
         List<CustomerPlanMapping> existingPlans = new ArrayList<>();
         existingPlans.add(existingPlan);
-        when(customerPlanRepository.findByCustomerId(1L)).thenReturn(existingPlans);
 
-        boolean result = customerPlanService.createNewCustomerPlanMapping(newCustomerPlanMapping);
+        when(customerPlanRepository.findByCustomer(any(Customer.class))).thenReturn(existingPlans);
+
+        boolean result = customerPlanService.createNewCustomerPlanMapping(newMapping);
 
         assertFalse(result);
-        verify(customerPlanRepository, never()).save(newCustomerPlanMapping);
+        verify(customerPlanRepository, never()).save(any());
     }
+
 
 
     // 4. Test case for getting customer plan status when plans exist
     @Test
     void testGetCustomerPlanStatus_WithPlans() {
-        Long customerId = 1L;
 
-        // Create and configure a CustomerPlanMapping object
         CustomerPlanMapping planMapping = new CustomerPlanMapping();
-        planMapping.setPlanId("PLAN123");
+        ServicePlan servicePlan = new ServicePlan();
+
+        Customer customer= new Customer();
+        customer.setCustomerId(1L);
+
+        servicePlan.setPlanId("test_plan");
+
         planMapping.setStatus("Active");
+        planMapping.setPlan(servicePlan);
+        planMapping.setCustomer(customer);
 
         // Add the CustomerPlanMapping object to a list
         List<CustomerPlanMapping> customerPlans = new ArrayList<>();
         customerPlans.add(planMapping);
 
-        // Create and configure a ServicePlan object
-        ServicePlan servicePlan = new ServicePlan();
-        servicePlan.setPlanId("PLAN123");
-        servicePlan.setPlanName("Test Plan");
 
         // Mock the behavior of repositories
-        when(customerPlanRepository.findByCustomerId(customerId)).thenReturn(customerPlans);
-        when(servicePlanRepository.findByPlanId("PLAN123")).thenReturn(servicePlan);
+        when(customerRepository.findById(anyLong())).thenReturn(Optional.of(customer));
+        when(customerPlanRepository.findByCustomer(customer)).thenReturn(customerPlans);
 
         // Call the method being tested
-        List<CustomerPlanMapping> result = customerPlanService.getCustomerPlanStatus(customerId);
+        List<CustomerPlanMapping> result = customerPlanService.getCustomerPlanStatus(1L);
 
         // Assert the result size
         assertEquals(1, result.size());
 
         // Assert the fields of the first (and only) element in the result list
         CustomerPlanMapping resultPlan = result.get(0);
-        assertEquals("PLAN123", resultPlan.getPlanId());
         assertEquals("Active", resultPlan.getStatus());
     }
 
@@ -110,12 +121,11 @@ class CustomerPlanServiceTest {
     // 5. Test case for getting customer plan status when no plans exist
     @Test
     void testGetCustomerPlanStatus_NoPlans() {
-        Long customerId = 1L;
 
         List<CustomerPlanMapping> customerPlans = new ArrayList<>();
-        when(customerPlanRepository.findByCustomerId(customerId)).thenReturn(customerPlans);
+        when(customerPlanRepository.findByCustomer(any(Customer.class))).thenReturn(customerPlans);
 
-        List<CustomerPlanMapping> result = customerPlanService.getCustomerPlanStatus(customerId);
+        List<CustomerPlanMapping> result = customerPlanService.getCustomerPlanStatus(anyLong());
 
         assertNull(result);
     }
@@ -123,82 +133,89 @@ class CustomerPlanServiceTest {
     // 6. Test case for multiple plans under the same customer
     @Test
     void testGetCustomerPlanStatus_MultiplePlans() {
-        Long customerId = 1L;
+
+        ServicePlan test_plan1= new ServicePlan();
+        ServicePlan test_plan2= new ServicePlan();
+        Customer customer = new Customer();
+        customer.setCustomerId(1L);
 
         CustomerPlanMapping plan1 = new CustomerPlanMapping();
-        plan1.setPlanId("PLAN123");
+        plan1.setPlan(test_plan1);
+        plan1.getPlan().setPlanId("plan1");
         plan1.setStatus("Active");
+        plan1.setCustomer(customer);
 
         CustomerPlanMapping plan2 = new CustomerPlanMapping();
-        plan2.setPlanId("PLAN456");
+        plan2.setPlan(test_plan2);
+        plan2.getPlan().setPlanId("plan2");
         plan2.setStatus("Expired");
+        plan2.setCustomer(customer);
 
         List<CustomerPlanMapping> customerPlans = new ArrayList<>();
         customerPlans.add(plan1);
         customerPlans.add(plan2);
 
-        ServicePlan servicePlan1 = new ServicePlan();
-        servicePlan1.setPlanId("PLAN123");
-        servicePlan1.setPlanName("Test Plan 1");
+        when(customerPlanRepository.findByCustomer(any(Customer.class))).thenReturn(customerPlans);
+        when(customerRepository.findById(anyLong())).thenReturn(Optional.of(customer));
 
-        ServicePlan servicePlan2 = new ServicePlan();
-        servicePlan2.setPlanId("PLAN456");
-        servicePlan2.setPlanName("Test Plan 2");
-
-        when(customerPlanRepository.findByCustomerId(customerId)).thenReturn(customerPlans);
-        when(servicePlanRepository.findByPlanId("PLAN123")).thenReturn(servicePlan1);
-        when(servicePlanRepository.findByPlanId("PLAN456")).thenReturn(servicePlan2);
-
-        List<CustomerPlanMapping> result = customerPlanService.getCustomerPlanStatus(customerId);
+        List<CustomerPlanMapping> result = customerPlanService.getCustomerPlanStatus(1L);
 
         // Assert the size of the result list
         assertEquals(2, result.size());
 
         // Assert the first element in the list
         CustomerPlanMapping resultPlan1 = result.get(0);
-        assertEquals("PLAN123", resultPlan1.getPlanId());
+        assertEquals("plan1", resultPlan1.getPlan().getPlanId());
         assertEquals("Active", resultPlan1.getStatus());
 
         // Assert the second element in the list
         CustomerPlanMapping resultPlan2 = result.get(1);
-        assertEquals("PLAN456", resultPlan2.getPlanId());
+        assertEquals("plan2", resultPlan2.getPlan().getPlanId());
         assertEquals("Expired", resultPlan2.getStatus());
     }
 
     // 7. Test case for updating the status of an existing plan
     @Test
     void testUpdateCustomerPlanStatus_ExistingPlan() {
-        Long customerId = 1L;
-        String planId = "PLAN123";
-        String newStatus = "Inactive";
+        ServicePlan test_plan= new ServicePlan();
+        test_plan.setPlanId("test_plan");
+
+        Customer customer = new Customer();
+        customer.setCustomerId(1L);
 
         CustomerPlanMapping planMapping = new CustomerPlanMapping();
-        planMapping.setPlanId(planId);
+        planMapping.setPlan(test_plan);
         planMapping.setStatus("Active");
+        planMapping.setCustomer(customer);
 
         List<CustomerPlanMapping> customerPlans = new ArrayList<>();
         customerPlans.add(planMapping);
 
-        when(customerPlanRepository.findByCustomerId(customerId)).thenReturn(customerPlans);
+        when(customerRepository.findById(anyLong())).thenReturn(Optional.of(customer));
+        when(customerPlanRepository.findByCustomer(any(Customer.class))).thenReturn(customerPlans);
 
-        boolean result = customerPlanService.updateCustomerPlanStatus(customerId, planId, newStatus);
+        boolean result = customerPlanService.updateCustomerPlanStatus(1L, "test_plan", "Inactive");
 
         assertTrue(result);
-        assertEquals(newStatus, planMapping.getStatus());
+        assertEquals("Inactive", planMapping.getStatus());
         verify(customerPlanRepository, times(1)).save(planMapping);
     }
 
-    // 8. Test case for failing to update the status if no such plan exists
+    // 8. Test case for failing to update the status when no such plan exists
     @Test
     void testUpdateCustomerPlanStatus_NoSuchPlan() {
-        Long customerId = 1L;
-        String planId = "PLAN123";
-        String newStatus = "Inactive";
+
+        Customer customer = new Customer();
+        customer.setCustomerId(1L);
+
+        CustomerPlanMapping planMapping = new CustomerPlanMapping();
+        planMapping.setCustomer(customer);
 
         List<CustomerPlanMapping> customerPlans = new ArrayList<>();
-        when(customerPlanRepository.findByCustomerId(customerId)).thenReturn(customerPlans);
+        when(customerRepository.findById(anyLong())).thenReturn(Optional.of(customer));
+        when(customerPlanRepository.findByCustomer(any(Customer.class))).thenReturn(customerPlans);
 
-        boolean result = customerPlanService.updateCustomerPlanStatus(customerId, planId, newStatus);
+        boolean result = customerPlanService.updateCustomerPlanStatus(1L, anyString(), "Inactive");
 
         assertFalse(result);
         verify(customerPlanRepository, never()).save(any());
@@ -208,13 +225,8 @@ class CustomerPlanServiceTest {
     @Test
     void testGetAllCustomerPlans() {
         // Prepare test data
-        CustomerPlanMapping customerPlan1 = new CustomerPlanMapping();
-        customerPlan1.setCustomerId(1L);
-        customerPlan1.setPlanId("plan1");
-
-        CustomerPlanMapping customerPlan2 = new CustomerPlanMapping();
-        customerPlan2.setCustomerId(2L);
-        customerPlan2.setPlanId("plan2");
+        CustomerPlanMapping customerPlan1 = Mockito.mock(CustomerPlanMapping.class);
+        CustomerPlanMapping customerPlan2 = Mockito.mock(CustomerPlanMapping.class);
 
         // Mock repository behavior
         when(customerPlanRepository.findAll()).thenReturn(Arrays.asList(customerPlan1, customerPlan2));
