@@ -4,23 +4,17 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.example.TelConnect.model.EmailContent;
-import com.mailjet.client.errors.MailjetException;
 import com.example.TelConnect.repository.NotificationRepository;
-import com.example.TelConnect.service.NotificationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class EmailServiceTest {
 
     private EmailService emailService;
-    private NotificationRepository notificationRepository;
-    private NotificationService notificationService;
 
     @BeforeEach
     public void setUp() {
-        notificationRepository = mock(NotificationRepository.class);
-        notificationService = mock(NotificationService.class);
-        emailService = new EmailService(notificationService, notificationRepository);
+        emailService = new EmailService(mock(NotificationService.class), mock(NotificationRepository.class));
     }
 
     //Test the email method for packaging welcome message
@@ -82,12 +76,12 @@ class EmailServiceTest {
         assertTrue(result);
     }
 
-    //Test the custom Email Sender to package the appropriate email for "thankyou" case
+    //Test the custom Email Sender to package the appropriate email for "thankYou" case
     @Test
     public void testCustomEmailSender_ThankYou() {
         String recipient = "test@email.com";
         String name = "Test User";
-        boolean result = emailService.customEmailSender("thankyou", null, recipient, name);
+        boolean result = emailService.customEmailSender("thankYou", null, recipient, name);
 
         assertTrue(result);
     }
@@ -97,7 +91,7 @@ class EmailServiceTest {
     public void testCustomEmailSender_ServiceActivation() {
         String recipient = "1ms20cs049@email.com";
         String name = "Test User";
-        boolean result = emailService.customEmailSender("serviceactivation", null, recipient, name);
+        boolean result = emailService.customEmailSender("serviceActivation", null, recipient, name);
 
         assertTrue(result);
     }
