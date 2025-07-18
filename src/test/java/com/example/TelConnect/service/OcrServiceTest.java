@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -43,19 +44,19 @@ class OcrServiceTest {
         // Prepare test data
         List<CustomerAadhar> customers = new ArrayList<>();
         CustomerAadhar customer = new CustomerAadhar();
-        customer.setCustomerName("Haarish Anandan");
+        customer.setCustomerName("test_name");
         customers.add(customer);
 
         when(customerAadharRepository.findAll()).thenReturn(customers);
 
         // Simulate the PDF InputStream
-        Resource pdfFile = new ClassPathResource("TestAadhar.pdf");
+        Resource pdfFile = new ClassPathResource("/test-image.png");
         InputStream fileStream = new FileInputStream(pdfFile.getFile());
 
         // Simulate the OCR result to contain the customer name
         OcrService spyOcrService = spy(ocrService);
         doReturn(List.of(new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB))).when(spyOcrService).extractImagesFromPdf(fileStream);
-        doReturn("Haarish Anandan").when(spyOcrService).performOcr(any());
+        doReturn("test_name").when(spyOcrService).performOcr(any());
 
         // Act
         String result = spyOcrService.recognizeText(fileStream);
@@ -69,7 +70,7 @@ class OcrServiceTest {
     @Test
     void testPerformOCR_Successful() throws Exception {
         // Arrange
-        BufferedImage image = ImageIO.read(getClass().getResourceAsStream("/test-image.png"));
+        BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/test-image.png")));
         String expectedOutput = "";
 
         // Set up mock process to return the expected output
@@ -86,11 +87,9 @@ class OcrServiceTest {
     //Test invalid image handler for OCR service
     @Test
     void testPerformOCR_InvalidImage() {
-        // Arrange
-        BufferedImage invalidImage = null;
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> ocrService.performOcr(invalidImage));
+        assertThrows(IllegalArgumentException.class, () -> ocrService.performOcr(null));
     }
 
     //Test failure handler of OCR service
@@ -157,7 +156,7 @@ class OcrServiceTest {
         when(customerAadharRepository.findAll()).thenReturn(customers);
 
         // Simulate the PDF InputStream
-        Resource pdfFile = new ClassPathResource("TestAadhar.pdf"); // Replace with your sample PDF path
+        Resource pdfFile = new ClassPathResource("/test-image.png"); // Replace with your sample PDF path
         InputStream fileStream = new FileInputStream(pdfFile.getFile());
 
         // Simulate the OCR result without the customer name
@@ -177,7 +176,7 @@ class OcrServiceTest {
     @Test
     void testExtractImagesFromPdf() throws IOException {
         // Simulate the PDF InputStream
-        Resource pdfFile = new ClassPathResource("TestAadhar.pdf"); // Replace with your sample PDF path
+        Resource pdfFile = new ClassPathResource("/test.pdf");
         InputStream fileStream = new FileInputStream(pdfFile.getFile());
 
         // Act
@@ -185,7 +184,7 @@ class OcrServiceTest {
 
         // Assert
         assertNotNull(images);
-        assertTrue(images.size() > 0);
+        assertFalse(images.isEmpty());
     }
 
     //Test the OCR service to be invoked
@@ -211,16 +210,16 @@ class OcrServiceTest {
         // Prepare test data
         List<CustomerAadhar> customers = new ArrayList<>();
         CustomerAadhar customer = new CustomerAadhar();
-        customer.setCustomerName("Haarish Anandan");
+        customer.setCustomerName("test_name");
         customers.add(customer);
 
         when(customerAadharRepository.findAll()).thenReturn(customers);
 
         // Act
-        String result = ocrService.verifyNameInText("Some text containing Haarish Anandan");
+        String result = ocrService.verifyNameInText("Some text containing test_name");
 
         // Assert
-        assertEquals("Haarish Anandan", result);
+        assertEquals("test_name", result);
     }
 
     @Test
