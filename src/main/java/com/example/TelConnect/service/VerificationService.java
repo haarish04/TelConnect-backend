@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 @Service
@@ -67,10 +68,11 @@ public class VerificationService {
     }
 
     //Update verification status of a customer
-    public void updateVerificationStatus(Long customerId, String status) {
-        String documentType= "Aadhar";
+    public boolean updateVerificationStatus(Long customerId, String status) {
+        String documentType= "Aadhaar";
         // Get the list of verifications for the given customer ID
         List<Verification> verifications = verificationRepository.findByCustomerId(customerId);
+        AtomicBoolean updateFlag= new AtomicBoolean(false);
 
         // Use streams to find the verification that matches the given document type
         verifications.stream()
@@ -85,7 +87,9 @@ public class VerificationService {
                     // Update the status of the found verification
                     verification.setRequestStatus(status);
                     verificationRepository.save(verification); // Save the updated verification
+                    updateFlag.set(true);
                 });
+        return updateFlag.get();
     }
 
     //Get all the verification attempts

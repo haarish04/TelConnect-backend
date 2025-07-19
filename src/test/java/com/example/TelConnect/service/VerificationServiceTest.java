@@ -1,23 +1,25 @@
 package com.example.TelConnect.service;
 
+import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.model.Verification;
 import com.example.TelConnect.DTO.VerificationRequestDTO;
 import com.example.TelConnect.model.Document;
+import com.example.TelConnect.repository.CustomerRepository;
+import com.example.TelConnect.repository.DocumentRepository;
 import com.example.TelConnect.repository.VerificationRepository;
-import com.example.TelConnect.service.DocumentService;
-import com.example.TelConnect.service.VerificationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import java.time.LocalDateTime;
+import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -26,11 +28,15 @@ class VerificationServiceTest {
     @Mock
     private VerificationRepository verificationRepository;
 
-    @Mock
-    private DocumentService documentService;
 
     @InjectMocks
     private VerificationService verificationService;
+
+    @Mock
+    private DocumentRepository documentRepository;
+
+    @Mock
+    private CustomerRepository customerRepository;
 
     @BeforeEach
     public void setUp() {
@@ -40,10 +46,12 @@ class VerificationServiceTest {
     //Test saving new verification request
     @Test
     void testSaveVerification() {
-        VerificationRequestDTO requestDTO = new VerificationRequestDTO();
-        requestDTO.setCustomerId(1L);
-        requestDTO.setDocumentId(2L);
+        VerificationRequestDTO requestDTO = Mockito.mock(VerificationRequestDTO.class);
+        Customer mockCustomer= new Customer();
+        Document mockDocument= new Document();
 
+        when(customerRepository.findById(anyLong())).thenReturn(Optional.of(mockCustomer));
+        when(documentRepository.findById(anyLong())).thenReturn(Optional.of(mockDocument));
         verificationService.saveVerification(requestDTO);
 
         verify(verificationRepository, times(1)).save(any(Verification.class));
@@ -54,30 +62,29 @@ class VerificationServiceTest {
     void testGetVerificationStatus() {
         List<Verification> mockVerifications = new ArrayList<>();
         Verification verification = new Verification();
-        verification.setCustomerId(1L);
-        verification.setDocumentId(2L);
-        verification.setRequestStatus("failed");
+        Document document= new Document();
+        document.setDocumentType("test_type");
+        document.setDocumentId(1L);
+
+        verification.setRequestStatus("Failed");
+        verification.setDocument(document);
+
         mockVerifications.add(verification);
 
-        Document mockDocument = new Document();
-        mockDocument.setDocumentId(2L);
-        mockDocument.setDocumentType("Aadhar");
+        when(verificationRepository.findByCustomerId(anyLong())).thenReturn(mockVerifications);
+        when(documentRepository.findById(anyLong())).thenReturn(Optional.of(document));
 
-        when(verificationRepository.findByCustomerId(1L)).thenReturn(mockVerifications);
-        when(documentService.getByDocumentId(2L)).thenReturn(mockDocument);
+        String result = verificationService.getVerificationStatus(anyLong());
 
-        String result = verificationService.getVerificationStatus(1L);
-
-        assertEquals("Document Type: Aadhar, Status: failed", result);
+        assertEquals("Document Type: test_type, Status: Failed", result);
     }
 
     //Test retrieving non-existent verification request
     @Test
     void testGetVerificationStatus_Empty() {
-        when(verificationRepository.findByCustomerId(1L)).thenReturn(new ArrayList<>());
+        when(verificationRepository.findByCustomerId(anyLong())).thenReturn(new ArrayList<>());
 
-        String result = verificationService.getVerificationStatus(1L);
-
+        String result = verificationService.getVerificationStatus(anyLong());
         assertEquals("", result);
     }
 
@@ -86,42 +93,46 @@ class VerificationServiceTest {
     void testUpdateVerificationStatus() {
         List<Verification> mockVerifications = new ArrayList<>();
         Verification verification = new Verification();
-        verification.setCustomerId(1L);
-        verification.setDocumentId(2L);
+        Document mockDocument = new Document();
+
+        Long customerId = 1L;
+
+        mockDocument.setDocumentId(1L);
+        mockDocument.setDocumentType("Aadhaar");
+
+        verification.setDocument(mockDocument);
+
         mockVerifications.add(verification);
 
-        Document mockDocument = new Document();
-        mockDocument.setDocumentId(2L);
-        mockDocument.setDocumentType("Aadhar");
+        when(verificationRepository.findByCustomerId(customerId)).thenReturn(mockVerifications);
+        when(documentRepository.findById(1L)).thenReturn(Optional.of(mockDocument));
 
-        when(verificationRepository.findByCustomerId(1L)).thenReturn(mockVerifications);
-        when(documentService.getByDocumentId(2L)).thenReturn(mockDocument);
-
-        verificationService.updateVerificationStatus(1L, "success");
+        verificationService.updateVerificationStatus(customerId, "success");
 
         verify(verificationRepository, times(1)).save(verification);
         assertEquals("success", verification.getRequestStatus());
     }
+
 
     //Test updating verification status of non-existent document
     @Test
     void testUpdateVerificationStatus_NoMatchingDocument() {
         List<Verification> mockVerifications = new ArrayList<>();
         Verification verification = new Verification();
-        verification.setVerificationId(3L);
-        verification.setCustomerId(3L);
-        verification.setDocumentId(3L);
+        Document mockDocument = new Document();
+
+        mockDocument.setDocumentId(1L);
+
+        verification.setDocument(mockDocument);
+
         verification.setRequestStatus("failed");
         mockVerifications.add(verification);
 
-        Document mockDocument = new Document();
-        mockDocument.setDocumentId(3L);
-        mockDocument.setDocumentType("Passport");
+        when(verificationRepository.findByCustomerId(anyLong())).thenReturn(mockVerifications);
+        when(documentRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        when(verificationRepository.findByCustomerId(3L)).thenReturn(mockVerifications);
-        when(documentService.getByDocumentId(2L)).thenReturn(mockDocument);
-
-        verificationService.updateVerificationStatus(2L, "success");
+        boolean result = verificationService.updateVerificationStatus(anyLong(), "success");
+        assertFalse(result);
 
         verify(verificationRepository, never()).save(any());
         assertEquals("failed", verification.getRequestStatus());
@@ -131,8 +142,7 @@ class VerificationServiceTest {
     @Test
     void testGetAllVerificationAttempts() {
         List<Verification> mockVerifications = new ArrayList<>();
-        Verification verification = new Verification();
-        verification.setCustomerId(1L);
+        Verification verification = Mockito.mock(Verification.class);
         mockVerifications.add(verification);
 
         when(verificationRepository.findAll()).thenReturn(mockVerifications);
@@ -140,6 +150,6 @@ class VerificationServiceTest {
         List<Verification> result = verificationService.getAllVerificationAttempts();
 
         assertEquals(1, result.size());
-        assertEquals(1L, result.get(0).getCustomerId());
+        assertEquals(verification, result.get(0));
     }
 }
