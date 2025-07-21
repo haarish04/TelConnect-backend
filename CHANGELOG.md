@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v2.2.0] - 21-07-2025
+
+### Changed
+- Removed the springcloud dependency, not using for now
+- Updated model classes for customerPlansMapping, Document, Notification, and Verification. Now the referenced columns are bound by foreign key, initially they just shared a name with extra logic to keep them in sync
+- Removed cascading in customer model
+- Updated the respective services of the model classes to accommodate the change in the model schema
+- Removed unused code and extra comments
+- Refactored all the test cases for all the services based on the changes made to the service and model schema
+- Added custom JPQL queries for Document, Verification and Notification repositories
+
 ## [v2.1.0] - 11-07-2025
 
 ### Added
