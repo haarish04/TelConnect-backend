@@ -1,5 +1,6 @@
 package com.example.TelConnect.service;
 
+import com.example.TelConnect.DTO.SecretsCache;
 import com.mailjet.client.ClientOptions;
 import com.mailjet.client.errors.MailjetException;
 import com.mailjet.client.MailjetClient;
@@ -11,11 +12,10 @@ import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.TelConnect.repository.NotificationRepository;
-import com.example.TelConnect.model.Notification;
-import com.example.TelConnect.service.NotificationService;
 import com.example.TelConnect.model.EmailContent;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,9 +31,13 @@ public class EmailService {
     private final NotificationService notificationService;
     public EmailContent email;
 
-    public EmailService(NotificationService notificationService, NotificationRepository notificationRepository){
+    @Autowired
+    private SecretsCache secretsCache;
+
+    public EmailService(NotificationService notificationService, NotificationRepository notificationRepository, SecretsCache secretsCache){
         this.notificationRepository=notificationRepository;
         this.notificationService=notificationService;
+        this.secretsCache = secretsCache;
     }
 
     private static class OtpEntry {
@@ -201,9 +205,11 @@ public class EmailService {
     //After retrieving the email contents from the EmailContent object we make a post request
     public void sendMail(EmailContent email, String recipient, String name) throws MailjetException, NullPointerException {
 
+        String api_key= secretsCache.getSecret("APIKEY");
+        String secret_key= secretsCache.getSecret("SECRETKEY");
         MailjetClient client = new MailjetClient(ClientOptions.builder()
-                .apiKey(System.getenv("MJ_APIKEY"))
-                .apiSecretKey(System.getenv("MJ_SECRETKEY"))
+                .apiKey(api_key)
+                .apiSecretKey(secret_key)
                 .build());
         MailjetRequest request = new MailjetRequest(Emailv31.resource)
                 .property(Emailv31.MESSAGES, new JSONArray()
