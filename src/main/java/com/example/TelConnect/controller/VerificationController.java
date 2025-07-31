@@ -1,12 +1,15 @@
 package com.example.TelConnect.controller;
 
 import com.example.TelConnect.DTO.VerificationRequestDTO;
+import com.example.TelConnect.model.Verification;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.example.TelConnect.service.VerificationService;
+
+import java.util.List;
 
 @Tag(name= "Verification", description = "Verification operations")
 @RestController
@@ -50,7 +53,10 @@ public class VerificationController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<?> getAllVerificationAttempts() {
-        return ResponseEntity.ok(verificationService.getAllVerificationAttempts());
+        List<Verification> verificationList= verificationService.getAllVerificationAttempts();
+        if(verificationList.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No verification request found");
+        return ResponseEntity.status(HttpStatus.OK).body(verificationList);
     }
 
 }
