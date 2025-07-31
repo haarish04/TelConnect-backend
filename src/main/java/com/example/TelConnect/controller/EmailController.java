@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name= "Email", description = "Email operations")
@@ -38,6 +39,7 @@ public class EmailController {
     }
 
     //Handler to push thank-you mail
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/thank-you")
     public ResponseEntity<String> thankYouSender(@RequestParam String recipient, @RequestParam String name){
         if(emailService.customEmailSender("thankyou",0,recipient,name))
@@ -47,6 +49,7 @@ public class EmailController {
     }
 
     //Handler to push service activation mail
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/service-activation")
     public ResponseEntity<String> activationSender(@RequestParam String recipient,@RequestParam String name){
         if(emailService.customEmailSender("serviceactivation",0,recipient,name))

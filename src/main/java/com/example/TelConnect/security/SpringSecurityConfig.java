@@ -50,7 +50,7 @@ public class SpringSecurityConfig {
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/swagger-resources/**").permitAll()
                         .requestMatchers("/webjars/**").permitAll()
-                        .requestMatchers("/api/ocr/**").permitAll()
+                        .requestMatchers("/api/ocr/**").authenticated()
                         .requestMatchers("/api/emails/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         )
