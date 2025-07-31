@@ -47,7 +47,7 @@ public class CustomerPlanController {
         if (customerPlanService.updateCustomerPlanStatus(customerId, planId, status)) {
             return ResponseEntity.ok("Status updated");
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Update failed");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to update status");
         }
     }
 
@@ -55,7 +55,10 @@ public class CustomerPlanController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<?> getCustomerPlans() {
-        return ResponseEntity.ok(customerPlanService.getAllCustomerPlans());
+        List<CustomerPlanMapping> customerPlanMappings=customerPlanService.getAllCustomerPlans();
+        if(customerPlanMappings.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        return ResponseEntity.status(HttpStatus.OK).body(customerPlanMappings);
     }
 
 }
