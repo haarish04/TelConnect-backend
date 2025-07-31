@@ -39,7 +39,12 @@ public class CustomerController {
     //Handler to get one customer using customerId
     @GetMapping("/Id={customerId}")
     public ResponseEntity<Customer> getCustomerById(@PathVariable Long customerId){
+        if(customerId==1)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         Customer customer= customerService.getByCustomerId(customerId);
+        if(customer==null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+
         return ResponseEntity.ok(customer);
     }
 
@@ -47,9 +52,8 @@ public class CustomerController {
     @PatchMapping("/{customerEmail}")
     public ResponseEntity<String> updateCustomer(@PathVariable String customerEmail,@RequestBody UpdateRequestDTO updateCustomer){
         updateCustomer.setCustomerEmail(customerEmail);
-        boolean update =customerService.updateCustomerDetails(updateCustomer);
-
-        if (update)
+        boolean updateStatus =customerService.updateCustomerDetails(updateCustomer);
+        if (updateStatus)
             return ResponseEntity.ok("Update Success");
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -62,6 +66,8 @@ public class CustomerController {
     @GetMapping
     public ResponseEntity<?> getCustomers() {
         List<Customer> customers = customerService.findAllCustomers();
+        if(customers.isEmpty())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         return ResponseEntity.ok(customers);
     }
 
