@@ -6,6 +6,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -67,7 +68,10 @@ public class OcrService {
 
 
             // Path to Tesseract executable
-            String tesseractPath = "C:/Users/e031975/AppData/Local/Programs/Tesseract-OCR/tesseract.exe";
+
+            ClassPathResource resource = new ClassPathResource("Tesseract-OCR/tesseract.exe");
+            String tesseractPath = resource.getFile().getAbsolutePath();
+
             String[] command = {
                     "cmd.exe", "/c", tesseractPath, "stdin", "stdout"
             };
@@ -111,6 +115,7 @@ public class OcrService {
 
         List<CustomerAadhar> customers = customerAadharRepository.findAll();
 
+        System.out.println(text);
         for (CustomerAadhar customer : customers) {
             String name = customer.getCustomerName();
 
