@@ -54,7 +54,8 @@ public class CustomerService {
         Customer existingCustomer=customerRepository.findByCustomerEmail(updateCustomer.getCustomerEmail());
         if(existingCustomer==null)
             return false;
-
+        if(existingCustomer.getCustomerId()==1)
+            return false;
         existingCustomer.setPassword(passwordEncoder.encode(updateCustomer.getPassword()));
         existingCustomer.setCustomerAddress(updateCustomer.getCustomerAddress());
         existingCustomer.setCustomerDOB(updateCustomer.getCustomerDOB());
