@@ -1,5 +1,6 @@
 package com.example.TelConnect.security;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -14,7 +15,7 @@ import java.security.Key;
 @Component
 public class JwtTokenProvider {
 
-    public String generateToken(Authentication authentication){
+    public String generateToken(Authentication authentication) {
 
         String name = authentication.getName();
         Date currentDate= new Date();
@@ -44,7 +45,7 @@ public class JwtTokenProvider {
                 .getSubject();
     }
 
-    public boolean validateToken(String token){
+    public boolean validateToken(String token) throws ExpiredJwtException{
         Jwts.parser()
                 .verifyWith((SecretKey) key())
                 .build()

@@ -1,5 +1,6 @@
 package com.example.TelConnect.security;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,15 +26,20 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token= extractToken(request);
-        if(StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)){
-            String name = jwtTokenProvider.getUserName(token);
-            UserDetails userDetails= customerDetailsService.loadUserByUsername(name);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException, ExpiredJwtException {
+        try {
+            String token = extractToken(request);
+            if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
+                String name = jwtTokenProvider.getUserName(token);
+                UserDetails userDetails = customerDetailsService.loadUserByUsername(name);
 
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-            SecurityContextHolder.getContext().setAuthentication(authToken);
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
 
         filterChain.doFilter(request,response);
