@@ -53,7 +53,8 @@ public class SpringSecurityConfig {
                         .requestMatchers("/api/ocr/**").authenticated()
                         .requestMatchers("/api/emails/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        )
+                        .requestMatchers("/actuator/**").hasRole("ADMIN")
+                )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // Add JWT filter
                 .httpBasic(Customizer.withDefaults());
         http.exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint));
