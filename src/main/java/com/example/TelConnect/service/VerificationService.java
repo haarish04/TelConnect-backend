@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
@@ -42,30 +44,28 @@ public class VerificationService {
     }
 
     //Get verification status of a customer
-    public String getVerificationStatus(Long customerId) {
+    public Map<String, String> getVerificationStatus(Long customerId) {
 
         // Get the list of verifications for the given customer ID
         List<Verification> verifications = verificationRepository.findByCustomerId(customerId);
-        List<String> results = new ArrayList<>();
+        Map<String, String> statusMap = new HashMap<>();
 
         for (Verification verification : verifications) {
             // Extract document ID and status from each verification
             Long documentId = verification.getDocument().getDocumentId();
             String status = verification.getRequestStatus();
 
-            // Get the document type using the document service
+            // Get the document type using the document repository
             Document document = documentRepository.findById(documentId).orElse(null);
-            String documentType = document.getDocumentType();
-
-            // Combine the document type and status into a result string
-            results.add("Document Type: " + documentType + ", Status: " + status);
+            if (document != null) {
+                String documentType = document.getDocumentType();
+                statusMap.put(documentType, status);
+            }
         }
-        if(results.isEmpty())
-            return "";
 
-        // Join all results into a single string for output
-        return String.join("\n", results);
+        return statusMap;
     }
+
 
     //Update verification status of a customer
     public boolean updateVerificationStatus(Long customerId, String status) {

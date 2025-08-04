@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.TelConnect.service.VerificationService;
 
 import java.util.List;
+import java.util.Map;
 
 @Tag(name= "Verification", description = "Verification operations")
 @RestController
@@ -31,8 +32,8 @@ public class VerificationController {
 
     //Handler to get verification status of customer
     @GetMapping("/{customerId}/status")
-    public ResponseEntity<String> getVerificationStatus(@PathVariable Long customerId){
-        String response= verificationService.getVerificationStatus(customerId);
+    public ResponseEntity<?> getVerificationStatus(@PathVariable Long customerId){
+        Map<String, String> response= verificationService.getVerificationStatus(customerId);
         if(response.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No verification request submitted by customer");
         else
