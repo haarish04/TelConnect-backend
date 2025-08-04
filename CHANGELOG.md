@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.0.0] - 04-08-2025
+
+### Added
+- Added tesseract-OCR packages as zip file
+- Included exception handling for expired JWT token (simple try catch can be picked up from console for admin logging)
+- Enabled actuator endpoints for health monitoring, can be accessed by admin
+
+
+### Changed
+- Updated gitignore file with Tesseract-OCR, check docs for usage 
+- Updated certain email endpoints and OCR endpoint to require JWT auth
+- Modified customer service to disallow operations on admin account
+- Modified endpoints to handle error conditions and throw appropriate status codes
+- Changed the return type of data in verification status endpoint
+
+
+### Removed
+- Removed functional tests from EmailServiceTests
+
+
 ## [v2.3.0] - 25-07-2025
 
 ### Added
