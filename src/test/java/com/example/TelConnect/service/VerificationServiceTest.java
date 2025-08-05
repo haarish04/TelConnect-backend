@@ -15,9 +15,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import javax.print.Doc;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -69,14 +67,17 @@ class VerificationServiceTest {
         verification.setRequestStatus("Failed");
         verification.setDocument(document);
 
+        Map<String, String> expectedResult= new HashMap<>();
+        expectedResult.put("test_type","Failed");
+
         mockVerifications.add(verification);
 
         when(verificationRepository.findByCustomerId(anyLong())).thenReturn(mockVerifications);
         when(documentRepository.findById(anyLong())).thenReturn(Optional.of(document));
 
-        String result = verificationService.getVerificationStatus(anyLong());
+        Map<String, String> result = verificationService.getVerificationStatus(anyLong());
 
-        assertEquals("Document Type: test_type, Status: Failed", result);
+        assertEquals(expectedResult, result);
     }
 
     //Test retrieving non-existent verification request
@@ -84,8 +85,8 @@ class VerificationServiceTest {
     void testGetVerificationStatus_Empty() {
         when(verificationRepository.findByCustomerId(anyLong())).thenReturn(new ArrayList<>());
 
-        String result = verificationService.getVerificationStatus(anyLong());
-        assertEquals("", result);
+        Map<String, String> result = verificationService.getVerificationStatus(anyLong());
+        assertEquals(new HashMap<>(), result);
     }
 
     //Test updating verification request status
