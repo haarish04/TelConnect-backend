@@ -18,7 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated certain email endpoints and OCR endpoint to require JWT auth
 - Modified customer service to disallow operations on admin account
 - Modified endpoints to handle error conditions and throw appropriate status codes
-- Changed the return type of data in verification status endpoint
+- Changed the return type of data in verification status and notification endpoint
+- Updated tests for notification and verification
 
 
 ### Removed
