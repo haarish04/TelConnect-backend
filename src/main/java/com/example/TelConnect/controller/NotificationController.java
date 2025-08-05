@@ -6,6 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.TelConnect.service.NotificationService;
 
+import java.util.List;
+import java.util.Map;
+
 @Tag(name= "Notifications", description = "Notify operations")
 @RestController
 @RequestMapping("/api/notifications")
@@ -26,8 +29,8 @@ public class NotificationController {
 
     //Handler to get notifications sent to a customer
     @GetMapping("/{customerId}")
-    public ResponseEntity<String> getNotification(@PathVariable Long customerId){
-        String notifications = notificationService.getCustomerNotifications(customerId).toString();
+    public ResponseEntity<?> getNotification(@PathVariable Long customerId){
+        List<Map<String, Object>> notifications = notificationService.getCustomerNotifications(customerId);
         if(notifications.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No notifications");
         else

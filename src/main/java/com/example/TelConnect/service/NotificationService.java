@@ -8,7 +8,9 @@ import com.example.TelConnect.model.Notification;
 import com.example.TelConnect.repository.NotificationRepository;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,14 +37,17 @@ public class NotificationService {
     }
 
     //Get all notifications pushed to customer
-    public List<String> getCustomerNotifications(Long customerId) {
+    public List<Map<String, Object>> getCustomerNotifications(Long customerId) {
         List<Notification> notifications = notificationRepository.findByCustomerId(customerId);
-
         return notifications.stream()
-                .map(notification ->
-                        "Notification: " + notification.getMessage() + " | Timestamp: " + notification.getNotificationTimestamp()
-                )
+                .map(notification -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("message", notification.getMessage());
+                    map.put("timestamp", notification.getNotificationTimestamp());
+                    return map;
+                })
                 .collect(Collectors.toList());
+
     }
 
 }

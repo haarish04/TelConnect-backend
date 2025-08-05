@@ -136,6 +136,7 @@ class CustomerServiceTest {
 
         Customer mockCustomer = new Customer();
         mockCustomer.setCustomerEmail("test@email.com");
+        mockCustomer.setCustomerId(111L);
         when(customerRepository.findByCustomerEmail(anyString())).thenReturn(mockCustomer);
         when(passwordEncoder.encode("test_password")).thenReturn("encodedPassword");
 
