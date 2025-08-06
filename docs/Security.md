@@ -28,7 +28,7 @@ Include the allowed methods ->
 
 The SpringSecurity class has the annotations @Configuration which entails that there are multiple @Bean methods that may be processed by the spring container at runtime. The @EnableWebSecurity annotation is used for Spring Security Web support and integration with Spring MVC. We require this since we are providing custom authentication logic with AuthManagers, JWT etc.
 
-![img_4.png](img_4.png)
+![img_4.png](Authentication Flow.png)
 
 ### UserDetailsService()
 This is injected to obtain the specific user data such as username and password at the time of authentication
@@ -74,7 +74,7 @@ This is a utility class for the implementation of JWT authentication which is in
 
 A JSON Web Token (JWT) is a standard (RFC 7519) for securely transmitting information between parties as a JSON object. This information can be verified and trusted because it is digitally signed.
 
-![img_5.png](img_5.png)
+![img_5.png](JWT Flow.png)
 
 Here we set a private string secret_key which is used to generate the JWT token during auth.
 

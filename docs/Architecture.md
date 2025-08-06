@@ -2,16 +2,20 @@
 
 ## High Level Architecture Diagram
 
-![img.png](img.png)
+![Architecture.png](Architecture.png)
 
 ## Use Case Diagram
 
-![img_1.png](img_1.png)
+![UseCase.png](UseCase.png)
+
+## Sequence Diagram
+
+![Sequence.png](Sequence.png)
 
 ## ER Diagram
 
-![img_2.png](img_2.png)
+![ER.png](ER.png)
 
 ## Class Diagram
 
-![img_3.png](img_3.png)
+![Class.png](Class.png)
