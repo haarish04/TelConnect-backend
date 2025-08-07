@@ -1,6 +1,7 @@
 package com.example.TelConnect.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
@@ -22,9 +23,11 @@ public class Verification {
     private Document document;
 
     @Column
+    @NotNull(message = "Request date cannot be null")
     private LocalDateTime requestDate;
 
     @Column
+    @NotNull(message = "Status cannot be null")
     private String requestStatus;
 
     public Long getVerificationId() {
