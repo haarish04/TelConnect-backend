@@ -4,6 +4,7 @@ import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.model.CustomerPlanMapping;
 import com.example.TelConnect.repository.CustomerPlanRepository;
 import com.example.TelConnect.repository.CustomerRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class CustomerPlanService {
     }
 
     //Service to create a new mapping between customer and a selected plan
-    public boolean createNewCustomerPlanMapping(CustomerPlanMapping newCustomerPlanMapping){
+    public boolean createNewCustomerPlanMapping(@Valid CustomerPlanMapping newCustomerPlanMapping){
         List<CustomerPlanMapping> customerPlans = customerPlanRepository.findByCustomer(newCustomerPlanMapping.getCustomer());
         //If customer already has plans
         if (!customerPlans.isEmpty()) {

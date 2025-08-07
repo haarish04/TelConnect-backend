@@ -1,6 +1,8 @@
 package com.example.TelConnect.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDate;
 
 @Entity
@@ -20,12 +22,15 @@ public class CustomerPlanMapping {
     private ServicePlan plan;
 
     @Column
+    @NotNull(message = "Start date of plan cannot be null")
     private LocalDate startDate;
 
     @Column
+    @NotNull(message = "End date of plan cannot be null")
     private LocalDate endDate;
 
     @Column
+    @NotNull(message = "Status of plan cannot be null")
     private String status;
 
     public Long getCustomerPlanId() {
