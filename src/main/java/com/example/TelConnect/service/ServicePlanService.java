@@ -3,6 +3,7 @@ package com.example.TelConnect.service;
 import com.example.TelConnect.model.ServicePlan;
 import com.example.TelConnect.repository.ServicePlanRepository;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -18,7 +19,7 @@ public class ServicePlanService {
     }
 
     //Service to create new service plan
-    public boolean createPlan(ServicePlan plan){
+    public boolean createPlan(@Valid ServicePlan plan){
         if(servicePlanRepository.findByPlanId(plan.getPlanId())==null) {
             servicePlanRepository.save(plan);
             return true;
@@ -28,7 +29,7 @@ public class ServicePlanService {
     }
 
     //Update existing service plan
-    public boolean updatePlan(ServicePlan plan, String planId){
+    public boolean updatePlan(@Valid ServicePlan plan, String planId){
         ServicePlan existingPlan= servicePlanRepository.findByPlanId(planId);
         if(plan==null)
             return false;

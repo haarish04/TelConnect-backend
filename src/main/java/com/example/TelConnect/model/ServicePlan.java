@@ -1,24 +1,29 @@
 package com.example.TelConnect.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "Service_Plans")
 public class ServicePlan {
 
     @Id
+    @NotNull(message = "PlanId cannot be null")
     private String planId;
 
     @Column
+    @NotNull(message = "Plan name cannot be null")
     private String planName;
 
     @Column
+    @NotNull(message = "Plan price cannot be null")
     private String planPrice;
 
     @Column
     private String planDescription;
 
     @Column
+    @NotNull(message = "Duration cannot be null")
     private String planDuration;
 
     public String getPlanId() {
