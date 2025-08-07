@@ -6,6 +6,7 @@ import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.repository.CustomerRepository;
 import com.example.TelConnect.repository.RoleRepository;
 import com.example.TelConnect.security.JwtTokenProvider;
+import jakarta.validation.Valid;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -43,7 +44,7 @@ public class AuthService {
         return jwtTokenProvider.generateToken(authentication);
     }
 
-    public boolean register(RegisterCustomerDTO newCustomer){
+    public boolean register( @Valid RegisterCustomerDTO newCustomer){
         Customer customer= new Customer();
         customer.setCustomerName(newCustomer.getCustomerName());
         customer.setCustomerEmail(newCustomer.getCustomerEmail());

@@ -1,22 +1,26 @@
 package com.example.TelConnect.DTO;
 
 
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDate;
 
 public class RegisterCustomerDTO {
 
+    @NotNull(message = "Name cannot be null")
     private String customerName;
 
     private String password;
 
+    @NotNull(message = "Email cannot be null")
     private String customerEmail;
 
     private String customerPhno;
 
+    @NotNull(message = "Address cannot be null")
     private String customerAddress;
 
     private LocalDate customerDOB;
-
 
     public String getCustomerName() {
         return customerName;

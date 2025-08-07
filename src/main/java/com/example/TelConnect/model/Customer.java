@@ -2,6 +2,8 @@ package com.example.TelConnect.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -14,6 +16,7 @@ public class Customer {
     private Long customerId;
 
     @Column
+    @NotNull(message = "Name cannot be null")
     private String customerName;
 
     @Column
@@ -27,6 +30,7 @@ public class Customer {
     private String customerPhno;
 
     @Column
+    @NotNull(message = "Address cannot be null")
     private String customerAddress;
 
     @Column(name = "customer_dob")

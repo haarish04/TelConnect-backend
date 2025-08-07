@@ -3,6 +3,7 @@ package com.example.TelConnect.service;
 import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.DTO.UpdateRequestDTO;
 import com.example.TelConnect.repository.CustomerRepository;
+import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +51,7 @@ public class CustomerService {
     }
 
     //Method to update customer details limited to updating password and or address and or DOB
-    public boolean updateCustomerDetails(UpdateRequestDTO updateCustomer){
+    public boolean updateCustomerDetails( @Valid UpdateRequestDTO updateCustomer){
         Customer existingCustomer=customerRepository.findByCustomerEmail(updateCustomer.getCustomerEmail());
         if(existingCustomer==null)
             return false;
