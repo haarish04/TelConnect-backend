@@ -44,7 +44,7 @@ public class SpringSecurityConfig {
                         .requestMatchers("/api/register").permitAll()
                         .requestMatchers("/api/customers/**").authenticated()
                         .requestMatchers("/api/verification/**").authenticated()
-                        .requestMatchers("/api/notifications/**").authenticated()
+                        .requestMatchers("/api/notifications/**").hasRole("ADMIN")
                         .requestMatchers("/api/plans/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
