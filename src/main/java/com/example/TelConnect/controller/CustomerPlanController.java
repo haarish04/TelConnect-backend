@@ -1,9 +1,12 @@
 package com.example.TelConnect.controller;
 
+import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.model.CustomerPlanMapping;
 import com.example.TelConnect.service.CustomerPlanService;
 
+import com.example.TelConnect.service.CustomerService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,9 +20,11 @@ import java.util.List;
 public class CustomerPlanController {
 
     private final CustomerPlanService customerPlanService;
+    private final CustomerService customerService;
 
-    public CustomerPlanController(CustomerPlanService customerPlanService){
+    public CustomerPlanController(CustomerPlanService customerPlanService, CustomerService customerService){
         this.customerPlanService=customerPlanService;
+        this.customerService=customerService;
     }
 
     //Handler to enroll new customer and map to a service
@@ -33,7 +38,18 @@ public class CustomerPlanController {
 
     //Handler to get status of customer and their plan
     @GetMapping("/{customerId}/status")
-    public ResponseEntity<List<CustomerPlanMapping>> getCustomerStatus(@PathVariable Long customerId){
+    public ResponseEntity<List<CustomerPlanMapping>> getCustomerStatus(@PathVariable Long customerId, HttpServletRequest request){
+
+        Customer customer= customerService.getByCustomerId(customerId);
+        String customerEmail= customer.getCustomerEmail();
+        String requesterEmail= request.getAttribute("userName").toString();
+
+        if(customer.getCustomerId()==1)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+
+        if(!requesterEmail.equals(customerEmail))
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+
         List<CustomerPlanMapping> response= customerPlanService.getCustomerPlanStatus(customerId);
         if(response.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);

@@ -3,6 +3,7 @@ package com.example.TelConnect.controller;
 import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.DTO.UpdateRequestDTO;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +28,20 @@ public class CustomerController {
 
     //Handler to get one customer
     @GetMapping("/{customerEmail}")
-    public ResponseEntity<Customer> getCustomerByEmail(@PathVariable String customerEmail) {
+    public ResponseEntity<Customer> getCustomerByEmail(@PathVariable String customerEmail, HttpServletRequest request) {
+        String requesterEmail= request.getAttribute("userName").toString();
+        String role= request.getAttribute("Role").toString();
+
         Customer customer=customerService.getByCustomerEmail(customerEmail);
+        if(role.equals("ROLE_ADMIN"))
+            return ResponseEntity.ok(customer);
+
+        if(customer.getCustomerId()==1)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+
+        if(!requesterEmail.equals(customerEmail))
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+
         if(customer!=null)
             return ResponseEntity.ok(customer);
 
@@ -38,10 +51,19 @@ public class CustomerController {
 
     //Handler to get one customer using customerId
     @GetMapping("/Id={customerId}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable Long customerId){
-        if(customerId==1)
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+    public ResponseEntity<Customer> getCustomerById(@PathVariable Long customerId, HttpServletRequest request){
+        String role= request.getAttribute("Role").toString();
         Customer customer= customerService.getByCustomerId(customerId);
+        String customerEmail= customer.getCustomerEmail();
+        String requesterEmail= request.getAttribute("userName").toString();
+        if(role.equals("ROLE_ADMIN"))
+            return ResponseEntity.ok(customer);
+
+        if(customer.getCustomerId()==1)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+
+        if(!requesterEmail.equals(customerEmail))
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         if(customer==null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 
@@ -50,8 +72,18 @@ public class CustomerController {
 
     //Handler to update customer details
     @PatchMapping("/{customerEmail}")
-    public ResponseEntity<String> updateCustomer(@PathVariable String customerEmail,@RequestBody UpdateRequestDTO updateCustomer){
+    public ResponseEntity<String> updateCustomer(@PathVariable String customerEmail, @RequestBody UpdateRequestDTO updateCustomer, HttpServletRequest request){
+        String requesterEmail= request.getAttribute("userName").toString();
+        Customer customer= customerService.getByCustomerEmail(customerEmail);
+
+        if(!requesterEmail.equals(customerEmail))
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+
+        if(customer.getCustomerId()==1)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+
         updateCustomer.setCustomerEmail(customerEmail);
+
         boolean updateStatus =customerService.updateCustomerDetails(updateCustomer);
         if (updateStatus)
             return ResponseEntity.ok("Update Success");
