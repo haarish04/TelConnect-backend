@@ -54,6 +54,7 @@ public class SpringSecurityConfig {
                         .requestMatchers("/api/ocr/**").authenticated()
                         .requestMatchers("/api/emails/**").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/actuator/prometheus").permitAll()
                         .requestMatchers("/actuator/**").hasRole("ADMIN")
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // Add JWT filter
