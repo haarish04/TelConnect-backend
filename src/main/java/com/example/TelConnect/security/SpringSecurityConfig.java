@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -33,7 +34,7 @@ public class SpringSecurityConfig {
 
     @Bean
     public static PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
+        return new Argon2PasswordEncoder(16, 32, 1, 65536, 3);
     }
 
     @Bean
