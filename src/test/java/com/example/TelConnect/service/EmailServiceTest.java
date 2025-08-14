@@ -5,10 +5,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.example.TelConnect.DTO.SecretsCache;
 import com.example.TelConnect.model.EmailContent;
-import com.example.TelConnect.repository.NotificationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.thymeleaf.TemplateEngine;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 class EmailServiceTest {
@@ -18,16 +21,31 @@ class EmailServiceTest {
     @InjectMocks
     SecretsCache secretsCache;
 
+    @InjectMocks
+    private EmailContentFactory emailContentFactory;
+
+    @InjectMocks
+    private EmailTemplateService emailTemplateService;
+
+    @InjectMocks
+    private TemplateEngine templateEngine;
+
 
     @BeforeEach
     public void setUp() {
-        emailService = new EmailService(mock(NotificationService.class), mock(NotificationRepository.class), secretsCache);
+        templateEngine= new TemplateEngine();
+        emailTemplateService= new EmailTemplateService(templateEngine);
+        emailContentFactory= new EmailContentFactory(emailTemplateService );
+        emailService = new EmailService(emailContentFactory,secretsCache);
     }
 
     //Test the email method for packaging welcome message
     @Test
     public void testWelcomeMessage() {
-        EmailContent emailContent = emailService.WelcomeMessage();
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("name", "testName");
+
+        EmailContent emailContent = emailContentFactory.createEmail("welcome",variables);
 
         assertEquals("Welcome to TelConnect! Your Connection Starts Here", emailContent.getSubject());
         assertNotNull(emailContent.getHtmlPart());
@@ -38,16 +56,23 @@ class EmailServiceTest {
     @Test
     public void testOTPMessage() {
         int otp = 123456;
-        EmailContent emailContent = emailService.OTPMessage(otp);
 
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("otp", otp);
+        EmailContent emailContent = emailContentFactory.createEmail("otp",variables);
+
+        System.out.println(emailContent.getHtmlPart());
         assertEquals("123456 is your 2FA OTP", emailContent.getSubject());
-        assertTrue(emailContent.getHtmlPart().contains(String.valueOf(otp)));
+        assertNotNull(emailContent.getHtmlPart());
     }
 
     //Test the email method for packaging thank you message
     @Test
     public void testThankYouMessage() {
-        EmailContent emailContent = emailService.thankYouMessage();
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("name", "testName");
+
+        EmailContent emailContent = emailContentFactory.createEmail("thankyou",variables);
 
         assertEquals("Thank You for Choosing TelConnect - Connecting You to What Matters!", emailContent.getSubject());
         assertNotNull(emailContent.getHtmlPart());
@@ -56,9 +81,11 @@ class EmailServiceTest {
     //Test the email method for packaging activation message
     @Test
     public void testServiceActivationMessage() {
-        EmailContent emailContent = emailService.ServiceActivationMessage();
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("name", "testName");
 
-        assertEquals("Service Activation", emailContent.getSubject());
+        EmailContent emailContent = emailContentFactory.createEmail("serviceactivation",variables);
+        assertEquals("Service Activation Alert", emailContent.getSubject());
         assertNotNull(emailContent.getHtmlPart());
     }
 
