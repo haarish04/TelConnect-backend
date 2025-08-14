@@ -52,7 +52,7 @@ public class SpringSecurityConfig {
                         .requestMatchers("/swagger-resources/**").permitAll()
                         .requestMatchers("/webjars/**").permitAll()
                         .requestMatchers("/api/ocr/**").authenticated()
-                        .requestMatchers("/api/emails/**").permitAll()
+                        .requestMatchers("/api/emails/**").authenticated()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/actuator/prometheus").permitAll()
                         .requestMatchers("/actuator/**").hasRole("ADMIN")
