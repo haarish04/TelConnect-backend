@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Email Verification</title>
+</head>
+<body>
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <h1 style="font-size: 24px; line-height: 32px;">Email Verification</h1>
+
+    <p style="font-size: 16px; line-height: 22px;">
+        Hi <span th:text="${name}">User</span>,
+    </p>
+
+    <p style="font-size: 16px; line-height: 22px;">
+        Your One-Time Password (OTP) is:
+    </p>
+
+    <h2 th:text="${otp}" style="font-size: 36px; font-weight: bold; text-align: center;"></h2>
+
+    <p style="font-size: 14px; color: #666; margin-top: 20px;">
+        If you did not initiate this request, someone may be trying to gain unauthorized access to your account.
+    </p>
+
+    <hr style="border: none; border-bottom: 1px solid #ccc; margin: 30px 0;" />
+
+    <p style="font-size: 12px; color: #666;">
+        If you need assistance or have concerns about account security, please contact our support team at
+        <a href="mailto:telconnecta@gmail.com">telconnecta@gmail.com</a>.
+    </p>
+</div>
+</body>
+</html>
