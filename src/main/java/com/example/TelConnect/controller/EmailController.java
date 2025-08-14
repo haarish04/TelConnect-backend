@@ -39,7 +39,6 @@ public class EmailController {
     }
 
     //Handler to push thank-you mail
-    @PreAuthorize("hasRole('USER')")
     @PostMapping("/thank-you")
     public ResponseEntity<String> thankYouSender(@RequestParam String recipient, @RequestParam String name){
         if(emailService.customEmailSender("thankyou",0,recipient,name))
@@ -49,7 +48,7 @@ public class EmailController {
     }
 
     //Handler to push service activation mail
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/service-activation")
     public ResponseEntity<String> activationSender(@RequestParam String recipient,@RequestParam String name){
         if(emailService.customEmailSender("serviceactivation",0,recipient,name))
