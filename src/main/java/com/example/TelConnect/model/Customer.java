@@ -2,7 +2,10 @@ package com.example.TelConnect.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -16,17 +19,21 @@ public class Customer {
     private Long customerId;
 
     @Column
+    @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
     @NotNull(message = "Name cannot be null")
     private String customerName;
 
     @Column
+    @Size(min=6, message = "Password must be atleast 6 characters")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Column
+    @Email(message = "Email must be valid")
     private String customerEmail;
 
     @Column
+    @Size(min = 10, max = 10, message = "Phone number must be 10 characters")
     private String customerPhno;
 
     @Column
@@ -34,6 +41,7 @@ public class Customer {
     private String customerAddress;
 
     @Column(name = "customer_dob")
+    @Past(message = "DOB must be before current date")
     private LocalDate customerDOB;
 
     @Column
