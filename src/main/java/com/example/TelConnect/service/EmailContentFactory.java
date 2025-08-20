@@ -38,6 +38,8 @@ public class EmailContentFactory {
                 return "Thank You for Choosing TelConnect - Connecting You to What Matters!";
             case "serviceactivation":
                 return "Service Activation Alert";
+            case "support":
+                return "Support Request";
             default:
                 return "TelConnect Notification";
         }

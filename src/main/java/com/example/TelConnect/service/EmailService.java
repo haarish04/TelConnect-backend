@@ -69,12 +69,11 @@ public class EmailService {
         return entry.getOtp() == otp;
     }
 
-    public boolean customEmailSender(String type, Integer otp, String recipient, String name) {
-        Map<String, Object> variables = new HashMap<>();
-        variables.put("name", name);
-        if ("otp".equalsIgnoreCase(type) && otp != null) {
-            variables.put("otp", otp);
-        }
+    public boolean customEmailSender(Map<String, Object> variables) {
+        String type = (String) variables.get("type");
+        String recipient = (String) variables.get("recipient");
+        String name = (String) variables.get("name");
+        Integer otp = (Integer) variables.get("otp");
 
         EmailContent email = emailFactory.createEmail(type, variables);
 
@@ -89,6 +88,7 @@ public class EmailService {
             return false;
         }
     }
+
 
     public void sendMail(EmailContent email, String recipient, String name) throws MailjetException {
         MailjetClient client = new MailjetClient(ClientOptions.builder()
