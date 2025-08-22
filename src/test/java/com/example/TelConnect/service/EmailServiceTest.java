@@ -5,38 +5,42 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.example.TelConnect.DTO.SecretsCache;
 import com.example.TelConnect.model.EmailContent;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.thymeleaf.TemplateEngine;
 
 import java.util.HashMap;
 import java.util.Map;
 
-
+@ExtendWith(MockitoExtension.class)
 class EmailServiceTest {
 
     private EmailService emailService;
 
     @InjectMocks
-    SecretsCache secretsCache;
+    private SecretsCache secretsCache;
 
-    @InjectMocks
     private EmailContentFactory emailContentFactory;
 
-    @InjectMocks
-    private EmailTemplateService emailTemplateService;
+    @Mock
+    private MeterRegistry meterRegistry;
 
-    @InjectMocks
-    private TemplateEngine templateEngine;
-
+    @Mock
+    private Counter counter;
 
     @BeforeEach
     public void setUp() {
-        templateEngine= new TemplateEngine();
-        emailTemplateService= new EmailTemplateService(templateEngine);
-        emailContentFactory= new EmailContentFactory(emailTemplateService );
-        emailService = new EmailService(emailContentFactory,secretsCache);
+        TemplateEngine templateEngine = new TemplateEngine();
+        EmailTemplateService emailTemplateService = new EmailTemplateService(templateEngine);
+        emailContentFactory= new EmailContentFactory(emailTemplateService);
+        when(meterRegistry.counter(anyString(), anyString(), anyString())).thenReturn(counter);
+        emailService = new EmailService(emailContentFactory,secretsCache, meterRegistry);
     }
 
     //Test the email method for packaging welcome message
