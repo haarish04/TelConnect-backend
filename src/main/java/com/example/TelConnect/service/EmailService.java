@@ -1,7 +1,6 @@
 package com.example.TelConnect.service;
 
 import com.example.TelConnect.DTO.SecretsCache;
-import com.example.TelConnect.service.EmailContentFactory;
 import com.example.TelConnect.model.EmailContent;
 import com.mailjet.client.ClientOptions;
 import com.mailjet.client.MailjetClient;
@@ -9,13 +8,14 @@ import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.errors.MailjetException;
 import com.mailjet.client.resource.Emailv31;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,6 +25,8 @@ import java.util.concurrent.ConcurrentMap;
 public class EmailService {
 
     private final ConcurrentMap<String, OtpEntry> otpStore = new ConcurrentHashMap<>();
+    private final Counter emailSuccessCounter;
+    private final Counter emailFailureCounter;
 
     @Autowired
     private final SecretsCache secretsCache;
@@ -32,9 +34,12 @@ public class EmailService {
     @Autowired
     private final EmailContentFactory emailFactory;
 
-    public EmailService(EmailContentFactory emailFactory, SecretsCache secretsCache) {
+    public EmailService(EmailContentFactory emailFactory, SecretsCache secretsCache, MeterRegistry meterRegistry) {
         this.emailFactory = emailFactory;
         this.secretsCache= secretsCache;
+        this.emailSuccessCounter = meterRegistry.counter("app_email_sent_success_total", "description", "Total number of successfully sent emails since app bootup");
+        this.emailFailureCounter = meterRegistry.counter("app_email_sent_failure_total", "description", "Total number of failed email attempts since app bootup");
+
     }
 
     private static class OtpEntry {
@@ -78,11 +83,11 @@ public class EmailService {
         EmailContent email = emailFactory.createEmail(type, variables);
 
         try {
-            sendMail(email, recipient, name);
+            boolean response=sendMail(email, recipient, name);
             if ("otp".equalsIgnoreCase(type) && otp != null) {
                 otpStore.put(recipient, new OtpEntry(otp));
             }
-            return true;
+            return response;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -90,7 +95,7 @@ public class EmailService {
     }
 
 
-    public void sendMail(EmailContent email, String recipient, String name) throws MailjetException {
+    public boolean sendMail(EmailContent email, String recipient, String name) throws MailjetException {
         MailjetClient client = new MailjetClient(ClientOptions.builder()
                 .apiKey(secretsCache.getSecret("APIKEY"))
                 .apiSecretKey(secretsCache.getSecret("SECRETKEY"))
@@ -112,7 +117,13 @@ public class EmailService {
                                 .put(Emailv31.Message.CUSTOMID, "PushEmail")));
 
         MailjetResponse response = client.post(request);
-        System.out.println(response.getStatus());
-        System.out.println(response.getData());
+        if(response.getStatus()==200) {
+            emailSuccessCounter.increment();
+            return true;
+        }
+        else {
+            emailFailureCounter.increment();
+            return false;
+        }
     }
 }
