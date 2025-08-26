@@ -20,7 +20,7 @@ public class JwtTokenProvider {
         String name = authentication.getName();
         Date currentDate= new Date();
 
-        Date expireDate= new Date(currentDate.getTime() + 604800000);
+        Date expireDate= new Date(currentDate.getTime() + 86400000);
 
         return Jwts.builder()
                 .claims()
@@ -51,5 +51,23 @@ public class JwtTokenProvider {
                 .build()
                 .parse(token);
         return true;
+    }
+
+    public Date getExpiry(String token){
+        return Jwts.parser()
+                .verifyWith((SecretKey) key())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getExpiration();
+    }
+
+    public Date issuedAt(String token){
+        return Jwts.parser()
+                .verifyWith((SecretKey) key())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getIssuedAt();
     }
 }

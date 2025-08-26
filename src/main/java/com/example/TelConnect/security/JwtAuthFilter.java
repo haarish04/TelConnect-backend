@@ -1,5 +1,6 @@
 package com.example.TelConnect.security;
 
+import com.example.TelConnect.DTO.UserSessionInfo;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -13,16 +14,20 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.util.Date;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomCustomerDetailsService customerDetailsService;
+    private final ActiveUserStore activeUserStore;
 
-    public JwtAuthFilter(JwtTokenProvider jwtTokenProvider, CustomCustomerDetailsService customerDetailsService){
+    public JwtAuthFilter(JwtTokenProvider jwtTokenProvider, CustomCustomerDetailsService customerDetailsService, ActiveUserStore activeUserStore){
         this.jwtTokenProvider=jwtTokenProvider;
         this.customerDetailsService=customerDetailsService;
+        this.activeUserStore=activeUserStore;
     }
 
     @Override
@@ -35,6 +40,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 request.setAttribute("userName", userDetails.getUsername());
                 request.setAttribute("Role", userDetails.getAuthorities());
+
+                activeUserStore.addUser(userDetails.getUsername(), new UserSessionInfo(userDetails.getUsername(),jwtTokenProvider.issuedAt(token), jwtTokenProvider.getExpiry(token), userDetails.getAuthorities()));
+
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
