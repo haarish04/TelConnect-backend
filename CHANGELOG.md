@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v3.1.0] - 28-08-2025
+
+### Added
+- Design diagrams added to docs
+- Added schema validation for the model classes
+- Added thymeleaf templates for each type of email
+- New support request email endpoint for customer to raise issue to admin
+- Added new custom health monitoring endpoints
+- Logs of each day are now stored in local folder (logs)
+- Integration with prometheus and grafana with dashboards for monitoring
+- Integration with sonarqube and sonar-scanner for SAST
+- Re-introduced Jacoco for code-coverage report
+
+
+### Changed
+- Added schema validation for the model classes
+- Updated JWT auth flow to store user ID to validate before hitting any endpoint
+- JWT auth for notification and email endpoints
+- Updated hashing algorithm to Argon2Encoder, BCrypt removed
+- Refactored email service, created new factory method for creating and pushing emails
+- Updated email test cases
+- Moved Tesseract-OCR from resources to root to resolve jacoco issue while compiling jaxb dependency
+
+
 ## [v3.0.0] - 04-08-2025
 
 ### Added
