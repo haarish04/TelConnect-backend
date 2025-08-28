@@ -6,8 +6,8 @@ call :run_step "git checkout main" || goto :fail
 call :run_step "git pull origin main" || goto :fail
 call :run_step "git merge dev" || goto :fail
 call :run_step "git push origin main" || goto :fail
-call :run_step "git tag v3.0.0" || goto :fail
-call :run_step "git push origin v3.0.0" || goto :fail
+call :run_step "git tag v3.1.0" || goto :fail
+call :run_step "git push origin v3.1.0" || goto :fail
 call :run_step "git checkout dev" || goto :fail
 
 echo  All steps completed successfully!
