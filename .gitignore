@@ -4,8 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 src/main/resources/application.properties
-src/main/resources/Tesseract-OCR
+Tesseract-OCR
 logs
+.scannerwork
 ### STS ###
 .apt_generated
 .classpath
