@@ -6,12 +6,12 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,11 +66,8 @@ public class OcrService {
             baos.flush();
             InputStream imageStream = new ByteArrayInputStream(baos.toByteArray());
 
-
             // Path to Tesseract executable
-
-            ClassPathResource resource = new ClassPathResource("Tesseract-OCR/tesseract.exe");
-            String tesseractPath = resource.getFile().getAbsolutePath();
+            String tesseractPath = Paths.get("Tesseract-OCR", "tesseract.exe").toAbsolutePath().toString();
 
             String[] command = {
                     "cmd.exe", "/c", tesseractPath, "stdin", "stdout"
