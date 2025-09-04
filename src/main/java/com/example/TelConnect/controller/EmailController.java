@@ -29,7 +29,7 @@ public class EmailController {
 
     //Handler to push welcome email
     @PostMapping("/welcome")
-    public ResponseEntity<String> welcomeMailSender(@RequestParam String recipient, @RequestParam String name) {
+    public ResponseEntity<String> welcomeMailSender(@RequestBody String recipient, @RequestBody String name) {
         Map<String, Object> variables = new HashMap<>();
         variables.put("type", "welcome");
         variables.put("recipient", recipient);
@@ -43,7 +43,7 @@ public class EmailController {
 
     //Handler to push OTP mail
     @PostMapping("/OTP")
-    public ResponseEntity<String> OTPMailSender(@RequestParam String recipient, @RequestParam String name) {
+    public ResponseEntity<String> OTPMailSender(@RequestBody String recipient, @RequestBody String name) {
         int otp = emailService.generateOTP();
 
         Map<String, Object> variables = new HashMap<>();
@@ -60,11 +60,12 @@ public class EmailController {
 
     //Handler to push thank-you mail
     @PostMapping("/thank-you")
-    public ResponseEntity<String> thankYouSender(@RequestParam String recipient, @RequestParam String name) {
+    public ResponseEntity<String> thankYouSender(@RequestBody String recipient, @RequestBody String name, @RequestBody String plan) {
         Map<String, Object> variables = new HashMap<>();
         variables.put("type", "thankyou");
         variables.put("recipient", recipient);
         variables.put("name", name);
+        variables.put("plan", plan);
 
         return emailService.customEmailSender(variables)
                 ? ResponseEntity.ok("Email sent")
@@ -74,11 +75,12 @@ public class EmailController {
     //Handler to push service activation mail
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/service-activation")
-    public ResponseEntity<String> activationSender(@RequestParam String recipient, @RequestParam String name) {
+    public ResponseEntity<String> activationSender(@RequestBody String recipient, @RequestBody String name, @RequestBody String plan) {
         Map<String, Object> variables = new HashMap<>();
         variables.put("type", "serviceactivation");
         variables.put("recipient", recipient);
         variables.put("name", name);
+        variables.put("plan", plan);
 
         return emailService.customEmailSender(variables)
                 ? ResponseEntity.ok("Email sent")
@@ -88,7 +90,7 @@ public class EmailController {
 
     //Handler to verify OTP submitted
     @PostMapping("/otp/verify")
-    public ResponseEntity<String> verifyOTP(@RequestParam String recipient, @RequestParam int otp) {
+    public ResponseEntity<String> verifyOTP(@RequestBody String recipient, @RequestBody int otp) {
         if (emailService.verifyOTP(recipient, otp)) {
             return ResponseEntity.ok().body("OTP verified successfully");
         } else {
