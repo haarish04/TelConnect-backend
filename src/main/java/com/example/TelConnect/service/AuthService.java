@@ -5,6 +5,7 @@ import com.example.TelConnect.DTO.RegisterCustomerDTO;
 import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.repository.CustomerRepository;
 import com.example.TelConnect.repository.RoleRepository;
+import com.example.TelConnect.security.BlacklistJwt;
 import com.example.TelConnect.security.JwtTokenProvider;
 import jakarta.validation.Valid;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,13 +25,15 @@ public class AuthService {
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final BlacklistJwt blacklistJwt;
 
-    public AuthService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager) {
+    public AuthService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager, BlacklistJwt blacklistJwt) {
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.authenticationManager=authenticationManager;
         this.jwtTokenProvider=jwtTokenProvider;
+        this.blacklistJwt = blacklistJwt;
     }
 
     public String login(LoginRequestDTO loginRequestDTO){
@@ -57,5 +60,10 @@ public class AuthService {
 
         Customer savedCustomer =customerRepository.save(customer);
         return savedCustomer.getCustomerId() != null;
+    }
+
+    public void logout(String token){
+        long expiry= jwtTokenProvider.getExpiry(token).getTime() - System.currentTimeMillis();
+        blacklistJwt.blacklistToken(token, expiry);
     }
 }

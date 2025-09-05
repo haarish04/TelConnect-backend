@@ -42,6 +42,7 @@ public class SpringSecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/login").permitAll()
+                        .requestMatchers("/api/logout").authenticated()
                         .requestMatchers("/api/register").permitAll()
                         .requestMatchers("/api/customers/**").authenticated()
                         .requestMatchers("/api/verification/**").authenticated()
@@ -57,7 +58,7 @@ public class SpringSecurityConfig {
                         .requestMatchers("/actuator/prometheus").permitAll()
                         .requestMatchers("/actuator/**").hasRole("ADMIN")
                 )
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // Add JWT filter
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(Customizer.withDefaults());
         http.exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint));
 

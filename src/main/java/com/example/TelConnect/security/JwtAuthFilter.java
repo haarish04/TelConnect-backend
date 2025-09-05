@@ -14,8 +14,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.time.Instant;
-import java.util.Date;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -23,11 +21,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomCustomerDetailsService customerDetailsService;
     private final ActiveUserStore activeUserStore;
+    private final BlacklistJwt blacklistJwt;
 
-    public JwtAuthFilter(JwtTokenProvider jwtTokenProvider, CustomCustomerDetailsService customerDetailsService, ActiveUserStore activeUserStore){
+    public JwtAuthFilter(JwtTokenProvider jwtTokenProvider, CustomCustomerDetailsService customerDetailsService, ActiveUserStore activeUserStore, BlacklistJwt blacklistJwt){
         this.jwtTokenProvider=jwtTokenProvider;
         this.customerDetailsService=customerDetailsService;
         this.activeUserStore=activeUserStore;
+        this.blacklistJwt = blacklistJwt;
     }
 
     @Override
@@ -37,6 +37,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
                 String name = jwtTokenProvider.getUserName(token);
                 UserDetails userDetails = customerDetailsService.loadUserByUsername(name);
+                if(blacklistJwt.isBlacklisted(token)) {
+                    activeUserStore.removeUser(userDetails.getUsername());
+                    throw new ExpiredJwtException(null, null, "Token has expired");
+                }
+
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 request.setAttribute("userName", userDetails.getUsername());
                 request.setAttribute("Role", userDetails.getAuthorities());

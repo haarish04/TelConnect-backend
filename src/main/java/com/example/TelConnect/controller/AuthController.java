@@ -6,6 +6,7 @@ import com.example.TelConnect.DTO.RegisterCustomerDTO;
 import com.example.TelConnect.DTO.LoginRequestDTO;
 import com.example.TelConnect.service.AuthService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,6 @@ import com.example.TelConnect.service.CustomerService;
 public class AuthController {
     private final CustomerService customerService;
     private final AuthService authService;
-
     @Autowired
     public AuthController(CustomerService customerService, AuthService authService) {
         this.customerService = customerService;
@@ -49,6 +49,21 @@ public class AuthController {
         if(authService.register(newCustomer))
             return ResponseEntity.status(HttpStatus.CREATED).body("Customer registered successfully");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error while creating new user");
+    }
+
+    //Handler method for user logout
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request){
+        String authHeader= request.getHeader("Authorization");
+
+        if(authHeader== null || !authHeader.startsWith("Bearer ")){
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error while validating JWT token");
+        }
+        String token= authHeader.substring(7);
+        authService.logout(token);
+
+        return ResponseEntity.status(HttpStatus.OK).body("User logged out successfully");
+
     }
 
 }
