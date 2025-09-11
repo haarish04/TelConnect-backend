@@ -1,25 +1,38 @@
 package com.example.TelConnect.security;
 
-
 import com.example.TelConnect.DTO.UserSessionInfo;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
+import java.util.Set;
 
-@Component
+@Service
 public class ActiveUserStore {
-    private final ConcurrentHashMap<String, UserSessionInfo> activeUsers = new ConcurrentHashMap<>();
+
+    private final RedisTemplate<String, UserSessionInfo> redisTemplate;
+
+    public ActiveUserStore(@Qualifier("userSessionRedisTemplate") RedisTemplate<String, UserSessionInfo> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     public void addUser(String username, UserSessionInfo info) {
-        activeUsers.put(username, info);
+        redisTemplate.opsForValue().set(username, info);
     }
 
-    public void removeUser(String username) {
-        activeUsers.remove(username);
+    public void removeUser(String username){
+        redisTemplate.delete(username);
     }
 
-    public Map<String, UserSessionInfo> getActiveUsers() {
-        return activeUsers;
+    public HashMap<String,UserSessionInfo> getActiveUsers() {
+        Set<String> keys = redisTemplate.keys("user:*");
+        HashMap<String, UserSessionInfo> activeUserList = new HashMap<>();
+        for (String key : keys) {
+            UserSessionInfo value = redisTemplate.opsForValue().get(key);
+            activeUserList.put(key, value);
+        }
+        return activeUserList;
+
     }
 }
