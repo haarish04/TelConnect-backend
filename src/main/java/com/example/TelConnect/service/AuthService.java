@@ -12,6 +12,7 @@ import com.example.TelConnect.security.CustomCustomerDetailsService;
 import com.example.TelConnect.security.JwtTokenProvider;
 import jakarta.validation.Valid;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,20 +46,32 @@ public class AuthService {
         this.activeUserStore = activeUserStore;
     }
 
-    public String login(LoginRequestDTO loginRequestDTO){
-        Authentication authentication= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginRequestDTO.getCustomerEmail(),
-                loginRequestDTO.getPassword()
-        ));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+    public String login(LoginRequestDTO loginRequestDTO) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequestDTO.getCustomerEmail(),
+                            loginRequestDTO.getPassword()
+                    )
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String token= jwtTokenProvider.generateToken(authentication);
-        String name = jwtTokenProvider.getUserName(token);
-        UserDetails userDetails = customerDetailsService.loadUserByUsername(name);
-        activeUserStore.addUser("user:" + userDetails.getUsername(), new UserSessionInfo(userDetails.getUsername(), jwtTokenProvider.issuedAt(token), jwtTokenProvider.getExpiry(token)));
+            String token = jwtTokenProvider.generateToken(authentication);
+            String name = jwtTokenProvider.getUserName(token);
+            UserDetails userDetails = customerDetailsService.loadUserByUsername(name);
+            activeUserStore.addUser("user:" + userDetails.getUsername(),
+                    new UserSessionInfo(userDetails.getUsername(), jwtTokenProvider.issuedAt(token), jwtTokenProvider.getExpiry(token)));
 
-        return token;
+            return token;
+
+        } catch (BadCredentialsException ex) {
+            if (customerRepository.findByCustomerEmail(loginRequestDTO.getCustomerEmail()).getCustomerId() == 1L) {
+                System.out.println("Invalid admin login attempt"+ LocalDate.now());
+            }
+            return "";
+        }
     }
+
 
     public boolean register( @Valid RegisterCustomerDTO newCustomer){
         Customer customer= new Customer();
