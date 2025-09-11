@@ -2,16 +2,20 @@ package com.example.TelConnect.service;
 
 import com.example.TelConnect.DTO.LoginRequestDTO;
 import com.example.TelConnect.DTO.RegisterCustomerDTO;
+import com.example.TelConnect.DTO.UserSessionInfo;
 import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.repository.CustomerRepository;
 import com.example.TelConnect.repository.RoleRepository;
+import com.example.TelConnect.security.ActiveUserStore;
 import com.example.TelConnect.security.BlacklistJwt;
+import com.example.TelConnect.security.CustomCustomerDetailsService;
 import com.example.TelConnect.security.JwtTokenProvider;
 import jakarta.validation.Valid;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,14 +30,19 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final BlacklistJwt blacklistJwt;
+    private final CustomCustomerDetailsService customerDetailsService;
+    private final ActiveUserStore activeUserStore;
 
-    public AuthService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager, BlacklistJwt blacklistJwt) {
+
+    public AuthService(CustomerRepository customerRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager, BlacklistJwt blacklistJwt, CustomCustomerDetailsService customerDetailsService, ActiveUserStore activeUserStore) {
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.authenticationManager=authenticationManager;
         this.jwtTokenProvider=jwtTokenProvider;
         this.blacklistJwt = blacklistJwt;
+        this.customerDetailsService = customerDetailsService;
+        this.activeUserStore = activeUserStore;
     }
 
     public String login(LoginRequestDTO loginRequestDTO){
@@ -41,10 +50,14 @@ public class AuthService {
                 loginRequestDTO.getCustomerEmail(),
                 loginRequestDTO.getPassword()
         ));
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return jwtTokenProvider.generateToken(authentication);
+        String token= jwtTokenProvider.generateToken(authentication);
+        String name = jwtTokenProvider.getUserName(token);
+        UserDetails userDetails = customerDetailsService.loadUserByUsername(name);
+        activeUserStore.addUser("user:" + userDetails.getUsername(), new UserSessionInfo(userDetails.getUsername(), jwtTokenProvider.issuedAt(token), jwtTokenProvider.getExpiry(token)));
+
+        return token;
     }
 
     public boolean register( @Valid RegisterCustomerDTO newCustomer){
@@ -63,7 +76,10 @@ public class AuthService {
     }
 
     public void logout(String token){
-        long expiry= jwtTokenProvider.getExpiry(token).getTime() - System.currentTimeMillis();
-        blacklistJwt.blacklistToken(token, expiry);
+        blacklistJwt.blacklistToken(token);
+        String name = jwtTokenProvider.getUserName(token);
+        UserDetails userDetails = customerDetailsService.loadUserByUsername(name);
+        activeUserStore.removeUser("user:" +userDetails.getUsername());
+
     }
 }

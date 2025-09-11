@@ -37,17 +37,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
                 String name = jwtTokenProvider.getUserName(token);
                 UserDetails userDetails = customerDetailsService.loadUserByUsername(name);
-                if(blacklistJwt.isBlacklisted(token)) {
-                    activeUserStore.removeUser(userDetails.getUsername());
+                if(blacklistJwt.isBlacklisted(token))
                     throw new ExpiredJwtException(null, null, "Token has expired");
-                }
 
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 request.setAttribute("userName", userDetails.getUsername());
                 request.setAttribute("Role", userDetails.getAuthorities());
-
-                activeUserStore.addUser(userDetails.getUsername(), new UserSessionInfo(userDetails.getUsername(),jwtTokenProvider.issuedAt(token), jwtTokenProvider.getExpiry(token), userDetails.getAuthorities()));
-
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
