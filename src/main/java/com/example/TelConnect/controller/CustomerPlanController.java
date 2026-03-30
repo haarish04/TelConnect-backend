@@ -33,7 +33,7 @@ public class CustomerPlanController {
     @GetMapping("/{customerId}/status")
     public ResponseEntity<List<CustomerPlanMapping>> getCustomerStatus(@PathVariable Long customerId){
         List<CustomerPlanMapping> response= customerPlanService.getCustomerPlanStatus(customerId);
-        if(response.isEmpty())
+        if(response==null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         return ResponseEntity.ok(response);
     }
