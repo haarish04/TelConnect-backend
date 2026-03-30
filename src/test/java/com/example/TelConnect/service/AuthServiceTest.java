@@ -106,7 +106,8 @@ public class AuthServiceTest {
         loginRequestDTO.setPassword("wrongpassword");
 
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
-                .thenThrow(new BadCredentialsException("Invalid credentials"));
+                .thenThrow(new BadCredentialsException(""));
+        when(customerRepository.findByCustomerEmail(anyString()).getCustomerId()).thenReturn(0L);
 
         assertThrows(BadCredentialsException.class, () -> authService.login(loginRequestDTO));
 

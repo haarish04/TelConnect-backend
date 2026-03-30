@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Service
@@ -66,7 +67,7 @@ public class AuthService {
 
         } catch (BadCredentialsException ex) {
             if (customerRepository.findByCustomerEmail(loginRequestDTO.getCustomerEmail()).getCustomerId() == 1L) {
-                System.out.println("Invalid admin login attempt"+ LocalDate.now());
+                System.out.println("Invalid admin login attempt at: "+ LocalDateTime.now());
             }
             return "";
         }

@@ -16,9 +16,13 @@ path "secret/telconnect/metadata/*" {
 
 vault policy write telconnect-policy telconnect-policy.hcl
 
+## Enable approle authentication
+
+vault auth enable approle
+
 ## Create a role for telconnect and assume this policy (authentication using approle)
 
-vault write auth/approle/role/telconnect-role token_policies="telconnect-policy" secret_id_ttl=60m token_ttl=60m token_max_ttl=4h
+vault write auth/approle/role/telconnect-role token_policies="telconnect-policy" secret_id_ttl=0 token_ttl=24h token_max_ttl=24h
 
 ## Retrieve the role_id and secret_id
 
