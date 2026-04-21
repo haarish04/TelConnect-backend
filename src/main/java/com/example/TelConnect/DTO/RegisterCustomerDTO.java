@@ -17,6 +17,19 @@ public class RegisterCustomerDTO {
 
     private LocalDate customerDOB;
 
+    private float balance = 1000;
+
+    private Long cidn;
+
+    private String role = "USER";
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 
     public String getCustomerName() {
         return customerName;
@@ -64,5 +77,21 @@ public class RegisterCustomerDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public float getBalance() {
+        return balance;
+    }
+
+    public void setBalance(float balance) {
+        this.balance = balance;
+    }
+
+    public Long getCidn() {
+        return cidn;
+    }
+
+    public void setCidn(Long cidn) {
+        this.cidn = cidn;
     }
 }

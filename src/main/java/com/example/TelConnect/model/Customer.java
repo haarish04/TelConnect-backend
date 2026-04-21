@@ -39,6 +39,12 @@ public class Customer {
     @Column
     private String role;
 
+    @Column
+    private float balance;
+
+    @Column(name = "cidn")
+    private Long cidn;
+
     public Long getCustomerId() {
         return customerId;
     }
@@ -111,6 +117,22 @@ public class Customer {
         this.role =role;
     }
 
+    public float getBalance() {
+        return balance;
+    }
+
+    public void setBalance(float balance) {
+        this.balance = balance;
+    }
+
+    public Long getCidn() {
+        return cidn;
+    }
+
+    public void setCidn(Long cidn) {
+        this.cidn = cidn;
+    }
+
 
     // Override toString for better logging or debugging
     @Override
@@ -124,6 +146,8 @@ public class Customer {
                 ", customerDOB='" + customerDOB + '\'' +
                 ", accountCreationDate=" + accountCreationDate +
                 ", roles=" + role +
+                ", balance=" + balance +
+                ", cidn=" + cidn +
                 '}';
     }
 }

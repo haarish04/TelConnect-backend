@@ -32,8 +32,9 @@ public class CustomerService {
         customer.setCustomerAddress(newCustomer.getCustomerAddress());
         customer.setAccountCreationDate(LocalDate.now());
         customer.setCustomerPhno(newCustomer.getCustomerPhno());
-        customer.setRole("USER");
-
+        customer.setRole(newCustomer.getRole());
+        customer.setBalance(newCustomer.getBalance());
+        customer.setCidn(newCustomer.getCidn());
         customerRepository.save(customer);
     }
 
@@ -88,8 +89,8 @@ public class CustomerService {
         existingCustomer.setPassword(passwordEncoder.encode(updateCustomer.getPassword()));
         existingCustomer.setCustomerAddress(updateCustomer.getCustomerAddress());
         existingCustomer.setCustomerDOB(updateCustomer.getCustomerDOB());
-
-
+        existingCustomer.setBalance(updateCustomer.getBalance());
+        existingCustomer.setCidn(updateCustomer.getCidn());
         customerRepository.save(existingCustomer);
         return true;
 
