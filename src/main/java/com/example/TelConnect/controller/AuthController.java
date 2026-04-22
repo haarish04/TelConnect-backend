@@ -10,13 +10,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.TelConnect.service.CustomerService;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
 public class AuthController {
     private final CustomerService customerService;
     private final JwtUtil jwtUtil;
+    private final ArrayList<String> adminRoles= new ArrayList<>(List.of("ADMIN", "SUPER_ADMIN", "LOGISTIC_ADMIN"));
 
     @Autowired
     public AuthController(CustomerService customerService, JwtUtil jwtUtil) {
@@ -35,7 +38,7 @@ public class AuthController {
 
             if (authenticate == 1) {
                 Customer customer = customerService.getByCustomerEmail(email);
-                if (customer.getCustomerId() == 1) {
+                if (customer.getCidn() == 1 && adminRoles.contains(customer.getRole())) {
                     // Generate JWT token for the admin
                     String token = jwtUtil.generateToken(email);
                     return ResponseEntity.ok(Collections.singletonMap("token", token));
