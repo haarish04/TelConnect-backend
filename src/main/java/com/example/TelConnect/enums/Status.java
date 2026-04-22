@@ -1,4 +1,6 @@
 package com.example.TelConnect.enums;
 
-public class Sataus {
+public enum Status {
+    OPEN,
+    CLOSED
 }

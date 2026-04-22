@@ -1,4 +1,8 @@
+
 package com.example.TelConnect.enums;
 
-public class Priority {
+public enum Priority {
+    LOW,
+    MEDIUM,
+    HIGH
 }

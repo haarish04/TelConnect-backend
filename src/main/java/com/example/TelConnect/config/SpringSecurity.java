@@ -47,6 +47,7 @@ public class SpringSecurity {
                                 .requestMatchers("/api/ocr/**").permitAll()
                         .requestMatchers("/api/emails/**").permitAll()
                         .requestMatchers("/api/admin/**").authenticated()
+                        .requestMatchers("/api/incidents/**").permitAll()
                         .and()
                         .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class) // Add JWT filter
 
