@@ -10,7 +10,6 @@ import java.time.LocalDate;
 public class Organization {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cidn")
     private Long CIDN;
 
