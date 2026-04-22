@@ -15,6 +15,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -24,6 +26,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
     private CustomerService customerService;
+
+    private final ArrayList<String> adminRoles= new ArrayList<>(List.of("ADMIN", "SUPER_ADMIN", "LOGISTIC_ADMIN"));
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -48,7 +53,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         // Validate token and set authentication for the admin
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             Customer customer = customerService.getByCustomerEmail(email);
-            if (jwtUtil.validateToken(jwt, email) && customer.getCustomerId() == 1) {
+            if (jwtUtil.validateToken(jwt, email) && customer.getCidn() == 1 && adminRoles.contains(customer.getRole())) {
                 // Set the admin authentication in the security context
                 AdminAuthenticationToken authToken = new AdminAuthenticationToken(customer);
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
