@@ -41,4 +41,13 @@ public class ServicePlanController {
 
     }
 
+    @GetMapping("/plan/{planName}")
+    public ResponseEntity<String> getPlanByName(@PathVariable String planName) {
+        ServicePlan plan = servicePlanService.getPlanByName(planName);
+        if (plan == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(plan.getPlanId());
+    }
+
 }

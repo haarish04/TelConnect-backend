@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ServicePlanRepository extends JpaRepository<ServicePlan, String> {
     public ServicePlan findByPlanId(String planId);
+    public ServicePlan findByPlanName(String planName);
 }

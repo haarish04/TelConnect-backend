@@ -42,6 +42,10 @@ public class ServicePlanService {
         return true;
     }
 
+    public ServicePlan getPlanByName(String planName){
+        return servicePlanRepository.findByPlanName(planName);
+    }
+
     //Get service using Id
     public ServicePlan getPlan(String planId){
         return servicePlanRepository.findByPlanId(planId);
