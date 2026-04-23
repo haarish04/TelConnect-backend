@@ -43,7 +43,6 @@ public class Incident {
         if (this.assigned_to == null || this.assigned_to.isEmpty()) {
             this.assigned_to = "admin";
         }
-        this.description = null;
     }
 
     @Override
@@ -52,6 +51,7 @@ public class Incident {
                 "incident_id='" + incident_id + '\'' +
                 ", customer_id=" + customer_id +
                 ", date_time=" + date_time +
+                ", description='" + description + '\'' +
                 ", status=" + status +
                 ", priority=" + priority +
                 ", assigned_to='" + assigned_to + '\'' +

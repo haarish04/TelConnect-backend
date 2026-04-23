@@ -1,6 +1,6 @@
 package com.example.TelConnect.controller;
 
-import com.example.TelConnect.model.Incident;
+import com.example.TelConnect.DTO.IncidentDTO;
 import com.example.TelConnect.service.IncidentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,26 +17,33 @@ public class IncidentController {
     private IncidentService incidentService;
 
     @GetMapping("/incidents")
-    public ResponseEntity<List<Incident>> readIncidents() {
-        List<Incident> incidents = incidentService.readincidents();
-        return ResponseEntity.ok(incidents);
+    public ResponseEntity<List<IncidentDTO>> readIncidents() {
+        return ResponseEntity.ok(incidentService.readIncidents());
     }
 
     @PostMapping("/incidents")
-    public ResponseEntity<Incident> createIncident(@RequestBody Incident incident) {
-        Incident createdIncident = incidentService.createIncident(incident);
-        return new ResponseEntity<>(createdIncident, HttpStatus.CREATED);
+    public ResponseEntity<IncidentDTO> createIncident(
+            @RequestBody IncidentDTO incidentDTO) {
+
+        IncidentDTO created = incidentService.createIncident(incidentDTO);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @PutMapping("/incidents/{incident_id}")
-    public ResponseEntity<Incident> updateIncident( @PathVariable String incident_id, @RequestBody Incident incident) {
-        Incident updatedIncident = incidentService.updateIncident(incident_id, incident);
-        return ResponseEntity.ok(updatedIncident);
+    public ResponseEntity<IncidentDTO> updateIncident(
+            @PathVariable String incident_id,
+            @RequestBody IncidentDTO incidentDTO) {
+
+        IncidentDTO updated =
+                incidentService.updateIncident(incident_id, incidentDTO);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/incidents/{incident_id}")
-    public ResponseEntity<String> deleteIncident(@PathVariable String incident_id) {
+    public ResponseEntity<String> deleteIncident(
+            @PathVariable String incident_id) {
+
         incidentService.deleteIncident(incident_id);
-        return ResponseEntity.ok("Incident deteled");
+        return ResponseEntity.ok("Incident deleted successfully");
     }
 }
