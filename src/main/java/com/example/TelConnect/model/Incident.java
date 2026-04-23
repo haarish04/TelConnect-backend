@@ -23,6 +23,9 @@ public class Incident {
     @Column
     private LocalDateTime date_time;
 
+    @Column
+    private String description;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -40,6 +43,7 @@ public class Incident {
         if (this.assigned_to == null || this.assigned_to.isEmpty()) {
             this.assigned_to = "admin";
         }
+        this.description = null;
     }
 
     @Override
