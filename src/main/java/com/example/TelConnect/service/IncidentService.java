@@ -6,8 +6,8 @@ import com.example.TelConnect.repository.IncidentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class IncidentService {
@@ -15,14 +15,12 @@ public class IncidentService {
     @Autowired
     private IncidentRepository incidentRepository;
 
-    public List<IncidentDTO> readIncidents() {
-        return incidentRepository.findAll()
-                .stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
+    public List<Incident> readIncidents() {
+        List<Incident> incidentsList= incidentRepository.findAll();
+        return new ArrayList<>(incidentsList);
     }
 
-    public IncidentDTO createIncident(IncidentDTO dto) {
+    public Incident createIncident(IncidentDTO dto) {
 
         long count = incidentRepository.count() + 1;
         String newId = String.format("INC%02d", count);
@@ -35,14 +33,14 @@ public class IncidentService {
         incident.setPriority(dto.getPriority());
         incident.setAssigned_to(dto.getAssigned_to());
 
-        Incident saved = incidentRepository.save(incident);
-        return mapToDTO(saved);
+        return incidentRepository.save(incident);
     }
 
-    public IncidentDTO updateIncident(String incident_id, IncidentDTO dto) {
+    public Incident updateIncident(String incident_id, IncidentDTO dto) {
 
-        Incident existing = incidentRepository.findById(incident_id)
-                .orElseThrow(() -> new RuntimeException("Incident not found"));
+        Incident existing = incidentRepository.findById(incident_id).orElse(null);
+        if(existing==null)
+            return null;
 
         if (dto.getStatus() != null) {
             existing.setStatus(dto.getStatus());
@@ -57,8 +55,7 @@ public class IncidentService {
             existing.setDescription(dto.getDescription());
         }
 
-        Incident saved = incidentRepository.save(existing);
-        return mapToDTO(saved);
+        return incidentRepository.save(existing);
     }
 
     public void deleteIncident(String incident_id) {
@@ -67,14 +64,4 @@ public class IncidentService {
         incidentRepository.delete(existing);
     }
 
-    private IncidentDTO mapToDTO(Incident incident) {
-        IncidentDTO dto = new IncidentDTO();
-        dto.setIncident_id(incident.getIncident_id());
-        dto.setCustomer_id(incident.getCustomer_id());
-        dto.setDescription(incident.getDescription());
-        dto.setStatus(incident.getStatus());
-        dto.setPriority(incident.getPriority());
-        dto.setAssigned_to(incident.getAssigned_to());
-        return dto;
-    }
 }

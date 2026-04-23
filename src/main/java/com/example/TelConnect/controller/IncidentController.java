@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.example.TelConnect.model.Incident;
 
 import java.util.List;
 
@@ -16,29 +17,31 @@ public class IncidentController {
     @Autowired
     private IncidentService incidentService;
 
+    //Get all incidents
     @GetMapping("/incidents")
-    public ResponseEntity<List<IncidentDTO>> readIncidents() {
+    public ResponseEntity<List<Incident>> readIncidents() {
         return ResponseEntity.ok(incidentService.readIncidents());
     }
 
+    //Handler to create new incident
     @PostMapping("/incidents")
-    public ResponseEntity<IncidentDTO> createIncident(
-            @RequestBody IncidentDTO incidentDTO) {
+    public ResponseEntity<Incident> createIncident(@RequestBody IncidentDTO incidentDTO) {
 
-        IncidentDTO created = incidentService.createIncident(incidentDTO);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        Incident newIncident=incidentService.createIncident(incidentDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newIncident);
     }
 
+    //Handler for update Incident
     @PutMapping("/incidents/{incident_id}")
-    public ResponseEntity<IncidentDTO> updateIncident(
-            @PathVariable String incident_id,
-            @RequestBody IncidentDTO incidentDTO) {
+    public ResponseEntity<Incident> updateIncident(@PathVariable String incident_id, @RequestBody IncidentDTO incidentDTO) {
 
-        IncidentDTO updated =
-                incidentService.updateIncident(incident_id, incidentDTO);
+        Incident updated =incidentService.updateIncident(incident_id, incidentDTO);
+        if(updated==null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         return ResponseEntity.ok(updated);
     }
 
+    //Handler to delete incident
     @DeleteMapping("/incidents/{incident_id}")
     public ResponseEntity<String> deleteIncident(
             @PathVariable String incident_id) {

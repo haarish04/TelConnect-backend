@@ -8,7 +8,6 @@ import lombok.Data;
 @Data
 public class IncidentDTO {
 
-    private String incident_id;
     private Long customer_id;
     private String description;
     private Status status;
