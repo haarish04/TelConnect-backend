@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.TelConnect.service.CustomerService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -53,4 +54,10 @@ public class CustomerController {
                 .body("Account does not exist with this email");
 
     }
+
+    @PostMapping("/cidns")
+    public Map<Long, Long> getCidnsByCustomerIds(@RequestBody List<Long> customerIds) {
+        return customerService.getCidnsByCustomerIds(customerIds);
+    }
+
 }

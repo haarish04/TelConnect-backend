@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 import com.example.TelConnect.repository.ServicePlanRepository;
 import com.example.TelConnect.model.ServicePlan;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class CustomerPlanService {
@@ -68,6 +70,10 @@ public class CustomerPlanService {
     //Utility method to get all customer and plans mappings
     public List<CustomerPlanMapping> getAllCustomerPlans(){
         return customerPlanRepository.findAll();
+    }
+
+    public List<CustomerPlanMapping> getCustomerIdByPlanId(String planId){
+        return customerPlanRepository.findByPlanId(planId);
     }
 
 }

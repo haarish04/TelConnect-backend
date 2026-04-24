@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -101,5 +102,12 @@ public class CustomerService {
         customer.setCustomerName(customer.getCustomerName());
         customer.setCustomerEmail(customer.getCustomerEmail());
         return customer;
+    }
+
+    public Map<Long, Long> getCidnsByCustomerIds(List<Long> customerIds) {
+        List<Customer> customers = customerRepository.findAllById(customerIds);
+        return customers.stream()
+                .collect(Collectors.toMap(Customer::getCustomerId, Customer::getCidn));
+
     }
 }

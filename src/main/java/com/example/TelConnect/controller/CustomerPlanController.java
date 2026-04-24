@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -38,5 +39,15 @@ public class CustomerPlanController {
         return ResponseEntity.ok(response);
     }
 
-
+    @GetMapping("/plan/{planId}")
+    public ResponseEntity<List<String>> getCustomerIdByPlanId(@PathVariable String planId){
+        List<CustomerPlanMapping> customerPlans = customerPlanService.getCustomerIdByPlanId(planId);
+        if (customerPlans == null || customerPlans.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonList("No customers found for the given plan ID"));
+        }
+        List<String> customerIds = customerPlans.stream()
+                .map(customerPlan -> String.valueOf(customerPlan.getCustomerId()))
+                .toList();
+        return ResponseEntity.ok(customerIds);
+    }
 }
