@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -110,4 +111,20 @@ public class CustomerService {
                 .collect(Collectors.toMap(Customer::getCustomerId, Customer::getCidn));
 
     }
+
+    public boolean saveBulkCustomers(List<RegisterCustomerDTO> newCustomerList) {
+
+        List<Customer> customers = new ArrayList<>();
+
+        for (RegisterCustomerDTO newCustomer : newCustomerList) {
+            try {
+                saveCustomer(newCustomer);
+            } catch (Exception e) {
+                return false;
+            }
+        }
+        return  true;
+
+    }
+
 }

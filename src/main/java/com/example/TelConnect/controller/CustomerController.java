@@ -1,5 +1,6 @@
 package com.example.TelConnect.controller;
 
+import com.example.TelConnect.DTO.RegisterCustomerDTO;
 import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.DTO.UpdateRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,19 @@ public class CustomerController {
     @PostMapping("/cidns")
     public Map<Long, Long> getCidnsByCustomerIds(@RequestBody List<Long> customerIds) {
         return customerService.getCidnsByCustomerIds(customerIds);
+    }
+
+    //handler to create customers in bulk
+    @PostMapping("/bulk")
+    public ResponseEntity<String> createBulkCustomers(@RequestBody List<RegisterCustomerDTO> customers){
+
+        boolean result  = customerService.saveBulkCustomers(customers);
+        if(!result)
+        {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("There is an error in creating account");
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body("Bulk accounts created Successfully");
     }
 
 }
