@@ -1,5 +1,6 @@
 package com.example.TelConnect.service;
 
+import com.example.TelConnect.DTO.UpdateDateDTO;
 import com.example.TelConnect.model.CustomerPlanMapping;
 import com.example.TelConnect.repository.CustomerPlanRepository;
 import org.springframework.stereotype.Service;
@@ -74,6 +75,24 @@ public class CustomerPlanService {
 
     public List<CustomerPlanMapping> getCustomerIdByPlanId(String planId){
         return customerPlanRepository.findByPlanId(planId);
+    }
+
+    public boolean updateCustomerPlanDates(Long customerId, String planId, UpdateDateDTO modifyDateAndStatus) {
+        List<CustomerPlanMapping> customerPlans = customerPlanRepository.findByCustomerId(customerId);
+        //If customer has the specified plan
+        if (!customerPlans.isEmpty()) {
+            for (CustomerPlanMapping customerPlan : customerPlans) {
+                if(customerPlan.getPlanId().equals(planId)) {
+                    customerPlan.setStatus(modifyDateAndStatus.getStatus());
+                    customerPlan.setStartDate(modifyDateAndStatus.getStartDate());
+                    customerPlan.setEndDate(modifyDateAndStatus.getEndDate());
+                    customerPlanRepository.save(customerPlan);
+                    return true;
+                }
+
+            }
+        }
+        return false;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.example.TelConnect.controller;
 
+import com.example.TelConnect.DTO.UpdateDateDTO;
 import com.example.TelConnect.model.*;
 import com.example.TelConnect.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,17 @@ public class AdminController {
     public ResponseEntity<String> updateStatus(@PathVariable Long customerId, @PathVariable String planId, @RequestParam String status) {
         if (customerPlanService.updateCustomerPlanStatus(customerId, planId, status)) {
             return ResponseEntity.ok("Status updated");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Update failed");
+        }
+    }
+
+    @PatchMapping("/{customerId}/plans/{planId}/dates")
+    public ResponseEntity<String> updateDates(@PathVariable Long customerId,
+                                              @PathVariable String planId,
+                                              @RequestBody UpdateDateDTO modifyDateAndStatus){
+        if(customerPlanService.updateCustomerPlanDates(customerId,planId,modifyDateAndStatus)){
+            return ResponseEntity.ok("Status and dates updated");
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Update failed");
         }
