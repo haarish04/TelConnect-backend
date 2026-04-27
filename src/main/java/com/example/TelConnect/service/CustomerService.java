@@ -1,5 +1,6 @@
 package com.example.TelConnect.service;
 
+import com.example.TelConnect.DTO.RoleUpdateDTO;
 import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.DTO.RegisterCustomerDTO;
 import com.example.TelConnect.DTO.UpdateRequestDTO;
@@ -18,6 +19,7 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ArrayList<String> adminRoles= new ArrayList<>(List.of("ADMIN", "SUPER_ADMIN", "LOGISTIC_ADMIN"));
 
     public CustomerService(CustomerRepository customerRepository , PasswordEncoder passwordEncoder) {
         this.customerRepository = customerRepository;
@@ -96,6 +98,24 @@ public class CustomerService {
         customerRepository.save(existingCustomer);
         return true;
 
+    }
+
+    //Service to update role of user
+    public int updateCustomerRole(Long customerId, RoleUpdateDTO roleUpdateDTO){
+        String RequestorRole= roleUpdateDTO.getRequestorRole();
+        String RequestorCidn=roleUpdateDTO.getRequestorCidn();
+        String UserCidn= roleUpdateDTO.getUserCidn();
+
+        //Check if requestor is telconnect admin or check if requestor is admin of a CIDN and the user is also of same CIDN
+        if((adminRoles.contains(RequestorRole) && RequestorCidn.equals("1")) || (RequestorRole.equals("PRIMARY_ADMIN") && RequestorCidn.equals(UserCidn))) {
+            Customer existingCustomer = customerRepository.findById(customerId).orElse(null);
+            if (existingCustomer == null)
+                return 0;
+            existingCustomer.setRole(roleUpdateDTO.getUserRole());
+            customerRepository.save(existingCustomer);
+            return 1;
+        }
+        return -1;
     }
 
     //Utility class to stream customers based on name and email

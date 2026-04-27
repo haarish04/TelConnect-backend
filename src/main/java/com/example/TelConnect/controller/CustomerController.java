@@ -1,6 +1,7 @@
 package com.example.TelConnect.controller;
 
 import com.example.TelConnect.DTO.RegisterCustomerDTO;
+import com.example.TelConnect.DTO.RoleUpdateDTO;
 import com.example.TelConnect.model.Customer;
 import com.example.TelConnect.DTO.UpdateRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,18 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body("Account does not exist with this email");
 
+    }
+
+
+    //Handler to update role of user
+    @PatchMapping("/{customerId}/updateRole")
+    public ResponseEntity<String> updateRole(@PathVariable Long customerId, @RequestBody RoleUpdateDTO roleUpdateDTO) {
+        int updateRole=customerService.updateCustomerRole(customerId, roleUpdateDTO);
+        if(updateRole==1)
+            return ResponseEntity.ok("User role updated to: "+roleUpdateDTO.getUserRole());
+        else if (updateRole==-1)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not authorized to perform this operation");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
     }
 
     @PostMapping("/cidns")
